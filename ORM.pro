@@ -12,9 +12,11 @@ TARGET = ORM
 TEMPLATE = lib
 CONFIG += staticlib
 
-SOURCES += orm.cpp
+SOURCES += orm.cpp \
+    ormobject.cpp
 
-HEADERS += orm.h
+HEADERS += orm.h \
+    ormobject.h
 unix:!symbian {
     maemo5 {
         target.path = /opt/usr/lib

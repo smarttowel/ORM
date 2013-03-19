@@ -9,6 +9,7 @@
     void set##name(type input_##name) { name = input_##name; } \
 
 #include <QObject>
+#include "ormdatabase.h"
 
 class ORMObject : public QObject
 {

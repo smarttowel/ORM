@@ -13,10 +13,14 @@ TEMPLATE = lib
 CONFIG += staticlib
 
 SOURCES += orm.cpp \
-    ormobject.cpp
+    ormobject.cpp \
+    ormdatabase.cpp \
+    ormabstractadapter.cpp
 
 HEADERS += orm.h \
-    ormobject.h
+    ormobject.h \
+    ormdatabase.h \
+    ormabstractadapter.h
 unix:!symbian {
     maemo5 {
         target.path = /opt/usr/lib

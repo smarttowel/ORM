@@ -6,7 +6,7 @@ ORMDatabase::ORMDatabase(QString driverName) :
     QSqlDatabase(QSqlDatabase::addDatabase(driverName))
 {
     if(driverName == "QMYSQL")
-        adapter = new MySqlAdapter(); //BUG
+        adapter = new MySqlAdapter();
 }
 
 ORMDatabase::ORMDatabase()

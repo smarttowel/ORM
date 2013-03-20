@@ -6,7 +6,7 @@
 class MySqlAdapter : public ORMAbstractAdapter
 {
 public:
-    MySqlAdapter() {}
+    MySqlAdapter();
 };
 
 #endif // MYSQLADAPTER_H

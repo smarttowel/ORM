@@ -12,8 +12,8 @@ TARGET = tst_test_ormdatabase
 CONFIG   += console
 CONFIG   -= app_bundle
 
+INCLUDEPATH += ../../ORM
 TEMPLATE = app
-
 
 SOURCES += tst_test_ormdatabase.cpp
 DEFINES += SRCDIR=\\\"$$PWD/\\\"

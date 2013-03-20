@@ -1,7 +1,8 @@
 #include <QString>
 #include <QtTest>
-#include "../../ORM/ormdatabase.h"
-#include "../../ORM/ormdatabase.cpp"
+#include "ormdatabase.cpp"
+#include "mysqladapter.cpp"
+#include "ormabstractadapter.cpp"
 
 class Test_ORMDatabase : public QObject
 {

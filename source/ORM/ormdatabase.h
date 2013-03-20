@@ -6,8 +6,9 @@
 class ORMDatabase : public QSqlDatabase
 {
 public:
-    explicit ORMDatabase();
-    
+    ORMDatabase(QString driverName);
+    ORMDatabase();
+    static ORMDatabase addORMDatabase(QString driverName);
 };
 
 #endif // ORMDATABASE_H

@@ -6,7 +6,7 @@
 class ORMAbstractAdapter
 {
 public:
-    explicit ORMAbstractAdapter();
+    ORMAbstractAdapter();
 };
 
 #endif // ORMABSTRACTADAPTER_H

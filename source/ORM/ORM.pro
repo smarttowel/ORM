@@ -12,15 +12,18 @@ TARGET = ORM
 TEMPLATE = lib
 CONFIG += staticlib
 
-SOURCES += orm.cpp \
-    ormobject.cpp \
-    ormdatabase.cpp \
-    ormabstractadapter.cpp
-
 HEADERS += orm.h \
     ormobject.h \
     ormdatabase.h \
-    ormabstractadapter.h
+    ormabstractadapter.h \
+    mysqladapter.h
+
+SOURCES += orm.cpp \
+    ormobject.cpp \
+    ormdatabase.cpp \
+    ormabstractadapter.cpp \
+    mysqladapter.cpp
+
 unix:!symbian {
     maemo5 {
         target.path = /opt/usr/lib

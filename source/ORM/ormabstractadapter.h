@@ -3,16 +3,10 @@
 
 #include <QObject>
 
-class ORMAbstractAdapter : public QObject
+class ORMAbstractAdapter
 {
-    Q_OBJECT
 public:
-    explicit ORMAbstractAdapter(QObject *parent = 0);
-    
-signals:
-    
-public slots:
-    
+    explicit ORMAbstractAdapter();
 };
 
 #endif // ORMABSTRACTADAPTER_H

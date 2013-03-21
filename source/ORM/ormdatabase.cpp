@@ -17,3 +17,14 @@ ORMDatabase ORMDatabase::addORMDatabase(QString driverName)
 {
     return ORMDatabase(driverName);
 }
+
+bool ORMDatabase::createDatabase(QString name)
+{
+    open(userName(), password());
+    return adapter->createDatabase(name);
+}
+
+QString ORMDatabase::lastQuery()
+{
+    return adapter->lastQuery();
+}

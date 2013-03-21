@@ -11,16 +11,14 @@
 #include <QObject>
 #include "ormdatabase.h"
 
+//TODO: make toList<> method
+//TODO: make toModel<> method
+
 class ORMObject : public QObject
 {
     Q_OBJECT
 public:
     explicit ORMObject(QObject *parent = 0);
-    
-signals:
-    
-public slots:
-    
 };
 
 #endif // ORMOBJECT_H

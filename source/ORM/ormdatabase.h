@@ -9,8 +9,10 @@ class ORMDatabase : public QSqlDatabase
 public:
     ORMDatabase(QString driverName);
     ORMDatabase();
-    static ORMDatabase addORMDatabase(QString driverName);
     static ORMAbstractAdapter *adapter;
+    static ORMDatabase addORMDatabase(QString driverName);
+    bool createDatabase(QString name);
+    QString lastQuery();
 };
 
 #endif // ORMDATABASE_H

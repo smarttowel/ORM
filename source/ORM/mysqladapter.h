@@ -9,6 +9,7 @@ class MySqlAdapter : public ORMAbstractAdapter
 public:
     MySqlAdapter();
     bool createDatabase(QString name);
+    bool createTable(QHash<QString, QString> fieldsInfo);
 
 protected:
     void fillTableTypes();

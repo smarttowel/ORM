@@ -2,6 +2,7 @@
 
 MySqlAdapter::MySqlAdapter()
 {
+    fillTableTypes();
 }
 
 bool MySqlAdapter::createDatabase(QString name)
@@ -11,6 +12,16 @@ bool MySqlAdapter::createDatabase(QString name)
     bool result = m_query.exec(m_lastQuery);
     initDB(name);
     return result;
+}
+
+bool MySqlAdapter::createTable(QHash<QString, QString> fieldsInfo)
+{
+    QString name;
+    m_lastQuery = "CREATE TABLE(id INT AUTO_INCREMENT, ";
+    foreach(name, fieldsInfo.keys())
+        m_lastQuery += name + m_tableTypes.value(fieldsInfo.value(name)) + ", ";
+    m_lastQuery += "PRIMARY KEY (id));";
+    return m_query.exec(m_lastQuery);
 }
 
 void MySqlAdapter::initDB(QString name)

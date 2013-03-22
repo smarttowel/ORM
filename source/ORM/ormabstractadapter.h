@@ -11,6 +11,7 @@ class ORMAbstractAdapter
 public:
     ORMAbstractAdapter();
     virtual bool createDatabase(QString name) = 0;
+    virtual bool createTable(QHash<QString, QString> fieldsInfo) = 0;
     QSqlError lastError();
     QString lastQuery();
 

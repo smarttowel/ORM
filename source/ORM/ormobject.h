@@ -9,6 +9,7 @@
     void set##name(type input_##name) { name = input_##name; } \
 
 #include <QObject>
+#include <QMetaProperty>
 #include "ormdatabase.h"
 
 //TODO: make toList<> method
@@ -19,6 +20,7 @@ class ORMObject : public QObject
     Q_OBJECT
 public:
     explicit ORMObject(QObject *parent = 0);
+    bool createTable();
 };
 
 #endif // ORMOBJECT_H

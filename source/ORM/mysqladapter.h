@@ -9,6 +9,11 @@ class MySqlAdapter : public ORMAbstractAdapter
 public:
     MySqlAdapter();
     bool createDatabase(QString name);
+
+protected:
+    void fillTableTypes();
+
+private:
     void initDB(QString name);
 };
 

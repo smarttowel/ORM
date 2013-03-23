@@ -10,16 +10,20 @@ bool MySqlAdapter::createDatabase(QString name)
     m_lastQuery = QString("CREATE DATABASE %1;")
             .arg(name);
     bool result = m_query.exec(m_lastQuery);
-    initDB(name);
+    if(result)
+        initDB(name);
     return result;
 }
 
-bool MySqlAdapter::createTable(QHash<QString, QString> fieldsInfo)
+bool MySqlAdapter::createTable(QString tableName, QHash<QString, QString> info)
 {
     QString name;
-    m_lastQuery = "CREATE TABLE(id INT AUTO_INCREMENT, ";
-    foreach(name, fieldsInfo.keys())
-        m_lastQuery += name + m_tableTypes.value(fieldsInfo.value(name)) + ", ";
+    m_lastQuery = QString("CREATE TABLE %1(id INT AUTO_INCREMENT, ")
+            .arg(tableName);
+    foreach(name, info.keys())
+        m_lastQuery += QString("%1 %2, ")
+                .arg(name)
+                .arg(m_tableTypes.value(info.value(name)));
     m_lastQuery += "PRIMARY KEY (id));";
     return m_query.exec(m_lastQuery);
 }

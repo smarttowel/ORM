@@ -12,3 +12,8 @@ bool ORMObject::createTable()
         info.insert(metaObject()->property(i).name(), metaObject()->property(i).typeName());
     return ORMDatabase::adapter->createTable(metaObject()->className(), info);
 }
+
+int ORMObject::getId()
+{
+    return id;
+}

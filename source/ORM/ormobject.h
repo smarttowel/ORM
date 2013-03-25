@@ -19,9 +19,14 @@
 class ORMObject : public QObject
 {
     Q_OBJECT
+
 public:
     explicit ORMObject(QObject *parent = 0);
     bool createTable();
+    int getId();
+
+protected:
+    int id;
 };
 
 #endif // ORMOBJECT_H

@@ -14,6 +14,7 @@ public:
     virtual bool createTable(QString tableName, QHash<QString, QString> info) = 0;
     QSqlError lastError();
     QString lastQuery();
+    virtual int addRecord(QString tableName, QHash<QString, QVariant> info) = 0;
 
 protected:
     QHash<QString, QString> m_tableTypes;

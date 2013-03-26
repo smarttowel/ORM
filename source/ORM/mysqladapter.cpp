@@ -28,6 +28,25 @@ bool MySqlAdapter::createTable(QString tableName, QHash<QString, QString> info)
     return m_query.exec(m_lastQuery);
 }
 
+int MySqlAdapter::addRecord(QString tableName, QHash<QString, QVariant> info)
+{
+    QString key;
+    m_lastQuery = QString("INSERT INTO %1(")
+            .arg(tableName);
+    foreach(key, info.keys())
+        m_lastQuery += key + ", ";
+    m_lastQuery.resize(m_lastQuery.size() - 2);
+    m_lastQuery += ") VALUES(";
+    foreach(key, info.keys())
+        m_lastQuery += "'" + info.value(key).toString() + "', ";
+    m_lastQuery.resize(m_lastQuery.size() - 2);
+    m_lastQuery += ");";
+    if(m_query.exec(m_lastQuery))
+        return m_query.lastInsertId().toInt();
+    else
+        return -1;
+}
+
 void MySqlAdapter::initDB(QString name)
 {
     m_lastQuery = QString("USE %1;")

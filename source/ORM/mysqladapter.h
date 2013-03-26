@@ -10,6 +10,7 @@ public:
     MySqlAdapter();
     bool createDatabase(QString name);
     bool createTable(QString tableName, QHash<QString, QString> info);
+    int addRecord(QString tableName, QHash<QString, QVariant> info);
 
 protected:
     void fillTableTypes();

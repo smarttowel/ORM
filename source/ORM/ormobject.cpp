@@ -3,6 +3,7 @@
 ORMObject::ORMObject(QObject *parent) :
     QObject(parent)
 {
+    id = -1;
 }
 
 bool ORMObject::createTable()
@@ -16,4 +17,18 @@ bool ORMObject::createTable()
 int ORMObject::getId()
 {
     return id;
+}
+
+bool ORMObject::save()
+{
+    QHash<QString, QVariant> info;
+    for(int i = 1; i < metaObject()->propertyCount(); i++)
+        info.insert(QString(metaObject()->property(i).name()), metaObject()->property(i).read(this));
+    if(id == -1)
+    {
+        id = ORMDatabase::adapter->addRecord(metaObject()->className(), info);
+        return (id > 0);
+    }
+    else
+        return false;
 }

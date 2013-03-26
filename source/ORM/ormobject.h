@@ -24,6 +24,7 @@ public:
     explicit ORMObject(QObject *parent = 0);
     bool createTable();
     int getId();
+    bool save();
 
 protected:
     int id;

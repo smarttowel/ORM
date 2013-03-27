@@ -28,6 +28,20 @@ bool MySqlAdapter::createTable(QString tableName, QHash<QString, QString> info)
     return m_query.exec(m_lastQuery);
 }
 
+bool MySqlAdapter::dropTable(QString tableName)
+{
+    m_lastQuery = QString("DROP TABLE %1;")
+            .arg(tableName);
+    return m_query.exec(m_lastQuery);
+}
+
+bool MySqlAdapter::dropDatabase(QString name)
+{
+    m_lastQuery = QString("DROP DATABASE %1")
+            .arg(name);
+    return m_query.exec(m_lastQuery);
+}
+
 int MySqlAdapter::addRecord(QString tableName, QHash<QString, QVariant> info)
 {
     QString key;

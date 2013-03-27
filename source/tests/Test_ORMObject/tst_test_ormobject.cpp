@@ -41,6 +41,7 @@ private:
 private Q_SLOTS:
     void test_CreateTable();
     void test_save();
+    void test_dropTable();
 };
 
 Test_ORMObject::Test_ORMObject()
@@ -86,6 +87,13 @@ void Test_ORMObject::test_save()
             QCOMPARE(query.value(i), model.property(query.record().fieldName(i).toLocal8Bit().constData()));
         else
             QCOMPARE(query.value(i).toInt(), model.getId());
+}
+
+void Test_ORMObject::test_dropTable()
+{
+    MyModel model;
+    QCOMPARE(model.dropTable(), true);
+    QCOMPARE(model.dropTable(), false);
 }
 
 QTEST_MAIN(Test_ORMObject)

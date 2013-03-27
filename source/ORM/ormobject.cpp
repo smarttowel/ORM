@@ -14,6 +14,11 @@ bool ORMObject::createTable()
     return ORMDatabase::adapter->createTable(metaObject()->className(), info);
 }
 
+bool ORMObject::dropTable()
+{
+    return ORMDatabase::adapter->dropTable(metaObject()->className());
+}
+
 int ORMObject::getId()
 {
     return id;

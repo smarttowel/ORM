@@ -12,6 +12,8 @@ public:
     ORMAbstractAdapter();
     virtual bool createDatabase(QString name) = 0;
     virtual bool createTable(QString tableName, QHash<QString, QString> info) = 0;
+    virtual bool dropTable(QString tableName) = 0;
+    virtual bool dropDatabase(QString name) = 0;
     QSqlError lastError();
     QString lastQuery();
     virtual int addRecord(QString tableName, QHash<QString, QVariant> info) = 0;

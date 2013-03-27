@@ -23,6 +23,7 @@ class ORMObject : public QObject
 public:
     explicit ORMObject(QObject *parent = 0);
     bool createTable();
+    bool dropTable();
     int getId();
     bool save();
 

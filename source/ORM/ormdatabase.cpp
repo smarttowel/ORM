@@ -24,6 +24,11 @@ bool ORMDatabase::createDatabase(QString name)
     return adapter->createDatabase(name);
 }
 
+bool ORMDatabase::dropDatabase(QString name)
+{
+    return adapter->dropDatabase(name);
+}
+
 QString ORMDatabase::lastQuery()
 {
     return adapter->lastQuery();

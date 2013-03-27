@@ -16,6 +16,7 @@ private Q_SLOTS:
     void test_addDatabase();
     void test_createDatabase();
     void test_lastQuery();
+    void test_dropDatabase();
 };
 
 Test_ORMDatabase::Test_ORMDatabase()
@@ -46,8 +47,10 @@ void Test_ORMDatabase::test_createDatabase()
 {
     {
         ORMDatabase db("QMYSQL");
-        QCOMPARE(db.createDatabase("test_ORMDatabase"), true);
-        db.exec("DROP DATABASE test_ORMDatabase;");
+        db.setUserName("root");
+        db.setHostName("localhost");
+        QCOMPARE(db.createDatabase("Test_ORMDatabase"), true);
+        QCOMPARE(db.dropDatabase("Test_ORMDatabase"), true);
         QCOMPARE(db.createDatabase("test"), false);
     }
     ORMDatabase::removeDatabase("qt_sql_default_connection");
@@ -57,12 +60,26 @@ void Test_ORMDatabase::test_lastQuery()
 {
     {
         ORMDatabase db("QMYSQL");
+        db.setUserName("root");
+        db.setHostName("localhost");
         QCOMPARE(db.lastQuery().isEmpty(), true);
-        db.createDatabase("test_ORMDatabase");
+        QCOMPARE(db.createDatabase("Test_ORMDatabase"), true);
         QCOMPARE(db.lastQuery().isEmpty(), false);
-        db.exec("DROP DATABASE test_ORMDatabase;");
+        QCOMPARE(db.dropDatabase("Test_ORMDatabase"), true);
     }
     ORMDatabase::removeDatabase("qt_sql_default_connection");
+}
+
+void Test_ORMDatabase::test_dropDatabase()
+{
+    {
+        ORMDatabase db("QMYSQL");
+        db.setUserName("root");
+        db.setHostName("localhost");
+        QCOMPARE(db.createDatabase("Test_ORMDatabase"), true);
+        QCOMPARE(db.dropDatabase("Test_ORMDatabase"), true);
+        QCOMPARE(db.dropDatabase("Test_ORMDatabase"), false);
+    }
 }
 
 QTEST_APPLESS_MAIN(Test_ORMDatabase)

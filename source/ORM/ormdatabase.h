@@ -12,6 +12,7 @@ public:
     static ORMAbstractAdapter *adapter;
     static ORMDatabase addORMDatabase(QString driverName);
     bool createDatabase(QString name);
+    bool dropDatabase(QString name);
     QString lastQuery();
 };
 

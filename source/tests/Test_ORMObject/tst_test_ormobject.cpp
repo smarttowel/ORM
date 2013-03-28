@@ -50,7 +50,7 @@ Test_ORMObject::Test_ORMObject()
     db = ORMDatabase::addORMDatabase("QMYSQL");
     db.setUserName("root");
     db.setHostName("localhost");
-    qDebug() << db.createDatabase("Test_ORMDatabase");
+    db.createDatabase("Test_ORMDatabase");
 }
 
 Test_ORMObject::~Test_ORMObject()

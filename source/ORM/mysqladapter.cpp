@@ -91,6 +91,17 @@ QSqlRecord MySqlAdapter::last(QString tableName)
     return m_query.record();
 }
 
+QSqlRecord MySqlAdapter::findBy(QString tableName, QString fieldName, QVariant value)
+{
+    m_lastQuery = QString("SELECT * FROM %1 WHERE %2 = '%3'")
+            .arg(tableName)
+            .arg(fieldName)
+            .arg(value.toString());
+    m_query.exec(m_lastQuery);
+    m_query.next();
+    return m_query.record();
+}
+
 void MySqlAdapter::initDB(QString name)
 {
     m_lastQuery = QString("USE %1;")

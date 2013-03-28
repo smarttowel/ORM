@@ -24,6 +24,11 @@ int ORMObject::getId()
     return id;
 }
 
+void ORMObject::setId(int id)
+{
+    this->id = id;
+}
+
 bool ORMObject::save()
 {
     QHash<QString, QVariant> info;
@@ -45,7 +50,7 @@ bool ORMObject::find(int id)
         return false;
     else
     {
-        translateRecToObj(list.first());
+        translateRecToThisObj(list.first());
         return true;
     }
 }
@@ -57,7 +62,7 @@ bool ORMObject::first()
         return false;
     else
     {
-        translateRecToObj(record);
+        translateRecToThisObj(record);
         return true;
     }
 }
@@ -69,16 +74,69 @@ bool ORMObject::last()
         return false;
     else
     {
-        translateRecToObj(record);
+        translateRecToThisObj(record);
         return true;
     }
 }
 
-void ORMObject::translateRecToObj(QSqlRecord record)
+bool ORMObject::findBy(QString fieldName, QVariant value)
+{
+    QSqlRecord record = ORMDatabase::adapter->findBy(metaObject()->className(), fieldName, value);
+    if(record.isNull("id"))
+        return false;
+    else
+    {
+        translateRecToThisObj(record);
+        return true;
+    }
+}
+
+bool ORMObject::findBy(QHash<QString, QVariant> params)
+{
+    m_records.clear();
+    QString key;
+    QSqlRecord currentRecord;
+    foreach(key, params.keys())
+    {
+        currentRecord = ORMDatabase::adapter->findBy(metaObject()->className(), key, params.value(key));
+        if(!currentRecord.value("id").isNull())
+            m_records.append(currentRecord);
+    }
+    if(m_records.isEmpty())
+        return false;
+    else
+    {
+        translateRecToThisObj(m_records.value(0));
+        return true;
+    }
+}
+
+void ORMObject::translateRecToThisObj(QSqlRecord record)
 {
     for(int i = 0; i < record.count(); i++)
         if(record.fieldName(i) != "id")
             setProperty(record.fieldName(i).toLocal8Bit().data(), record.value(i));
         else
             id = record.value(i).toInt();
+}
+
+template<class T>
+QList<T*> ORMObject::toList()
+{
+    QList<T*> result;
+    for(int i = 0; i < m_records.size(); i++)
+        result.append(translateRecToObj<T>(m_records.value(i)));
+    return result;
+}
+
+template<class T>
+T* ORMObject::translateRecToObj(QSqlRecord record)
+{
+    T *result = new T;
+    for(int i = 0; i < record.count(); i++)
+        if(record.fieldName(i) != "id")
+            result->setProperty(record.fieldName(i).toLocal8Bit().data(), record.value(i));
+        else
+            result->setId(record.value(i).toInt());
+    return result;
 }

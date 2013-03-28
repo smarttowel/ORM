@@ -44,6 +44,8 @@ private Q_SLOTS:
     void test_find();
     void test_first();
     void test_last();
+    void test_findBy();
+    void test_findBy2();
     void test_dropTable();
 };
 
@@ -114,6 +116,50 @@ void Test_ORMObject::test_dropTable()
     MyModel model;
     QCOMPARE(model.dropTable(), true);
     QCOMPARE(model.dropTable(), false);
+}
+
+void Test_ORMObject::test_findBy()
+{
+    MyModel model;
+    model.setnameInt(15);
+    model.save();
+    QCOMPARE(model.findBy("nameInt", QVariant(15)), true);
+    QCOMPARE(model.getnameInt(), 15);
+    MyModel model2;
+    QCOMPARE(model2.findBy("nameString", QVariant("sdjkfhsjk")), false);
+    QCOMPARE(model2.getId(), -1);
+}
+
+void Test_ORMObject::test_findBy2()
+{
+    db.exec("DELETE FROM MyModel;");
+    MyModel model, model2, model3, resultModel;
+    model.setnameString("Hello");
+    QCOMPARE(model.save(), true);
+    model2.setnameInt(3);
+    QCOMPARE(model2.save(), true);
+    model3.setnamedouble(1.23);
+    QCOMPARE(model3.save(), true);
+    QHash<QString, QVariant> findHash;
+    findHash.insert("nameString", QVariant("Hello"));
+    findHash.insert("nameInt", QVariant(3));
+    findHash.insert("nameDouble", QVariant(1.23));
+    findHash.insert("nameChar", QVariant('X'));
+    QCOMPARE(resultModel.findBy(findHash), true);
+    QList<MyModel*> list = resultModel.toList<MyModel>();
+    QCOMPARE(list.size(), 3);
+    for(int i = 0; i < list.size(); i++)
+    {
+        if(list.value(i)->getId() == 1)
+            QCOMPARE(list.value(i)->getnameString(), QString("Hello"));
+        if(list.value(i)->getId() == 2)
+        {
+            QCOMPARE(list.value(i)->getnameInt(), 3);
+            QCOMPARE(list.value(i)->getnameString().isEmpty(), true);
+        }
+        if(list.value(i)->getId() == 3)
+            QCOMPARE(list.value(i)->getnamedouble(), 1.23);
+    }
 }
 
 void Test_ORMObject::test_first()

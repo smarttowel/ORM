@@ -18,6 +18,8 @@ public:
     QString lastQuery();
     virtual int addRecord(QString tableName, QHash<QString, QVariant> info) = 0;
     virtual QList<QSqlRecord> find(QString tableName, QString findString) = 0;
+    virtual QSqlRecord first(QString tableName) = 0;
+    virtual QSqlRecord last(QString tableName) = 0;
 
 protected:
     QHash<QString, QString> m_tableTypes;

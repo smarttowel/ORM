@@ -42,6 +42,8 @@ private Q_SLOTS:
     void test_CreateTable();
     void test_save();
     void test_find();
+    void test_first();
+    void test_last();
     void test_dropTable();
 };
 
@@ -112,6 +114,23 @@ void Test_ORMObject::test_dropTable()
     MyModel model;
     QCOMPARE(model.dropTable(), true);
     QCOMPARE(model.dropTable(), false);
+}
+
+void Test_ORMObject::test_first()
+{
+    MyModel model;
+    QCOMPARE(model.save(), true);
+    QCOMPARE(model.first(), true);
+    QCOMPARE(model.getId(), 1);
+}
+
+void Test_ORMObject::test_last()
+{
+    MyModel model;
+    QCOMPARE(model.last(), true);
+    QCOMPARE(model.getId(), 2);
+    db.exec("DELETE FROM MyModel;");
+    QCOMPARE(model.last(), false);
 }
 
 QTEST_MAIN(Test_ORMObject)

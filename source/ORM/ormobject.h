@@ -25,6 +25,8 @@ public:
     int getId();
     bool save();
     bool find(int id);
+    bool first();
+    bool last();
 
 protected:
     int id;

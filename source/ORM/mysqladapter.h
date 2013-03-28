@@ -15,6 +15,8 @@ public:
     bool dropDatabase(QString name);
     int addRecord(QString tableName, QHash<QString, QVariant> info);
     QList<QSqlRecord> find(QString tableName, QString findString);
+    virtual QSqlRecord first(QString tableName);
+    virtual QSqlRecord last(QString tableName);
 
 protected:
     void fillTableTypes();

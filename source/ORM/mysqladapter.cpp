@@ -73,6 +73,24 @@ QList<QSqlRecord> MySqlAdapter::find(QString tableName, QString findString)
     return result;
 }
 
+QSqlRecord MySqlAdapter::first(QString tableName)
+{
+    m_lastQuery = QString("SELECT * FROM %1 ORDER BY id ASC LIMIT 1;")
+            .arg(tableName);
+    m_query.exec(m_lastQuery);
+    m_query.next();
+    return m_query.record();
+}
+
+QSqlRecord MySqlAdapter::last(QString tableName)
+{
+    m_lastQuery = QString("SELECT * FROM %1 ORDER BY id DESC LIMIT 1;")
+            .arg(tableName);
+    m_query.exec(m_lastQuery);
+    m_query.next();
+    return m_query.record();
+}
+
 void MySqlAdapter::initDB(QString name)
 {
     m_lastQuery = QString("USE %1;")

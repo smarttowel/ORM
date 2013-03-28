@@ -50,6 +50,30 @@ bool ORMObject::find(int id)
     }
 }
 
+bool ORMObject::first()
+{
+    QSqlRecord record = ORMDatabase::adapter->first(metaObject()->className());
+    if(record.isNull("id"))
+        return false;
+    else
+    {
+        translateRecToObj(record);
+        return true;
+    }
+}
+
+bool ORMObject::last()
+{
+    QSqlRecord record = ORMDatabase::adapter->last(metaObject()->className());
+    if(record.isNull("id"))
+        return false;
+    else
+    {
+        translateRecToObj(record);
+        return true;
+    }
+}
+
 void ORMObject::translateRecToObj(QSqlRecord record)
 {
     for(int i = 0; i < record.count(); i++)

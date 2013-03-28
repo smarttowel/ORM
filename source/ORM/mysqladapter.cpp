@@ -61,6 +61,18 @@ int MySqlAdapter::addRecord(QString tableName, QHash<QString, QVariant> info)
         return -1;
 }
 
+QList<QSqlRecord> MySqlAdapter::find(QString tableName, QString findString)
+{
+    QList<QSqlRecord> result;
+    m_lastQuery = QString("SELECT * FROM %1 WHERE %2;")
+            .arg(tableName)
+            .arg(findString);
+    if(m_query.exec(m_lastQuery))
+        while(m_query.next())
+            result.append(m_query.record());
+    return result;
+}
+
 void MySqlAdapter::initDB(QString name)
 {
     m_lastQuery = QString("USE %1;")

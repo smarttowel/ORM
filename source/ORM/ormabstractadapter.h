@@ -17,6 +17,7 @@ public:
     QSqlError lastError();
     QString lastQuery();
     virtual int addRecord(QString tableName, QHash<QString, QVariant> info) = 0;
+    virtual QList<QSqlRecord> find(QString tableName, QString findString) = 0;
 
 protected:
     QHash<QString, QString> m_tableTypes;

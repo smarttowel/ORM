@@ -2,6 +2,7 @@
 #define MYSQLADAPTER_H
 
 #include <QVariant>
+#include <QSqlRecord>
 #include "ormabstractadapter.h"
 
 class MySqlAdapter : public ORMAbstractAdapter
@@ -13,6 +14,7 @@ public:
     bool dropTable(QString tableName);
     bool dropDatabase(QString name);
     int addRecord(QString tableName, QHash<QString, QVariant> info);
+    QList<QSqlRecord> find(QString tableName, QString findString);
 
 protected:
     void fillTableTypes();

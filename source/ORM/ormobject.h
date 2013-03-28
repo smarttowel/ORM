@@ -11,10 +11,8 @@
 
 #include <QObject>
 #include <QMetaProperty>
+#include <QSqlRecord>
 #include "ormdatabase.h"
-
-//TODO: make toList<> method
-//TODO: make toModel<> method
 
 class ORMObject : public QObject
 {
@@ -26,9 +24,13 @@ public:
     bool dropTable();
     int getId();
     bool save();
+    bool find(int id);
 
 protected:
     int id;
+
+private:
+    void translateRecToObj(QSqlRecord record);
 };
 
 #endif // ORMOBJECT_H

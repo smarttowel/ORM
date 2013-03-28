@@ -41,6 +41,7 @@ private:
 private Q_SLOTS:
     void test_CreateTable();
     void test_save();
+    void test_find();
     void test_dropTable();
 };
 
@@ -87,6 +88,23 @@ void Test_ORMObject::test_save()
             QCOMPARE(query.value(i), model.property(query.record().fieldName(i).toLocal8Bit().constData()));
         else
             QCOMPARE(query.value(i).toInt(), model.getId());
+}
+
+void Test_ORMObject::test_find()
+{
+    MyModel model;
+    QCOMPARE(model.getId(), -1);
+    QCOMPARE(model.find(1), true);
+    QCOMPARE(model.getId(), 1);
+    QSqlQuery query = db.exec("SELECT * FROM MyModel WHERE id = 1;");
+    query.next();
+    for(int i = 0; i < query.size(); i++)
+        if(query.record().fieldName(i) != "id")
+            QCOMPARE(query.value(i), model.property(query.record().fieldName(i).toLocal8Bit().constData()));
+        else
+            QCOMPARE(query.value(i).toInt(), model.getId());
+    QCOMPARE(model.find(-1), false);
+    QCOMPARE(model.getId(), 1);
 }
 
 void Test_ORMObject::test_dropTable()

@@ -160,6 +160,9 @@ void Test_ORMObject::test_findBy2()
         if(list.value(i)->getId() == 3)
             QCOMPARE(list.value(i)->getnamedouble(), 1.23);
     }
+    findHash.clear();;
+    findHash.insert("id", QVariant(-100));
+    QCOMPARE(resultModel.findBy(findHash), false);
 }
 
 void Test_ORMObject::test_first()

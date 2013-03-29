@@ -55,10 +55,6 @@ ORMWhere::ORMWhere(QString fieldName, ORMWhere::Condition con, QVariant value)
         m_whereCondition = QString("(%1 IS NULL)")
                 .arg(fieldName);
         break;
-    case ORMWhere::NotNull:
-        m_whereCondition = QString("(%1 NOT NULL)")
-                .arg(fieldName);
-        break;
     default:
         m_whereCondition.clear();
     }

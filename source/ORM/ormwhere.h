@@ -18,8 +18,7 @@ public:
         StartsWith,
         EndsWith,
         Contains,
-        IsNull,
-        NotNull
+        IsNull
     };
     ORMWhere();
     ORMWhere(QString fieldName, Condition con, QVariant value);

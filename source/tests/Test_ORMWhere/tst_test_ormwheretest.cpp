@@ -44,9 +44,6 @@ void Test_ORMWhereTest::test_constructor()
     a = new ORMWhere("field1", ORMWhere::IsNull, "1");
     QCOMPARE(a->getWhereCondition(), QString("(field1 IS NULL)"));
     delete a;
-    a = new ORMWhere("field1", ORMWhere::NotNull, "1");
-    QCOMPARE(a->getWhereCondition(), QString("(field1 NOT NULL)"));
-    delete a;
     a = new ORMWhere("field1", ORMWhere::StartsWith, "1");
     QCOMPARE(a->getWhereCondition(), QString("(field1 LIKE '1%')"));
     delete a;

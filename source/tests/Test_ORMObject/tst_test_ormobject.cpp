@@ -47,6 +47,7 @@ private Q_SLOTS:
     void test_last();
     void test_findBy();
     void test_findBy2();
+    void test_where();
     void test_dropTable();
 };
 
@@ -163,9 +164,36 @@ void Test_ORMObject::test_findBy2()
         if(list.value(i)->getId() == 3)
             QCOMPARE(list.value(i)->getnamedouble(), 1.23);
     }
-    findHash.clear();;
+    findHash.clear();
     findHash.insert("id", QVariant(-100));
     QCOMPARE(resultModel.findBy(findHash), false);
+}
+
+void Test_ORMObject::test_where()
+{
+    db.exec("DELETE FROM MyModel;");
+    MyModel model1, model2, model3, resultModel;
+    model1.setnameInt(1);
+    model2.setnameInt(3);
+    model3.setnameInt(5);
+    model1.save();
+    model2.save();
+    model3.save();
+    QCOMPARE(resultModel.where(ORMWhere("nameInt", ORMWhere::Equals, 3)), true);
+    QList<MyModel*> list = resultModel.toList<MyModel>();
+    QCOMPARE(list.size(), 1);
+    QCOMPARE(list.first()->getnameInt(), 3);
+    QVERIFY(list.first()->getId() >= 0);
+    QCOMPARE(resultModel.where(ORMWhere("nameString", ORMWhere::Equals, "Hello")), false);
+    QCOMPARE(resultModel.where(ORMWhere("nameInt", ORMWhere::Equals, 1) && ORMWhere("nameInt", ORMWhere::Equals, 5)), false);
+    list = resultModel.toList<MyModel>();
+    QCOMPARE(list.size(), 0);
+    QCOMPARE(resultModel.where(ORMWhere("nameInt", ORMWhere::Equals, 1) || ORMWhere("nameInt", ORMWhere::LessThan, 5)), true);
+    list = resultModel.toList<MyModel>();
+    QCOMPARE(list.size(), 2);
+    QCOMPARE(resultModel.where(ORMWhere("nameInt", ORMWhere::Equals, 1) || ORMWhere("nameString", ORMWhere::Equals, "")), true);
+    list = resultModel.toList<MyModel>();
+    QCOMPARE(list.size(), 3);
 }
 
 void Test_ORMObject::test_first()

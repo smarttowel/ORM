@@ -13,6 +13,7 @@
 #include <QMetaProperty>
 #include <QSqlRecord>
 #include "ormdatabase.h"
+#include "ormwhere.h"
 
 class ORMObject : public QObject
 {
@@ -29,6 +30,7 @@ public:
     bool last();
     bool findBy(QString fieldName, QVariant value);
     bool findBy(QHash<QString, QVariant> params);
+    bool where(ORMWhere condition);
     //
     template<class T>
     QList<T*> toList();

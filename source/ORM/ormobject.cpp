@@ -106,6 +106,18 @@ bool ORMObject::findBy(QHash<QString, QVariant> params)
     }
 }
 
+bool ORMObject::where(ORMWhere condition)
+{
+    m_records = ORMDatabase::adapter->find(metaObject()->className(), condition.getWhereCondition());
+    if(m_records.isEmpty())
+        return false;
+    else
+    {
+        translateRecToThisObj(m_records.first());
+        return true;
+    }
+}
+
 void ORMObject::translateRecToThisObj(QSqlRecord record)
 {
     for(int i = 0; i < record.count(); i++)

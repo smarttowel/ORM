@@ -23,7 +23,6 @@ public:
     bool createTable();
     bool dropTable();
     int getId();
-    void setId(int id);
     bool save();
     bool find(int id);
     bool first();

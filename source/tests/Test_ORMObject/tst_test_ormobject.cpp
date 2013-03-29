@@ -7,6 +7,7 @@
 #include "mysqladapter.cpp"
 #include "ormabstractadapter.cpp"
 #include "ormobject.cpp"
+#include "ormwhere.cpp"
 
 class MyModel : public ORMObject
 {
@@ -150,6 +151,8 @@ void Test_ORMObject::test_findBy2()
     QCOMPARE(list.size(), 3);
     for(int i = 0; i < list.size(); i++)
     {
+        QVERIFY(model.getId() == list.value(i)->getId() || model2.getId() == list.value(i)->getId()
+                || model3.getId() == list.value(i)->getId());
         if(list.value(i)->getId() == 1)
             QCOMPARE(list.value(i)->getnameString(), QString("Hello"));
         if(list.value(i)->getId() == 2)

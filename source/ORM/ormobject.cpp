@@ -24,11 +24,6 @@ int ORMObject::getId()
     return id;
 }
 
-void ORMObject::setId(int id)
-{
-    this->id = id;
-}
-
 bool ORMObject::save()
 {
     QHash<QString, QVariant> info;
@@ -137,6 +132,6 @@ T* ORMObject::translateRecToObj(QSqlRecord record)
         if(record.fieldName(i) != "id")
             result->setProperty(record.fieldName(i).toLocal8Bit().data(), record.value(i));
         else
-            result->setId(record.value(i).toInt());
+            result->id = record.value(i).toInt();
     return result;
 }

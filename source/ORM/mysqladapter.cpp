@@ -15,7 +15,7 @@ bool MySqlAdapter::createDatabase(QString name)
     return result;
 }
 
-bool MySqlAdapter::createTable(QString tableName, QHash<QString, QString> info)
+bool MySqlAdapter::createTable(QString tableName, const QHash<QString, QString> &info)
 {
     QString name;
     m_lastQuery = QString("CREATE TABLE %1(id INT AUTO_INCREMENT, ")
@@ -42,7 +42,7 @@ bool MySqlAdapter::dropDatabase(QString name)
     return m_query.exec(m_lastQuery);
 }
 
-int MySqlAdapter::addRecord(QString tableName, QHash<QString, QVariant> info)
+int MySqlAdapter::addRecord(QString tableName, const QHash<QString, QVariant> &info)
 {
     QString key;
     m_lastQuery = QString("INSERT INTO %1(")

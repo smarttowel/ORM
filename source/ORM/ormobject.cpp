@@ -6,7 +6,7 @@ ORMObject::ORMObject(QObject *parent) :
     id = -1;
 }
 
-bool ORMObject::createTable()
+bool ORMObject::createTable() const
 {
     QHash<QString, QString> info; //QHash<name, type>
     for(int i = 1; i < metaObject()->propertyCount(); i++)
@@ -14,12 +14,12 @@ bool ORMObject::createTable()
     return ORMDatabase::adapter->createTable(metaObject()->className(), info);
 }
 
-bool ORMObject::dropTable()
+bool ORMObject::dropTable() const
 {
     return ORMDatabase::adapter->dropTable(metaObject()->className());
 }
 
-int ORMObject::getId()
+int ORMObject::getId() const
 {
     return id;
 }
@@ -74,7 +74,7 @@ bool ORMObject::last()
     }
 }
 
-bool ORMObject::findBy(QString fieldName, QVariant value)
+bool ORMObject::findBy(const QString fieldName, const QVariant value)
 {
     QSqlRecord record = ORMDatabase::adapter->findBy(metaObject()->className(), fieldName, value);
     if(record.isNull("id"))
@@ -86,7 +86,7 @@ bool ORMObject::findBy(QString fieldName, QVariant value)
     }
 }
 
-bool ORMObject::findBy(QHash<QString, QVariant> params)
+bool ORMObject::findBy(const QHash<QString, QVariant> &params)
 {
     m_records.clear();
     QString key;

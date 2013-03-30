@@ -11,12 +11,12 @@ class ORMAbstractAdapter
 public:
     ORMAbstractAdapter();
     virtual bool createDatabase(QString name) = 0;
-    virtual bool createTable(QString tableName, QHash<QString, QString> info) = 0;
+    virtual bool createTable(QString tableName, const QHash<QString, QString> &info) = 0;
     virtual bool dropTable(QString tableName) = 0;
     virtual bool dropDatabase(QString name) = 0;
     QSqlError lastError();
     QString lastQuery();
-    virtual int addRecord(QString tableName, QHash<QString, QVariant> info) = 0;
+    virtual int addRecord(QString tableName, const QHash<QString, QVariant> &info) = 0;
     virtual QList<QSqlRecord> find(QString tableName, QString findString) = 0;
     virtual QSqlRecord first(QString tableName) = 0;
     virtual QSqlRecord last(QString tableName) = 0;

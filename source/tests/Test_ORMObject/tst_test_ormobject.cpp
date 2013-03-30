@@ -113,13 +113,6 @@ void Test_ORMObject::test_find()
     QCOMPARE(model.getId(), 1);
 }
 
-void Test_ORMObject::test_dropTable()
-{
-    MyModel model;
-    QCOMPARE(model.dropTable(), true);
-    QCOMPARE(model.dropTable(), false);
-}
-
 void Test_ORMObject::test_findBy()
 {
     MyModel model;
@@ -198,19 +191,33 @@ void Test_ORMObject::test_where()
 
 void Test_ORMObject::test_first()
 {
-    MyModel model;
+    db.exec("DELETE FROM MyModel;");
+    MyModel model, model2, model3;
     QCOMPARE(model.save(), true);
-    QCOMPARE(model.first(), true);
-    QCOMPARE(model.getId(), 1);
+    QCOMPARE(model2.save(), true);
+    QCOMPARE(model3.first(), true);
+    QCOMPARE(model3.getId(), model.getId());
+    db.exec("DELETE FROM MyModel;");
+    QCOMPARE(model.first(), false);
 }
 
 void Test_ORMObject::test_last()
 {
-    MyModel model;
-    QCOMPARE(model.last(), true);
-    QCOMPARE(model.getId(), 2);
+    db.exec("DELETE FROM MyModel;");
+    MyModel model, model2, model3;
+    QCOMPARE(model.save(), true);
+    QCOMPARE(model2.save(), true);
+    QCOMPARE(model3.last(), true);
+    QCOMPARE(model3.getId(), model2.getId());
     db.exec("DELETE FROM MyModel;");
     QCOMPARE(model.last(), false);
+}
+
+void Test_ORMObject::test_dropTable()
+{
+    MyModel model;
+    QCOMPARE(model.dropTable(), true);
+    QCOMPARE(model.dropTable(), false);
 }
 
 QTEST_MAIN(Test_ORMObject)

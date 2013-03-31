@@ -36,14 +36,14 @@ public:
     QList<T*> toList();
 
 protected:
-    int id;
+    qlonglong id;
 
 private:
     QList<QSqlRecord> m_records;
-    void translateRecToThisObj(QSqlRecord record);
+    void translateRecToThisObj(const QSqlRecord &record);
 
     template<class T>
-    T* translateRecToObj(QSqlRecord record);
+    T* translateRecToObj(const QSqlRecord &record);
 };
 
 #endif // ORMOBJECT_H

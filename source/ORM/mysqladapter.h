@@ -17,7 +17,6 @@ public:
     QList<QSqlRecord> find(QString tableName, QString findString);
     virtual QSqlRecord first(QString tableName);
     virtual QSqlRecord last(QString tableName);
-    virtual QSqlRecord findBy(QString tableName, QString fieldName, QVariant value);
 
 protected:
     void fillTableTypes();

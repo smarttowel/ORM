@@ -20,7 +20,6 @@ public:
     virtual QList<QSqlRecord> find(QString tableName, QString findString) = 0;
     virtual QSqlRecord first(QString tableName) = 0;
     virtual QSqlRecord last(QString tableName) = 0;
-    virtual QSqlRecord findBy(QString tableName, QString fieldName, QVariant value) = 0;
 
 protected:
     QHash<QString, QString> m_tableTypes;

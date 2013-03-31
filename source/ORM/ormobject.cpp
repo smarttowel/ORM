@@ -40,11 +40,14 @@ bool ORMObject::save()
 
 bool ORMObject::find(int id)
 {
-    QList<QSqlRecord> list = ORMDatabase::adapter->find(metaObject()->className(), QString("id = %1").arg(id));
-    if(list.empty())
+    QList<QSqlRecord> list;
+    list = ORMDatabase::adapter->find(metaObject()->className(), QString("id = %1").arg(id));
+    if(list.isEmpty())
         return false;
     else
     {
+        m_records.clear();
+        m_records.append(list.first());
         translateRecToThisObj(list.first());
         return true;
     }
@@ -57,6 +60,8 @@ bool ORMObject::first()
         return false;
     else
     {
+        m_records.clear();
+        m_records.append(record);
         translateRecToThisObj(record);
         return true;
     }
@@ -69,6 +74,8 @@ bool ORMObject::last()
         return false;
     else
     {
+        m_records.clear();
+        m_records.append(record);
         translateRecToThisObj(record);
         return true;
     }
@@ -76,49 +83,55 @@ bool ORMObject::last()
 
 bool ORMObject::findBy(const QString fieldName, const QVariant value)
 {
-    QSqlRecord record = ORMDatabase::adapter->findBy(metaObject()->className(), fieldName, value);
-    if(record.isNull("id"))
+    QList<QSqlRecord> list = ORMDatabase::adapter->find(metaObject()->className(), QString("%1 = '%2'")
+                                                   .arg(fieldName)
+                                                   .arg(value.toString()));
+    if(list.isEmpty())
         return false;
     else
     {
-        translateRecToThisObj(record);
+        m_records = list;
+        translateRecToThisObj(list.first());
         return true;
     }
 }
 
 bool ORMObject::findBy(const QHash<QString, QVariant> &params)
 {
-    m_records.clear();
     QString key;
-    QSqlRecord currentRecord;
+    QString whereString;
+    QList<QSqlRecord> list;
     foreach(key, params.keys())
-    {
-        currentRecord = ORMDatabase::adapter->findBy(metaObject()->className(), key, params.value(key));
-        if(!currentRecord.value("id").isNull())
-            m_records.append(currentRecord);
-    }
-    if(m_records.isEmpty())
+        whereString += QString("%1 = '%2' OR ")
+                .arg(key)
+                .arg(params.value(key).toString());
+    whereString.resize(whereString.size() - 4);
+    list = ORMDatabase::adapter->find(metaObject()->className(), whereString);
+    if(list.isEmpty())
         return false;
     else
     {
-        translateRecToThisObj(m_records.value(0));
+        m_records = list;
+        translateRecToThisObj(m_records.first());
         return true;
     }
 }
 
 bool ORMObject::where(ORMWhere condition)
 {
-    m_records = ORMDatabase::adapter->find(metaObject()->className(), condition.getWhereCondition());
-    if(m_records.isEmpty())
+    QList<QSqlRecord> list;
+    list = ORMDatabase::adapter->find(metaObject()->className(), condition.getWhereCondition());
+    if(list.isEmpty())
         return false;
     else
     {
+        m_records = list;
         translateRecToThisObj(m_records.first());
         return true;
     }
 }
 
-void ORMObject::translateRecToThisObj(QSqlRecord record)
+void ORMObject::translateRecToThisObj(const QSqlRecord &record)
 {
     for(int i = 0; i < record.count(); i++)
         if(record.fieldName(i) != "id")
@@ -137,7 +150,7 @@ QList<T*> ORMObject::toList()
 }
 
 template<class T>
-T* ORMObject::translateRecToObj(QSqlRecord record)
+T* ORMObject::translateRecToObj(const QSqlRecord &record)
 {
     T *result = new T;
     for(int i = 0; i < record.count(); i++)

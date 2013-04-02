@@ -1,0 +1,245 @@
+\hypertarget{class_o_r_m_object}{\section{O\-R\-M\-Object Class Reference}
+\label{class_o_r_m_object}\index{O\-R\-M\-Object@{O\-R\-M\-Object}}
+}
+
+
+The \hyperlink{class_o_r_m_object}{O\-R\-M\-Object} is a base class for all your models.  
+
+
+
+
+Inherits Q\-Object.
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_o_r_m_object_ac6fe34862a531c6e8997e192efa2b58e}{O\-R\-M\-Object} (Q\-Object $\ast$parent=0)
+\item 
+bool \hyperlink{class_o_r_m_object_aa4b3afcaa5bbd9378d475f2731b2f0ba}{create\-Table} () const 
+\item 
+bool \hyperlink{class_o_r_m_object_a53dc0b7cd89670e3fb41b7744723be5e}{drop\-Table} () const 
+\item 
+int \hyperlink{class_o_r_m_object_a91c4f17ab400515dcfb1621cf3de9937}{get\-Id} () const 
+\item 
+bool \hyperlink{class_o_r_m_object_a9593290b073c8023affc8e54e1c6ac55}{save} ()
+\item 
+bool \hyperlink{class_o_r_m_object_a0995c54ac3b6c06ea76585a2493773b7}{find} (int \hyperlink{class_o_r_m_object_a8dd7d23f7d0ccc13b2595ef534cc6826}{id})
+\item 
+bool \hyperlink{class_o_r_m_object_a5a7c8628800a40c764c7b168d4d0e86e}{first} ()
+\item 
+bool \hyperlink{class_o_r_m_object_add021ba2ee2590e7957a6c277ecdf63d}{last} ()
+\item 
+bool \hyperlink{class_o_r_m_object_a742c5f0cfe74eec4ae7fd5af5212fed0}{find\-By} (const Q\-String field\-Name, const Q\-Variant value)
+\item 
+bool \hyperlink{class_o_r_m_object_a26c85f99297f39a92cb20196e9af6d54}{find\-By} (const Q\-Hash$<$ Q\-String, Q\-Variant $>$ \&params)
+\item 
+bool \hyperlink{class_o_r_m_object_a11ff9723e7f82c496df41bf4d099dcdb}{where} (\hyperlink{class_o_r_m_where}{O\-R\-M\-Where} condition)
+\item 
+{\footnotesize template$<$class T $>$ }\\Q\-List$<$ T $\ast$ $>$ \hyperlink{class_o_r_m_object_a6d85bdb41db98bd2cd522c1559ce45ff}{to\-List} ()
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+qlonglong \hyperlink{class_o_r_m_object_a8dd7d23f7d0ccc13b2595ef534cc6826}{id}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+The \hyperlink{class_o_r_m_object}{O\-R\-M\-Object} is a base class for all your models. 
+
+For create model, you must inherits by this class. Example\-: 
+\begin{DoxyCode}
+Car : \textcolor{keyword}{public} \hyperlink{class_o_r_m_object}{ORMObject}
+\{
+ Car();
+ ORM\_PROPERTY(QString, brand)
+ ORM\_PROPERTY(QDate, year)
+ ORM\_PROPERTY(QString, color)
+\}
+\end{DoxyCode}
+ 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_o_r_m_object_ac6fe34862a531c6e8997e192efa2b58e}{\index{O\-R\-M\-Object@{O\-R\-M\-Object}!O\-R\-M\-Object@{O\-R\-M\-Object}}
+\index{O\-R\-M\-Object@{O\-R\-M\-Object}!ORMObject@{O\-R\-M\-Object}}
+\subsubsection[{O\-R\-M\-Object}]{\setlength{\rightskip}{0pt plus 5cm}O\-R\-M\-Object\-::\-O\-R\-M\-Object (
+\begin{DoxyParamCaption}
+\item[{Q\-Object $\ast$}]{parent = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [explicit]}}}\label{class_o_r_m_object_ac6fe34862a531c6e8997e192efa2b58e}
+
+\begin{DoxyParams}{Parameters}
+{\em parent} & Q\-Object \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_o_r_m_object_aa4b3afcaa5bbd9378d475f2731b2f0ba}{\index{O\-R\-M\-Object@{O\-R\-M\-Object}!create\-Table@{create\-Table}}
+\index{create\-Table@{create\-Table}!ORMObject@{O\-R\-M\-Object}}
+\subsubsection[{create\-Table}]{\setlength{\rightskip}{0pt plus 5cm}bool O\-R\-M\-Object\-::create\-Table (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const}}\label{class_o_r_m_object_aa4b3afcaa5bbd9378d475f2731b2f0ba}
+Create table associated with model \begin{DoxyReturn}{Returns}
+true if table created, otherwise return false 
+\end{DoxyReturn}
+\hypertarget{class_o_r_m_object_a53dc0b7cd89670e3fb41b7744723be5e}{\index{O\-R\-M\-Object@{O\-R\-M\-Object}!drop\-Table@{drop\-Table}}
+\index{drop\-Table@{drop\-Table}!ORMObject@{O\-R\-M\-Object}}
+\subsubsection[{drop\-Table}]{\setlength{\rightskip}{0pt plus 5cm}bool O\-R\-M\-Object\-::drop\-Table (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const}}\label{class_o_r_m_object_a53dc0b7cd89670e3fb41b7744723be5e}
+Delete table associated with model \begin{DoxyReturn}{Returns}
+true if table deleted, otherwise return false 
+\end{DoxyReturn}
+\hypertarget{class_o_r_m_object_a0995c54ac3b6c06ea76585a2493773b7}{\index{O\-R\-M\-Object@{O\-R\-M\-Object}!find@{find}}
+\index{find@{find}!ORMObject@{O\-R\-M\-Object}}
+\subsubsection[{find}]{\setlength{\rightskip}{0pt plus 5cm}bool O\-R\-M\-Object\-::find (
+\begin{DoxyParamCaption}
+\item[{int}]{id}
+\end{DoxyParamCaption}
+)}}\label{class_o_r_m_object_a0995c54ac3b6c06ea76585a2493773b7}
+Find object by id 
+\begin{DoxyParams}{Parameters}
+{\em id} & -\/ existing object id \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if object is found, otherwise return false 
+\end{DoxyReturn}
+\hypertarget{class_o_r_m_object_a742c5f0cfe74eec4ae7fd5af5212fed0}{\index{O\-R\-M\-Object@{O\-R\-M\-Object}!find\-By@{find\-By}}
+\index{find\-By@{find\-By}!ORMObject@{O\-R\-M\-Object}}
+\subsubsection[{find\-By}]{\setlength{\rightskip}{0pt plus 5cm}bool O\-R\-M\-Object\-::find\-By (
+\begin{DoxyParamCaption}
+\item[{const Q\-String}]{field\-Name, }
+\item[{const Q\-Variant}]{value}
+\end{DoxyParamCaption}
+)}}\label{class_o_r_m_object_a742c5f0cfe74eec4ae7fd5af5212fed0}
+Find object by some field and value. If there is more than one object, you can get them by \hyperlink{class_o_r_m_object_a6d85bdb41db98bd2cd522c1559ce45ff}{to\-List()}. 
+\begin{DoxyParams}{Parameters}
+{\em field\-Name} & -\/ field name \\
+\hline
+{\em value} & -\/ value, of which will be searched \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if object is found, otherwise return false 
+\end{DoxyReturn}
+\hypertarget{class_o_r_m_object_a26c85f99297f39a92cb20196e9af6d54}{\index{O\-R\-M\-Object@{O\-R\-M\-Object}!find\-By@{find\-By}}
+\index{find\-By@{find\-By}!ORMObject@{O\-R\-M\-Object}}
+\subsubsection[{find\-By}]{\setlength{\rightskip}{0pt plus 5cm}bool O\-R\-M\-Object\-::find\-By (
+\begin{DoxyParamCaption}
+\item[{const Q\-Hash$<$ Q\-String, Q\-Variant $>$ \&}]{params}
+\end{DoxyParamCaption}
+)}}\label{class_o_r_m_object_a26c85f99297f39a92cb20196e9af6d54}
+Find object by mane fields and values. If there is more than one object, you can get them by \hyperlink{class_o_r_m_object_a6d85bdb41db98bd2cd522c1559ce45ff}{to\-List()}. 
+\begin{DoxyParams}{Parameters}
+{\em params} & -\/ Hash$<$field\-Name, value$>$, of which will be searched \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if object is found, otherwise return false 
+\end{DoxyReturn}
+\hypertarget{class_o_r_m_object_a5a7c8628800a40c764c7b168d4d0e86e}{\index{O\-R\-M\-Object@{O\-R\-M\-Object}!first@{first}}
+\index{first@{first}!ORMObject@{O\-R\-M\-Object}}
+\subsubsection[{first}]{\setlength{\rightskip}{0pt plus 5cm}bool O\-R\-M\-Object\-::first (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{class_o_r_m_object_a5a7c8628800a40c764c7b168d4d0e86e}
+Find first object in table \begin{DoxyReturn}{Returns}
+true if object is found, otherwise return false 
+\end{DoxyReturn}
+\hypertarget{class_o_r_m_object_a91c4f17ab400515dcfb1621cf3de9937}{\index{O\-R\-M\-Object@{O\-R\-M\-Object}!get\-Id@{get\-Id}}
+\index{get\-Id@{get\-Id}!ORMObject@{O\-R\-M\-Object}}
+\subsubsection[{get\-Id}]{\setlength{\rightskip}{0pt plus 5cm}int O\-R\-M\-Object\-::get\-Id (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const}}\label{class_o_r_m_object_a91c4f17ab400515dcfb1621cf3de9937}
+Return model id. \begin{DoxyReturn}{Returns}
+Id contains current object id. Immediately after creation id = -\/1. 
+\end{DoxyReturn}
+\hypertarget{class_o_r_m_object_add021ba2ee2590e7957a6c277ecdf63d}{\index{O\-R\-M\-Object@{O\-R\-M\-Object}!last@{last}}
+\index{last@{last}!ORMObject@{O\-R\-M\-Object}}
+\subsubsection[{last}]{\setlength{\rightskip}{0pt plus 5cm}bool O\-R\-M\-Object\-::last (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{class_o_r_m_object_add021ba2ee2590e7957a6c277ecdf63d}
+Find last object in table \begin{DoxyReturn}{Returns}
+true if object is found, otherwise return false 
+\end{DoxyReturn}
+\hypertarget{class_o_r_m_object_a9593290b073c8023affc8e54e1c6ac55}{\index{O\-R\-M\-Object@{O\-R\-M\-Object}!save@{save}}
+\index{save@{save}!ORMObject@{O\-R\-M\-Object}}
+\subsubsection[{save}]{\setlength{\rightskip}{0pt plus 5cm}bool O\-R\-M\-Object\-::save (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{class_o_r_m_object_a9593290b073c8023affc8e54e1c6ac55}
+Read all meta-\/property from model and save their into table. \begin{DoxyReturn}{Returns}
+true if success, otherwise return false 
+\end{DoxyReturn}
+\hypertarget{class_o_r_m_object_a6d85bdb41db98bd2cd522c1559ce45ff}{\index{O\-R\-M\-Object@{O\-R\-M\-Object}!to\-List@{to\-List}}
+\index{to\-List@{to\-List}!ORMObject@{O\-R\-M\-Object}}
+\subsubsection[{to\-List}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ Q\-List$<$ T $\ast$ $>$ O\-R\-M\-Object\-::to\-List (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{class_o_r_m_object_a6d85bdb41db98bd2cd522c1559ce45ff}
+Return list of objects that can be found for example \hyperlink{class_o_r_m_object_a11ff9723e7f82c496df41bf4d099dcdb}{where()} method. Example\-: 
+\begin{DoxyCode}
+Student : \textcolor{keyword}{public} \hyperlink{class_o_r_m_object}{ORMObject}
+\{
+ ...
+\}
+...
+Student model;
+QList<Student*> list = model.\hyperlink{class_o_r_m_object_a6d85bdb41db98bd2cd522c1559ce45ff}{toList}<Student>();
+\end{DoxyCode}
+ 
+\begin{DoxyParams}{Parameters}
+{\em T} & -\/ class, a list of objects which will be returned \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+list of objects 
+\end{DoxyReturn}
+\hypertarget{class_o_r_m_object_a11ff9723e7f82c496df41bf4d099dcdb}{\index{O\-R\-M\-Object@{O\-R\-M\-Object}!where@{where}}
+\index{where@{where}!ORMObject@{O\-R\-M\-Object}}
+\subsubsection[{where}]{\setlength{\rightskip}{0pt plus 5cm}bool O\-R\-M\-Object\-::where (
+\begin{DoxyParamCaption}
+\item[{{\bf O\-R\-M\-Where}}]{condition}
+\end{DoxyParamCaption}
+)}}\label{class_o_r_m_object_a11ff9723e7f82c496df41bf4d099dcdb}
+Find object with use W\-H\-E\-R\-E expression. If there is more than one object, you can get them by \hyperlink{class_o_r_m_object_a6d85bdb41db98bd2cd522c1559ce45ff}{to\-List()}. For \hyperlink{class_o_r_m_where}{O\-R\-M\-Where} defined \&\& and $|$$|$ operators, so you use next code\-: 
+\begin{DoxyCode}
+Model.where(\hyperlink{class_o_r_m_where}{ORMWhere}(...) || \hyperlink{class_o_r_m_where}{ORMWhere}(...));
+\end{DoxyCode}
+ or 
+\begin{DoxyCode}
+Model.where(\hyperlink{class_o_r_m_where}{ORMWhere}(...) && \hyperlink{class_o_r_m_where}{ORMWhere}(...));
+\end{DoxyCode}
+ 
+\begin{DoxyParams}{Parameters}
+{\em condition} & -\/ W\-H\-E\-R\-E expression \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if object is found, otherwise return false 
+\end{DoxyReturn}
+
+
+\subsection{Member Data Documentation}
+\hypertarget{class_o_r_m_object_a8dd7d23f7d0ccc13b2595ef534cc6826}{\index{O\-R\-M\-Object@{O\-R\-M\-Object}!id@{id}}
+\index{id@{id}!ORMObject@{O\-R\-M\-Object}}
+\subsubsection[{id}]{\setlength{\rightskip}{0pt plus 5cm}qlonglong O\-R\-M\-Object\-::id\hspace{0.3cm}{\ttfamily [protected]}}}\label{class_o_r_m_object_a8dd7d23f7d0ccc13b2595ef534cc6826}
+Id is a primary key in any table. 
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+/home/pavel/\-Qt/\-O\-R\-M/source/\-O\-R\-M/ormobject.\-h\item 
+/home/pavel/\-Qt/\-O\-R\-M/source/\-O\-R\-M/ormobject.\-cpp\end{DoxyCompactItemize}

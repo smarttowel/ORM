@@ -96,6 +96,26 @@ bool ORMObject::findBy(const QString fieldName, const QVariant value)
     }
 }
 
+bool ORMObject::findBy(const QString fieldName, const QVector<QVariant> &values)
+{
+    QString whereString;
+    QVariant value;
+    foreach(value, values)
+        whereString += QString("%1 = '%2' OR ")
+                .arg(fieldName)
+                .arg(value.toString());
+    whereString.resize(whereString.size() - 4);
+    QList<QSqlRecord> list = ORMDatabase::adapter->find(metaObject()->className(), whereString);
+    if(list.isEmpty())
+        return false;
+    else
+    {
+        m_records = list;
+        translateRecToThisObj(m_records.first());
+        return true;
+    }
+}
+
 bool ORMObject::findBy(const QHash<QString, QVariant> &params)
 {
     QString key;

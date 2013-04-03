@@ -46,8 +46,9 @@ private Q_SLOTS:
     void test_find();
     void test_first();
     void test_last();
-    void test_findBy();
-    void test_findBy2();
+    void test_findByValue();
+    void test_findByValues();
+    void test_findByParams();
     void test_where();
     void test_dropTable();
 };
@@ -125,7 +126,7 @@ void Test_ORMObject::test_find()
             QCOMPARE(query.value(i).toInt(), model.getId());
 }
 
-void Test_ORMObject::test_findBy()
+void Test_ORMObject::test_findByValue()
 {
     db.exec("DELETE FROM MyModel;");
     MyModel model;
@@ -142,7 +143,30 @@ void Test_ORMObject::test_findBy()
     QCOMPARE(model2.toList<MyModel>().isEmpty(), true);
 }
 
-void Test_ORMObject::test_findBy2()
+void Test_ORMObject::test_findByValues()
+{
+    db.exec("DELETE FROM MyModel;");
+    MyModel model1, model2, model3, resultModel;
+    model1.setnameInt(10);
+    model2.setnameInt(11);
+    model3.setnameInt(12);
+    model1.save();
+    model2.save();
+    model3.save();
+    QVector<QVariant> vector;
+    vector.append(10);
+    vector.append(11);
+    QCOMPARE(resultModel.findBy("nameInt", vector), true);
+    QCOMPARE(resultModel.toList<MyModel>().size(), 2);
+    QCOMPARE(resultModel.getId(), model1.getId());
+    vector.clear();
+    QCOMPARE(resultModel.findBy("nameInt", vector), false);
+    QCOMPARE(resultModel.getId(), model1.getId());
+    vector.append(20);
+    QCOMPARE(resultModel.findBy("nameInt", vector), false);
+}
+
+void Test_ORMObject::test_findByParams()
 {
     db.exec("DELETE FROM MyModel;");
     MyModel model, model2, model3, resultModel;

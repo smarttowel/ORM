@@ -18,6 +18,7 @@
 #include <QObject>
 #include <QMetaProperty>
 #include <QSqlRecord>
+#include <QVector>
 #include "ormdatabase.h"
 #include "ormwhere.h"
 
@@ -92,6 +93,7 @@ public:
        \return true if object is found, otherwise return false
      */
     bool findBy(const QString fieldName, const QVariant value);
+    bool findBy(const QString fieldName, const QVector<QVariant> &values);
     /*!
        Find object by mane fields and values. If there is more than
        one object, you can get them by toList().

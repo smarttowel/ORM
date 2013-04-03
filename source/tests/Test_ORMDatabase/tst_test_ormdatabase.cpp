@@ -48,7 +48,6 @@ void Test_ORMDatabase::test_createDatabase()
     {
         ORMDatabase db("QMYSQL");
         db.setUserName("root");
-        db.setHostName("localhost");
         QCOMPARE(db.createDatabase("Test_ORMDatabase"), true);
         QCOMPARE(db.dropDatabase("Test_ORMDatabase"), true);
         QCOMPARE(db.createDatabase("test"), false);
@@ -61,7 +60,6 @@ void Test_ORMDatabase::test_lastQuery()
     {
         ORMDatabase db("QMYSQL");
         db.setUserName("root");
-        db.setHostName("localhost");
         QCOMPARE(db.lastQuery().isEmpty(), true);
         QCOMPARE(db.createDatabase("Test_ORMDatabase"), true);
         QCOMPARE(db.lastQuery().isEmpty(), false);
@@ -75,7 +73,6 @@ void Test_ORMDatabase::test_dropDatabase()
     {
         ORMDatabase db("QMYSQL");
         db.setUserName("root");
-        db.setHostName("localhost");
         QCOMPARE(db.createDatabase("Test_ORMDatabase"), true);
         QCOMPARE(db.dropDatabase("Test_ORMDatabase"), true);
         QCOMPARE(db.dropDatabase("Test_ORMDatabase"), false);

@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<title>ORM: /home/pavel/Qt/ORM/source/ORM/ormwhere.h Source File</title>
+<title>ORM: ORM/ormwhere.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -40,7 +40,7 @@
   </div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_b2f33c71d4aa5e7af42a1ca61ff5af1b.html">source</a></li><li class="navelem"><a class="el" href="dir_584c2b4b041cd9e2c8d8c7dc8bd34a9d.html">ORM</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_c7b46d2beaabe1ba7355cd2a06b91ff8.html">ORM</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -54,37 +54,37 @@
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;QVariant&gt;</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &lt;QString&gt;</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;</div>
-<div class="line"><a name="l00007"></a><span class="lineno"><a class="code" href="class_o_r_m_where.html">    7</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_o_r_m_where.html">ORMWhere</a></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;{</div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;    <span class="keyword">enum</span> Condition</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;    {</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;        Equals,</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        NotEquals,</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;        LessThan,</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        LessOrEquals,</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        GreaterThan,</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        GreaterOrEquals,</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        StartsWith,</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        EndsWith,</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        Contains,</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        IsNull</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    };</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    <a class="code" href="class_o_r_m_where.html">ORMWhere</a>();</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    <a class="code" href="class_o_r_m_where.html">ORMWhere</a>(QString fieldName, Condition con, QVariant value);</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    <span class="keywordtype">void</span> operator= (<a class="code" href="class_o_r_m_where.html">ORMWhere</a> b);</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    <a class="code" href="class_o_r_m_where.html">ORMWhere</a> operator&amp;&amp; (<a class="code" href="class_o_r_m_where.html">ORMWhere</a> b);</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    <a class="code" href="class_o_r_m_where.html">ORMWhere</a> operator|| (<a class="code" href="class_o_r_m_where.html">ORMWhere</a> b);</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    QString getWhereCondition();</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    QString m_whereCondition;</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;};</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">#endif // ORMWHERE_H</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno"><a class="code" href="class_o_r_m_where.html">   24</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_o_r_m_where.html" title="The ORMWhere class use for generate WHERE expressions.">ORMWhere</a></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;{</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00051"></a><span class="lineno"><a class="code" href="class_o_r_m_where.html#a187706d50dd5a95bdbffc6e41f617275">   51</a></span>&#160;    <span class="keyword">enum</span> <a class="code" href="class_o_r_m_where.html#a187706d50dd5a95bdbffc6e41f617275">Condition</a></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    {</div>
+<div class="line"><a name="l00053"></a><span class="lineno"><a class="code" href="class_o_r_m_where.html#a187706d50dd5a95bdbffc6e41f617275ae39fef7ec26a030eb0346ce6ab33e504">   53</a></span>&#160;        <a class="code" href="class_o_r_m_where.html#a187706d50dd5a95bdbffc6e41f617275ae39fef7ec26a030eb0346ce6ab33e504">Equals</a>,</div>
+<div class="line"><a name="l00054"></a><span class="lineno"><a class="code" href="class_o_r_m_where.html#a187706d50dd5a95bdbffc6e41f617275a99524b7bbffa3a9ad1705478fe500e10">   54</a></span>&#160;        <a class="code" href="class_o_r_m_where.html#a187706d50dd5a95bdbffc6e41f617275a99524b7bbffa3a9ad1705478fe500e10">NotEquals</a>,</div>
+<div class="line"><a name="l00055"></a><span class="lineno"><a class="code" href="class_o_r_m_where.html#a187706d50dd5a95bdbffc6e41f617275a96b3a54ad253eb733f38c1944afeb497">   55</a></span>&#160;        <a class="code" href="class_o_r_m_where.html#a187706d50dd5a95bdbffc6e41f617275a96b3a54ad253eb733f38c1944afeb497">LessThan</a>,</div>
+<div class="line"><a name="l00056"></a><span class="lineno"><a class="code" href="class_o_r_m_where.html#a187706d50dd5a95bdbffc6e41f617275a0da83e257da652ff0b20dfb44ff479cc">   56</a></span>&#160;        <a class="code" href="class_o_r_m_where.html#a187706d50dd5a95bdbffc6e41f617275a0da83e257da652ff0b20dfb44ff479cc">LessOrEquals</a>,</div>
+<div class="line"><a name="l00057"></a><span class="lineno"><a class="code" href="class_o_r_m_where.html#a187706d50dd5a95bdbffc6e41f617275a7661e0158bc3ea708dbda5ff1a475770">   57</a></span>&#160;        <a class="code" href="class_o_r_m_where.html#a187706d50dd5a95bdbffc6e41f617275a7661e0158bc3ea708dbda5ff1a475770">GreaterThan</a>,</div>
+<div class="line"><a name="l00058"></a><span class="lineno"><a class="code" href="class_o_r_m_where.html#a187706d50dd5a95bdbffc6e41f617275adcb94b4ea868b22f4b800d556a791a6a">   58</a></span>&#160;        <a class="code" href="class_o_r_m_where.html#a187706d50dd5a95bdbffc6e41f617275adcb94b4ea868b22f4b800d556a791a6a">GreaterOrEquals</a>,</div>
+<div class="line"><a name="l00059"></a><span class="lineno"><a class="code" href="class_o_r_m_where.html#a187706d50dd5a95bdbffc6e41f617275acd9c4b493076159ffded1e2724c7c67a">   59</a></span>&#160;        <a class="code" href="class_o_r_m_where.html#a187706d50dd5a95bdbffc6e41f617275acd9c4b493076159ffded1e2724c7c67a">StartsWith</a>,</div>
+<div class="line"><a name="l00060"></a><span class="lineno"><a class="code" href="class_o_r_m_where.html#a187706d50dd5a95bdbffc6e41f617275a3e3b42e843f28aa5a6de2d703de4f963">   60</a></span>&#160;        <a class="code" href="class_o_r_m_where.html#a187706d50dd5a95bdbffc6e41f617275a3e3b42e843f28aa5a6de2d703de4f963">EndsWith</a>,</div>
+<div class="line"><a name="l00061"></a><span class="lineno"><a class="code" href="class_o_r_m_where.html#a187706d50dd5a95bdbffc6e41f617275a19eb46ac2efeb7fc5f45559b473abf0f">   61</a></span>&#160;        <a class="code" href="class_o_r_m_where.html#a187706d50dd5a95bdbffc6e41f617275a19eb46ac2efeb7fc5f45559b473abf0f">Contains</a>,</div>
+<div class="line"><a name="l00062"></a><span class="lineno"><a class="code" href="class_o_r_m_where.html#a187706d50dd5a95bdbffc6e41f617275a7ca65a0edfd9b9a2d12a391b6f1eeccb">   62</a></span>&#160;        <a class="code" href="class_o_r_m_where.html#a187706d50dd5a95bdbffc6e41f617275a7ca65a0edfd9b9a2d12a391b6f1eeccb">IsNull</a></div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    };</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <a class="code" href="class_o_r_m_where.html#acc5e93592334c096f7f2633485ed8c24">ORMWhere</a>();</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <a class="code" href="class_o_r_m_where.html#acc5e93592334c096f7f2633485ed8c24">ORMWhere</a>(QString fieldName, <a class="code" href="class_o_r_m_where.html#a187706d50dd5a95bdbffc6e41f617275">Condition</a> con, QVariant value);</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_o_r_m_where.html#a2322a4e6ecedc637a06f2904f4bedcc8">operator= </a>(<a class="code" href="class_o_r_m_where.html" title="The ORMWhere class use for generate WHERE expressions.">ORMWhere</a> b);</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <a class="code" href="class_o_r_m_where.html" title="The ORMWhere class use for generate WHERE expressions.">ORMWhere</a> <a class="code" href="class_o_r_m_where.html#a301acae1560447b35fbbf50375d5285c">operator&amp;&amp; </a>(<a class="code" href="class_o_r_m_where.html" title="The ORMWhere class use for generate WHERE expressions.">ORMWhere</a> b);</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    <a class="code" href="class_o_r_m_where.html" title="The ORMWhere class use for generate WHERE expressions.">ORMWhere</a> <a class="code" href="class_o_r_m_where.html#a5785105b73bbc8533c6b10fe07108402">operator|| </a>(<a class="code" href="class_o_r_m_where.html" title="The ORMWhere class use for generate WHERE expressions.">ORMWhere</a> b);</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    QString <a class="code" href="class_o_r_m_where.html#ad235e31bfb0c824258b55da06b240ee5">getWhereCondition</a>();</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    QString m_whereCondition;</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;};</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="preprocessor">#endif // ORMWHERE_H</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Apr 2 2013 20:22:13 for ORM by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Apr 3 2013 21:20:23 for ORM by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.2
 </small></address>

@@ -3,36 +3,133 @@
 }
 
 
+The \hyperlink{class_o_r_m_database}{O\-R\-M\-Database} is wrapper for Q\-Sql\-Database.  
+
+
+
+
 Inherits Q\-Sql\-Database.
 
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{class_o_r_m_database_a1bfc00123a5d92e1828ebb972f0612b4}{{\bfseries O\-R\-M\-Database} (Q\-String driver\-Name)}\label{class_o_r_m_database_a1bfc00123a5d92e1828ebb972f0612b4}
-
+\hyperlink{class_o_r_m_database_a2a71f0c6ab0dc7aa6bdafde9731739a9}{O\-R\-M\-Database} ()
 \item 
-\hypertarget{class_o_r_m_database_a9c500c24e76bac9fd8d0e86865318293}{bool {\bfseries create\-Database} (Q\-String name)}\label{class_o_r_m_database_a9c500c24e76bac9fd8d0e86865318293}
-
+\hyperlink{class_o_r_m_database_a1bfc00123a5d92e1828ebb972f0612b4}{O\-R\-M\-Database} (Q\-String driver\-Name)
 \item 
-\hypertarget{class_o_r_m_database_affc7579b55a4430de1cac925f02ba1c9}{bool {\bfseries drop\-Database} (Q\-String name)}\label{class_o_r_m_database_affc7579b55a4430de1cac925f02ba1c9}
-
+bool \hyperlink{class_o_r_m_database_a9c500c24e76bac9fd8d0e86865318293}{create\-Database} (Q\-String name)
 \item 
-\hypertarget{class_o_r_m_database_af3f07807f8da3071587bfe232ed1d34d}{Q\-String {\bfseries last\-Query} ()}\label{class_o_r_m_database_af3f07807f8da3071587bfe232ed1d34d}
-
+bool \hyperlink{class_o_r_m_database_affc7579b55a4430de1cac925f02ba1c9}{drop\-Database} (Q\-String name)
+\item 
+Q\-String \hyperlink{class_o_r_m_database_af3f07807f8da3071587bfe232ed1d34d}{last\-Query} ()
 \end{DoxyCompactItemize}
 \subsection*{Static Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{class_o_r_m_database_ac560b3727f23580cc5c28e70c7460cb4}{static \hyperlink{class_o_r_m_database}{O\-R\-M\-Database} {\bfseries add\-O\-R\-M\-Database} (Q\-String driver\-Name)}\label{class_o_r_m_database_ac560b3727f23580cc5c28e70c7460cb4}
-
+static \hyperlink{class_o_r_m_database}{O\-R\-M\-Database} \hyperlink{class_o_r_m_database_ac560b3727f23580cc5c28e70c7460cb4}{add\-O\-R\-M\-Database} (Q\-String driver\-Name)
 \end{DoxyCompactItemize}
 \subsection*{Static Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{class_o_r_m_database_a84ddcb13a085bc15c8eeba718574e312}{static O\-R\-M\-Abstract\-Adapter $\ast$ {\bfseries adapter} = 0}\label{class_o_r_m_database_a84ddcb13a085bc15c8eeba718574e312}
-
+static O\-R\-M\-Abstract\-Adapter $\ast$ \hyperlink{class_o_r_m_database_a84ddcb13a085bc15c8eeba718574e312}{adapter} = 0
 \end{DoxyCompactItemize}
 
+
+\subsection{Detailed Description}
+The \hyperlink{class_o_r_m_database}{O\-R\-M\-Database} is wrapper for Q\-Sql\-Database. 
+
+The \hyperlink{class_o_r_m_database}{O\-R\-M\-Database} provides interface for comfortable accessing a database with one connection. If you want use \hyperlink{class_o_r_m_object}{O\-R\-M\-Object} models, you must create object of this class. Example\-: 
+\begin{DoxyCode}
+\hyperlink{class_o_r_m_database}{ORMDatabase} myDatabase(\textcolor{stringliteral}{"QMYSQL"});
+myDatabase.setUserName(\textcolor{stringliteral}{"root"});
+myDatabase.\hyperlink{class_o_r_m_database_a9c500c24e76bac9fd8d0e86865318293}{createDatabase}(\textcolor{stringliteral}{"MyDatabase"});
+\end{DoxyCode}
+ or 
+\begin{DoxyCode}
+\hyperlink{class_o_r_m_database}{ORMDatabase} myDatabase;
+myDatabase = \hyperlink{class_o_r_m_database_ac560b3727f23580cc5c28e70c7460cb4}{ORMDatabase::addORMDatabase}(\textcolor{stringliteral}{"QMYSQL"});
+myDatabase.setUserName(\textcolor{stringliteral}{"root"});
+myDatabase.\hyperlink{class_o_r_m_database_a9c500c24e76bac9fd8d0e86865318293}{createDatabase}(\textcolor{stringliteral}{"MyDatabase"});
+\end{DoxyCode}
+ 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_o_r_m_database_a2a71f0c6ab0dc7aa6bdafde9731739a9}{\index{O\-R\-M\-Database@{O\-R\-M\-Database}!O\-R\-M\-Database@{O\-R\-M\-Database}}
+\index{O\-R\-M\-Database@{O\-R\-M\-Database}!ORMDatabase@{O\-R\-M\-Database}}
+\subsubsection[{O\-R\-M\-Database}]{\setlength{\rightskip}{0pt plus 5cm}O\-R\-M\-Database\-::\-O\-R\-M\-Database (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{class_o_r_m_database_a2a71f0c6ab0dc7aa6bdafde9731739a9}
+Constructs empty \hyperlink{class_o_r_m_database}{O\-R\-M\-Database}. \hypertarget{class_o_r_m_database_a1bfc00123a5d92e1828ebb972f0612b4}{\index{O\-R\-M\-Database@{O\-R\-M\-Database}!O\-R\-M\-Database@{O\-R\-M\-Database}}
+\index{O\-R\-M\-Database@{O\-R\-M\-Database}!ORMDatabase@{O\-R\-M\-Database}}
+\subsubsection[{O\-R\-M\-Database}]{\setlength{\rightskip}{0pt plus 5cm}O\-R\-M\-Database\-::\-O\-R\-M\-Database (
+\begin{DoxyParamCaption}
+\item[{Q\-String}]{driver\-Name}
+\end{DoxyParamCaption}
+)}}\label{class_o_r_m_database_a1bfc00123a5d92e1828ebb972f0612b4}
+Constructs \hyperlink{class_o_r_m_database}{O\-R\-M\-Database} with given driver\-Name. 
+\begin{DoxyParams}{Parameters}
+{\em driver\-Name} & driver that support Qt \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_o_r_m_database_ac560b3727f23580cc5c28e70c7460cb4}{\index{O\-R\-M\-Database@{O\-R\-M\-Database}!add\-O\-R\-M\-Database@{add\-O\-R\-M\-Database}}
+\index{add\-O\-R\-M\-Database@{add\-O\-R\-M\-Database}!ORMDatabase@{O\-R\-M\-Database}}
+\subsubsection[{add\-O\-R\-M\-Database}]{\setlength{\rightskip}{0pt plus 5cm}{\bf O\-R\-M\-Database} O\-R\-M\-Database\-::add\-O\-R\-M\-Database (
+\begin{DoxyParamCaption}
+\item[{Q\-String}]{driver\-Name}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [static]}}}\label{class_o_r_m_database_ac560b3727f23580cc5c28e70c7460cb4}
+Constructs \hyperlink{class_o_r_m_database}{O\-R\-M\-Database} with given driver\-Name and returns it. \hypertarget{class_o_r_m_database_a9c500c24e76bac9fd8d0e86865318293}{\index{O\-R\-M\-Database@{O\-R\-M\-Database}!create\-Database@{create\-Database}}
+\index{create\-Database@{create\-Database}!ORMDatabase@{O\-R\-M\-Database}}
+\subsubsection[{create\-Database}]{\setlength{\rightskip}{0pt plus 5cm}bool O\-R\-M\-Database\-::create\-Database (
+\begin{DoxyParamCaption}
+\item[{Q\-String}]{name}
+\end{DoxyParamCaption}
+)}}\label{class_o_r_m_database_a9c500c24e76bac9fd8d0e86865318293}
+Create database with given name 
+\begin{DoxyParams}{Parameters}
+{\em name} & -\/ database name \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if database created, otherwise return false 
+\end{DoxyReturn}
+\hypertarget{class_o_r_m_database_affc7579b55a4430de1cac925f02ba1c9}{\index{O\-R\-M\-Database@{O\-R\-M\-Database}!drop\-Database@{drop\-Database}}
+\index{drop\-Database@{drop\-Database}!ORMDatabase@{O\-R\-M\-Database}}
+\subsubsection[{drop\-Database}]{\setlength{\rightskip}{0pt plus 5cm}bool O\-R\-M\-Database\-::drop\-Database (
+\begin{DoxyParamCaption}
+\item[{Q\-String}]{name}
+\end{DoxyParamCaption}
+)}}\label{class_o_r_m_database_affc7579b55a4430de1cac925f02ba1c9}
+Delete database with given name 
+\begin{DoxyParams}{Parameters}
+{\em name} & -\/ database name \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if database deleted, otherwise return false 
+\end{DoxyReturn}
+\hypertarget{class_o_r_m_database_af3f07807f8da3071587bfe232ed1d34d}{\index{O\-R\-M\-Database@{O\-R\-M\-Database}!last\-Query@{last\-Query}}
+\index{last\-Query@{last\-Query}!ORMDatabase@{O\-R\-M\-Database}}
+\subsubsection[{last\-Query}]{\setlength{\rightskip}{0pt plus 5cm}Q\-String O\-R\-M\-Database\-::last\-Query (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{class_o_r_m_database_af3f07807f8da3071587bfe232ed1d34d}
+Return last query to database. \begin{DoxyReturn}{Returns}
+S\-Q\-L query 
+\end{DoxyReturn}
+
+
+\subsection{Member Data Documentation}
+\hypertarget{class_o_r_m_database_a84ddcb13a085bc15c8eeba718574e312}{\index{O\-R\-M\-Database@{O\-R\-M\-Database}!adapter@{adapter}}
+\index{adapter@{adapter}!ORMDatabase@{O\-R\-M\-Database}}
+\subsubsection[{adapter}]{\setlength{\rightskip}{0pt plus 5cm}O\-R\-M\-Abstract\-Adapter $\ast$ O\-R\-M\-Database\-::adapter = 0\hspace{0.3cm}{\ttfamily [static]}}}\label{class_o_r_m_database_a84ddcb13a085bc15c8eeba718574e312}
+Adapter builds various queries. 
 
 The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
 \item 

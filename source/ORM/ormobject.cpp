@@ -29,13 +29,13 @@ bool ORMObject::save()
     QHash<QString, QVariant> info;
     for(int i = 1; i < metaObject()->propertyCount(); i++)
         info.insert(QString(metaObject()->property(i).name()), metaObject()->property(i).read(this));
-    if(id == -1)
+    if(id < 0)
     {
         id = ORMDatabase::adapter->addRecord(metaObject()->className(), info);
         return (id > 0);
     }
     else
-        return false;
+        return ORMDatabase::adapter->updateRecord(metaObject()->className(), id, info);
 }
 
 bool ORMObject::find(int id)

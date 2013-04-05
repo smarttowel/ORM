@@ -14,6 +14,7 @@ public:
     bool dropTable(QString tableName);
     bool dropDatabase(QString name);
     int addRecord(QString tableName, const QHash<QString, QVariant> &info);
+    bool updateRecord(QString tableName, qlonglong id, const QHash<QString, QVariant> &info);
     QList<QSqlRecord> find(QString tableName, QString findString);
     virtual QSqlRecord first(QString tableName);
     virtual QSqlRecord last(QString tableName);

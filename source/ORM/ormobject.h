@@ -66,6 +66,7 @@ public:
     int getId() const;
     /*!
        Read all meta-property from model and save their into table.
+       If object's id less than 0 - create new object, otherwise updated existing object.
        \return true if success, otherwise return false
      */
     bool save();
@@ -93,9 +94,15 @@ public:
        \return true if object is found, otherwise return false
      */
     bool findBy(const QString fieldName, const QVariant value);
+    /*!
+       Find objects by vector of values. If found more than one object, you can get them by toList().
+       \param fieldName - field name for search
+       \param values - vector of values for search
+       \return true if object is found, otherwise return false
+     */
     bool findBy(const QString fieldName, const QVector<QVariant> &values);
     /*!
-       Find object by mane fields and values. If there is more than
+       Find object by many fields and values. If there is more than
        one object, you can get them by toList().
        \param params - Hash<fieldName, value>, of which will be searched
        \return true if object is found, otherwise return false
@@ -116,6 +123,12 @@ public:
        \return true if object is found, otherwise return false
      */
     bool where(ORMWhere condition);
+    /*!
+       Immediately updates object field in table.
+       \param fieldName - field name, value of which will be updated
+       \param value - value for write to table
+       \return true if property updated, otherwise return false
+     */
     bool updateProperty(QString fieldName, QVariant value);
     //
     template<class T>

@@ -151,6 +151,15 @@ bool ORMObject::where(ORMWhere condition)
     }
 }
 
+bool ORMObject::updateProperty(QString fieldName, QVariant value)
+{
+    if(id < 0)
+        return false;
+    QHash<QString, QVariant> info;
+    info.insert(fieldName, value);
+    return ORMDatabase::adapter->updateRecord(metaObject()->className(), id, info);
+}
+
 void ORMObject::translateRecToThisObj(const QSqlRecord &record)
 {
     for(int i = 0; i < record.count(); i++)

@@ -116,6 +116,7 @@ public:
        \return true if object is found, otherwise return false
      */
     bool where(ORMWhere condition);
+    bool updateProperty(QString fieldName, QVariant value);
     //
     template<class T>
     /*!

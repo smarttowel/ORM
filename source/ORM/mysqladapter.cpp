@@ -61,6 +61,21 @@ int MySqlAdapter::addRecord(QString tableName, const QHash<QString, QVariant> &i
         return -1;
 }
 
+bool MySqlAdapter::updateRecord(QString tableName, qlonglong id, const QHash<QString, QVariant> &info)
+{
+    m_lastQuery = QString("UPDATE %1 SET ")
+            .arg(tableName);
+    QString fieldName;
+    foreach(fieldName, info.keys())
+        m_lastQuery += QString("%1 = '%2', ")
+                .arg(fieldName)
+                .arg(info.value(fieldName).toString());
+    m_lastQuery.resize(m_lastQuery.size() - 2);
+    m_lastQuery += QString(" WHERE id = %1;")
+            .arg(id);
+    return m_query.exec(m_lastQuery);
+}
+
 QList<QSqlRecord> MySqlAdapter::find(QString tableName, QString findString)
 {
     QList<QSqlRecord> result;
@@ -86,17 +101,6 @@ QSqlRecord MySqlAdapter::last(QString tableName)
 {
     m_lastQuery = QString("SELECT * FROM %1 ORDER BY id DESC LIMIT 1;")
             .arg(tableName);
-    m_query.exec(m_lastQuery);
-    m_query.next();
-    return m_query.record();
-}
-
-QSqlRecord MySqlAdapter::findBy(QString tableName, QString fieldName, QVariant value)
-{
-    m_lastQuery = QString("SELECT * FROM %1 WHERE %2 = '%3'")
-            .arg(tableName)
-            .arg(fieldName)
-            .arg(value.toString());
     m_query.exec(m_lastQuery);
     m_query.next();
     return m_query.record();

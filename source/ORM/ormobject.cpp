@@ -191,6 +191,11 @@ bool ORMObject::removeBy(ORMWhere condition)
     return ORMDatabase::adapter->remove(metaObject()->className(), condition.getWhereCondition());
 }
 
+bool ORMObject::removeAll()
+{
+    return ORMDatabase::adapter->removeAll(metaObject()->className());
+}
+
 void ORMObject::translateRecToThisObj(const QSqlRecord &record)
 {
     for(int i = 0; i < record.count(); i++)

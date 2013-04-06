@@ -15,8 +15,8 @@ public:
     virtual bool dropTable(const QString tableName) = 0;
     virtual bool dropDatabase(const QString name) = 0;
     //
-    QSqlError lastError();
-    QString lastQuery();
+    QSqlError lastError() const;
+    QString lastQuery() const;
     //
     virtual int addRecord(const QString tableName, const QHash<QString, QVariant> &info) = 0;
     virtual bool updateRecord(const QString tableName, const qlonglong id, const QHash<QString, QVariant> &info) = 0;
@@ -24,7 +24,8 @@ public:
     virtual QList<QSqlRecord> findAll(const QString tableName) = 0;
     virtual QSqlRecord first(const QString tableName) = 0;
     virtual QSqlRecord last(const QString tableName) = 0;
-    virtual bool remove(QString tableName, QString whereString) = 0;
+    virtual bool remove(const QString tableName, const QString whereString) = 0;
+    virtual bool removeAll(const QString tableName) = 0;
 
 protected:
     QHash<QString, QString> m_tableTypes;

@@ -19,7 +19,8 @@ public:
     QList<QSqlRecord> findAll(const QString tableName);
     virtual QSqlRecord first(const QString tableName);
     virtual QSqlRecord last(const QString tableName);
-    virtual bool remove(QString tableName, QString whereString);
+    virtual bool remove(const QString tableName, const QString whereString);
+    virtual bool removeAll(const QString tableName);
 
 protected:
     void fillTableTypes();

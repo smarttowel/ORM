@@ -132,6 +132,7 @@ public:
      */
     bool updateProperty(QString fieldName, QVariant value);
     bool remove();
+    bool removeBy(ORMWhere condition);
     //
     template<class T>
     /*!

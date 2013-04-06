@@ -117,6 +117,14 @@ QSqlRecord MySqlAdapter::last(const QString tableName)
     return m_query.record();
 }
 
+bool MySqlAdapter::remove(QString tableName, QString whereString)
+{
+    m_lastQuery = QString("DELETE FROM %1 WHERE %2;")
+            .arg(tableName)
+            .arg(whereString);
+    return m_query.exec(m_lastQuery);
+}
+
 void MySqlAdapter::initDB(QString name)
 {
     m_lastQuery = QString("USE %1;")

@@ -24,6 +24,7 @@ public:
     virtual QList<QSqlRecord> findAll(const QString tableName) = 0;
     virtual QSqlRecord first(const QString tableName) = 0;
     virtual QSqlRecord last(const QString tableName) = 0;
+    virtual bool remove(QString tableName, QString whereString) = 0;
 
 protected:
     QHash<QString, QString> m_tableTypes;

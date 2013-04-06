@@ -131,6 +131,7 @@ public:
        \return true if property updated, otherwise return false
      */
     bool updateProperty(QString fieldName, QVariant value);
+    bool remove();
     //
     template<class T>
     /*!

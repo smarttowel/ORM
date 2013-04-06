@@ -174,6 +174,18 @@ bool ORMObject::updateProperty(QString fieldName, QVariant value)
     return ORMDatabase::adapter->updateRecord(metaObject()->className(), id, info);
 }
 
+bool ORMObject::remove()
+{
+    if(ORMDatabase::adapter->remove(metaObject()->className(), QString("id = %1")
+                                    .arg(id)))
+    {
+        id = -1;
+        return true;
+    }
+    else
+        return false;
+}
+
 void ORMObject::translateRecToThisObj(const QSqlRecord &record)
 {
     for(int i = 0; i < record.count(); i++)

@@ -52,6 +52,7 @@ private Q_SLOTS:
     void test_findByParams();
     void test_where();
     void test_updateProperty();
+    void test_remove();
     void test_dropTable();
 };
 
@@ -284,6 +285,29 @@ void Test_ORMObject::test_updateProperty()
     QCOMPARE(model2.updateProperty("nameInt", 20), false);
     model2.first();
     QCOMPARE(model2.getnameString(), QString("Hello"));
+}
+
+void Test_ORMObject::test_remove()
+{
+    db.exec("DELETE FROM MyModel;");
+    MyModel model, model2, model3, resultModel;
+    model.save();
+    model2.save();
+    model3.save();
+    int id = model.getId();
+    int id2 = model2.getId();
+    QCOMPARE(resultModel.findAll(), true);
+    QCOMPARE(resultModel.toList<MyModel>().size(), 3);
+    QCOMPARE(resultModel.find(id), true);
+    QCOMPARE(model.remove(), true);
+    QCOMPARE(resultModel.find(id), false);
+    QCOMPARE(resultModel.find(id2), true);
+    QCOMPARE(model2.remove(), true);
+    QCOMPARE(resultModel.findAll(), true);
+    QCOMPARE(resultModel.toList<MyModel>().size(), 1);
+    QCOMPARE(resultModel.find(id2), false);
+    QCOMPARE(model3.remove(), true);
+    QCOMPARE(resultModel.findAll(), false);
 }
 
 void Test_ORMObject::test_first()

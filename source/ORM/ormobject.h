@@ -76,6 +76,7 @@ public:
        \return true if object is found, otherwise return false
      */
     bool find(int id);
+    bool findAll();
     /*!
         Find first object in table
         \return true if object is found, otherwise return false

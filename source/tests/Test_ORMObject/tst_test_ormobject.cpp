@@ -44,6 +44,7 @@ private Q_SLOTS:
     void test_CreateTable();
     void test_save();
     void test_find();
+    void test_findAll();
     void test_first();
     void test_last();
     void test_findByValue();
@@ -145,6 +146,19 @@ void Test_ORMObject::test_find()
             QCOMPARE(query.value(i), model.property(query.record().fieldName(i).toLocal8Bit().constData()));
         else
             QCOMPARE(query.value(i).toInt(), model.getId());
+}
+
+void Test_ORMObject::test_findAll()
+{
+    db.exec("DELETE FROM MyModel;");
+    MyModel model, model1, model2, model3, resultModel;
+    QCOMPARE(resultModel.findAll(), false);
+    model.save();
+    model1.save();
+    model2.save();
+    model3.save();
+    QCOMPARE(resultModel.findAll(), true);
+    QCOMPARE(resultModel.toList<MyModel>().size(), 4);
 }
 
 void Test_ORMObject::test_findByValue()

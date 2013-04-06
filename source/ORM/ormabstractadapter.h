@@ -21,6 +21,7 @@ public:
     virtual int addRecord(QString tableName, const QHash<QString, QVariant> &info) = 0;
     virtual bool updateRecord(QString tableName, qlonglong id, const QHash<QString, QVariant> &info) = 0;
     virtual QList<QSqlRecord> find(QString tableName, QString findString) = 0;
+    virtual QList<QSqlRecord> findAll(QString tableName) = 0;
     virtual QSqlRecord first(QString tableName) = 0;
     virtual QSqlRecord last(QString tableName) = 0;
 

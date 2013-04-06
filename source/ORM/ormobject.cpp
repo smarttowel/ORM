@@ -53,6 +53,20 @@ bool ORMObject::find(int id)
     }
 }
 
+bool ORMObject::findAll()
+{
+    QList<QSqlRecord> list;
+    list = ORMDatabase::adapter->findAll(metaObject()->className());
+    if(list.isEmpty())
+        return false;
+    else
+    {
+        m_records = list;
+        translateRecToThisObj(list.first());
+        return true;
+    }
+}
+
 bool ORMObject::first()
 {
     QSqlRecord record = ORMDatabase::adapter->first(metaObject()->className());

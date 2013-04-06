@@ -10,20 +10,20 @@ class ORMAbstractAdapter
 {
 public:
     ORMAbstractAdapter();
-    virtual bool createDatabase(QString name) = 0;
-    virtual bool createTable(QString tableName, const QHash<QString, QString> &info) = 0;
-    virtual bool dropTable(QString tableName) = 0;
-    virtual bool dropDatabase(QString name) = 0;
+    virtual bool createDatabase(const QString name) = 0;
+    virtual bool createTable(const QString tableName, const QHash<QString, QString> &info) = 0;
+    virtual bool dropTable(const QString tableName) = 0;
+    virtual bool dropDatabase(const QString name) = 0;
     //
     QSqlError lastError();
     QString lastQuery();
     //
-    virtual int addRecord(QString tableName, const QHash<QString, QVariant> &info) = 0;
-    virtual bool updateRecord(QString tableName, qlonglong id, const QHash<QString, QVariant> &info) = 0;
-    virtual QList<QSqlRecord> find(QString tableName, QString findString) = 0;
-    virtual QList<QSqlRecord> findAll(QString tableName) = 0;
-    virtual QSqlRecord first(QString tableName) = 0;
-    virtual QSqlRecord last(QString tableName) = 0;
+    virtual int addRecord(const QString tableName, const QHash<QString, QVariant> &info) = 0;
+    virtual bool updateRecord(const QString tableName, const qlonglong id, const QHash<QString, QVariant> &info) = 0;
+    virtual QList<QSqlRecord> find(const QString tableName, const QString findString) = 0;
+    virtual QList<QSqlRecord> findAll(const QString tableName) = 0;
+    virtual QSqlRecord first(const QString tableName) = 0;
+    virtual QSqlRecord last(const QString tableName) = 0;
 
 protected:
     QHash<QString, QString> m_tableTypes;

@@ -5,7 +5,7 @@ MySqlAdapter::MySqlAdapter()
     fillTableTypes();
 }
 
-bool MySqlAdapter::createDatabase(QString name)
+bool MySqlAdapter::createDatabase(const QString name)
 {
     m_lastQuery = QString("CREATE DATABASE %1;")
             .arg(name);
@@ -15,7 +15,7 @@ bool MySqlAdapter::createDatabase(QString name)
     return result;
 }
 
-bool MySqlAdapter::createTable(QString tableName, const QHash<QString, QString> &info)
+bool MySqlAdapter::createTable(const QString tableName, const QHash<QString, QString> &info)
 {
     QString name;
     m_lastQuery = QString("CREATE TABLE %1(id INT AUTO_INCREMENT, ")
@@ -28,21 +28,21 @@ bool MySqlAdapter::createTable(QString tableName, const QHash<QString, QString> 
     return m_query.exec(m_lastQuery);
 }
 
-bool MySqlAdapter::dropTable(QString tableName)
+bool MySqlAdapter::dropTable(const QString tableName)
 {
     m_lastQuery = QString("DROP TABLE %1;")
             .arg(tableName);
     return m_query.exec(m_lastQuery);
 }
 
-bool MySqlAdapter::dropDatabase(QString name)
+bool MySqlAdapter::dropDatabase(const QString name)
 {
     m_lastQuery = QString("DROP DATABASE %1")
             .arg(name);
     return m_query.exec(m_lastQuery);
 }
 
-int MySqlAdapter::addRecord(QString tableName, const QHash<QString, QVariant> &info)
+int MySqlAdapter::addRecord(const QString tableName, const QHash<QString, QVariant> &info)
 {
     QString key;
     m_lastQuery = QString("INSERT INTO %1(")
@@ -61,7 +61,7 @@ int MySqlAdapter::addRecord(QString tableName, const QHash<QString, QVariant> &i
         return -1;
 }
 
-bool MySqlAdapter::updateRecord(QString tableName, qlonglong id, const QHash<QString, QVariant> &info)
+bool MySqlAdapter::updateRecord(const QString tableName, const qlonglong id, const QHash<QString, QVariant> &info)
 {
     m_lastQuery = QString("UPDATE %1 SET ")
             .arg(tableName);
@@ -76,7 +76,7 @@ bool MySqlAdapter::updateRecord(QString tableName, qlonglong id, const QHash<QSt
     return m_query.exec(m_lastQuery);
 }
 
-QList<QSqlRecord> MySqlAdapter::find(QString tableName, QString findString)
+QList<QSqlRecord> MySqlAdapter::find(const QString tableName, const QString findString)
 {
     QList<QSqlRecord> result;
     m_lastQuery = QString("SELECT * FROM %1 WHERE %2;")
@@ -88,7 +88,7 @@ QList<QSqlRecord> MySqlAdapter::find(QString tableName, QString findString)
     return result;
 }
 
-QList<QSqlRecord> MySqlAdapter::findAll(QString tableName)
+QList<QSqlRecord> MySqlAdapter::findAll(const QString tableName)
 {
     QList<QSqlRecord> result;
     m_lastQuery = QString("SELECT * FROM %1;")
@@ -99,7 +99,7 @@ QList<QSqlRecord> MySqlAdapter::findAll(QString tableName)
     return result;
 }
 
-QSqlRecord MySqlAdapter::first(QString tableName)
+QSqlRecord MySqlAdapter::first(const QString tableName)
 {
     m_lastQuery = QString("SELECT * FROM %1 ORDER BY id ASC LIMIT 1;")
             .arg(tableName);
@@ -108,7 +108,7 @@ QSqlRecord MySqlAdapter::first(QString tableName)
     return m_query.record();
 }
 
-QSqlRecord MySqlAdapter::last(QString tableName)
+QSqlRecord MySqlAdapter::last(const QString tableName)
 {
     m_lastQuery = QString("SELECT * FROM %1 ORDER BY id DESC LIMIT 1;")
             .arg(tableName);

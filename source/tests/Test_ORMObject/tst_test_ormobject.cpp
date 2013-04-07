@@ -43,6 +43,7 @@ private:
 private Q_SLOTS:
     void test_CreateTable();
     void test_save();
+    void test_update();
     void test_find();
     void test_findAll();
     void test_first();
@@ -80,7 +81,6 @@ void Test_ORMObject::test_CreateTable()
 void Test_ORMObject::test_save()
 {
     db.exec("DELETE FROM MyModel;");
-    //insert part
     QTime time = QTime::currentTime();
     MyModel model;
     model.setnameBool(true);
@@ -105,25 +105,22 @@ void Test_ORMObject::test_save()
             QCOMPARE(query.value(i), model.property(query.record().fieldName(i).toLocal8Bit().constData()));
         else
             QCOMPARE(query.value(i).toInt(), model.getId());
-    //update part
+}
+
+void Test_ORMObject::test_update()
+{
     db.exec("DELETE FROM MyModel;");
     MyModel model2, model3;
     model2.setnameInt(10);
-    QCOMPARE(model2.save(), true);
-    query.exec("SELECT * FROM MyModel;");
-    QCOMPARE(query.size(), 1);
-    model2.setnameString("Hello");
-    QCOMPARE(model2.save(), true);
-    query.exec("SELECT * FROM MyModel;");
-    QCOMPARE(query.size(), 1);
-    model3.first();
-    QCOMPARE(model3.getnameInt(), 10);
-    QCOMPARE(model3.getnameString(), QString("Hello"));
-    QCOMPARE(model2.getId(), model3.getId());
-    model3.setnamedouble(3.14);
-    QCOMPARE(model3.save(), true);
-    query.exec("SELECT * FROM MyModel;");
-    QCOMPARE(query.size(), 1);
+    QCOMPARE(model2.update(), false);
+    QCOMPARE(model3.findAll(), false);
+    model2.save();
+    QCOMPARE(model3.findAll(), true);
+    model3.setnameInt(15);
+    QCOMPARE(model3.update(), true);
+    QCOMPARE(model2.findAll(), true);
+    QCOMPARE(model2.toList<MyModel>().size(), 1);
+    QCOMPARE(model2.getnameInt(), 15);
 }
 
 void Test_ORMObject::test_find()

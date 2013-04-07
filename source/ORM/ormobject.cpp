@@ -38,6 +38,16 @@ bool ORMObject::save()
         return ORMDatabase::adapter->updateRecord(metaObject()->className(), id, info);
 }
 
+bool ORMObject::update()
+{
+    if(id < 0)
+        return false;
+    QHash<QString, QVariant> info;
+    for(int i = 1; i < metaObject()->propertyCount(); i++)
+        info.insert(QString(metaObject()->property(i).name()), metaObject()->property(i).read(this));
+    return ORMDatabase::adapter->updateRecord(metaObject()->className(), id, info);
+}
+
 bool ORMObject::find(int id)
 {
     QList<QSqlRecord> list;

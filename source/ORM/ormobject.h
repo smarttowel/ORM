@@ -70,6 +70,7 @@ public:
        \return true if success, otherwise return false
      */
     bool save();
+    bool update();
     /*!
        Find object by id
        \param id - existing object id

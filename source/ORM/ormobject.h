@@ -139,6 +139,7 @@ public:
     bool remove();
     bool removeBy(ORMWhere condition);
     bool removeAll();
+    int count();
     //
     template<class T>
     /*!

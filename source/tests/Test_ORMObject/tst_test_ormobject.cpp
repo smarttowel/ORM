@@ -60,6 +60,7 @@ private Q_SLOTS:
     void test_remove();
     void test_removeBy();
     void test_removeAll();
+    void test_count();
     void test_dropTable();
 };
 
@@ -389,6 +390,22 @@ void Test_ORMObject::test_removeAll()
     QCOMPARE(model1.listSize(), 3);
     model1.removeAll();
     QCOMPARE(model1.findAll(), false);
+}
+
+void Test_ORMObject::test_count()
+{
+    db.exec("DELETE FROM MyModel;");
+    MyModel model, model2, model3;
+    QCOMPARE(model.count(), 0);
+    model.save();
+    QCOMPARE(model.count(), 1);
+    model2.save();
+    QCOMPARE(model.count(), 2);
+    model3.save();
+    QCOMPARE(model.count(), 3);
+    model2.remove();
+    model3.remove();
+    QCOMPARE(model.count(), 1);
 }
 
 void Test_ORMObject::test_first()

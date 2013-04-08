@@ -227,6 +227,11 @@ bool ORMObject::removeAll()
     return ORMDatabase::adapter->removeAll(metaObject()->className());
 }
 
+int ORMObject::count()
+{
+    return ORMDatabase::adapter->count(metaObject()->className());
+}
+
 void ORMObject::translateRecToThisObj(const QSqlRecord &record)
 {
     for(int i = 0; i < record.count(); i++)

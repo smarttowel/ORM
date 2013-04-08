@@ -21,6 +21,7 @@ public:
     virtual QSqlRecord last(const QString tableName);
     virtual bool remove(const QString tableName, const QString whereString);
     virtual bool removeAll(const QString tableName);
+    virtual int count(const QString tableName);
 
 protected:
     void fillTableTypes();

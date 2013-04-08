@@ -180,6 +180,11 @@ bool ORMObject::where(ORMWhere condition)
     }
 }
 
+bool ORMObject::exists()
+{
+    return !ORMDatabase::adapter->findAll(metaObject()->className()).isEmpty();
+}
+
 bool ORMObject::updateProperty(QString fieldName, QVariant value)
 {
     if(id < 0)

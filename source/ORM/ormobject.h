@@ -132,6 +132,7 @@ public:
        \param value - value for write to table
        \return true if property updated, otherwise return false
      */
+    bool exists();
     bool updateProperty(QString fieldName, QVariant value);
     bool remove();
     bool removeBy(ORMWhere condition);

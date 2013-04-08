@@ -44,7 +44,6 @@ private Q_SLOTS:
     void test_CreateTable();
     void test_listSize();
     void test_save();
-    void test_update();
     void test_find();
     void test_findAll();
     void test_first();
@@ -53,7 +52,9 @@ private Q_SLOTS:
     void test_findByValues();
     void test_findByParams();
     void test_where();
+    void test_update();
     void test_updateProperty();
+    void test_exists();
     void test_remove();
     void test_removeBy();
     void test_removeAll();
@@ -296,6 +297,17 @@ void Test_ORMObject::test_updateProperty()
     QCOMPARE(model2.updateProperty("nameInt", 20), false);
     model2.first();
     QCOMPARE(model2.getnameString(), QString("Hello"));
+}
+
+void Test_ORMObject::test_exists()
+{
+    db.exec("DELETE FROM MyModel;");
+    MyModel model;
+    QCOMPARE(model.exists(), false);
+    model.save();
+    QCOMPARE(model.exists(), true);
+    db.exec("DELETE FROM MyModel;");
+    QCOMPARE(model.exists(), false);
 }
 
 void Test_ORMObject::test_remove()

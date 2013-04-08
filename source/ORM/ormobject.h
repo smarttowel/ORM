@@ -134,6 +134,7 @@ public:
      */
     bool exists();
     bool exists(int id);
+    bool exists(ORMWhere con);
     bool updateProperty(QString fieldName, QVariant value);
     bool remove();
     bool removeBy(ORMWhere condition);

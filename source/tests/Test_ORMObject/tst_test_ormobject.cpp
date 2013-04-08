@@ -56,6 +56,7 @@ private Q_SLOTS:
     void test_updateProperty();
     void test_exists();
     void test_existsById();
+    void test_existsByWhere();
     void test_remove();
     void test_removeBy();
     void test_removeAll();
@@ -322,6 +323,20 @@ void Test_ORMObject::test_existsById()
     int id = model.getId();
     model.remove();
     QCOMPARE(model.exists(id), false);
+}
+
+void Test_ORMObject::test_existsByWhere()
+{
+    db.exec("DELETE FROM MyModel;");
+    MyModel model, model2;
+    model.setnameInt(10);
+    model2.setnameInt(15);
+    model.save();
+    model2.save();
+    QCOMPARE(model.exists(ORMWhere("nameInt", ORMWhere::Equals, 10) || ORMWhere("nameInt", ORMWhere::Equals, 15)), true);
+    QCOMPARE(model.exists(ORMWhere("nameInt", ORMWhere::Equals, 10) && ORMWhere("nameInt", ORMWhere::Equals, 15)), false);
+    QCOMPARE(model.exists(ORMWhere("nameInt", ORMWhere::LessThan, 13)), true);
+    QCOMPARE(model.exists(ORMWhere("nameInt", ORMWhere::Equals, 20)), false);
 }
 
 void Test_ORMObject::test_remove()

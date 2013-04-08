@@ -64,6 +64,7 @@ public:
        \return Id contains current object id. Immediately after creation id = -1.
      */
     int getId() const;
+    int listSize();
     /*!
        Read all meta-property from model and save their into table.
        If object's id less than 0 - create new object, otherwise updated existing object.

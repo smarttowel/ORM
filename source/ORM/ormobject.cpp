@@ -24,6 +24,11 @@ int ORMObject::getId() const
     return id;
 }
 
+int ORMObject::listSize()
+{
+    return m_records.size();
+}
+
 bool ORMObject::save()
 {
     QHash<QString, QVariant> info;

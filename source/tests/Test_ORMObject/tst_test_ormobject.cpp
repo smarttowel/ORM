@@ -42,6 +42,7 @@ private:
 
 private Q_SLOTS:
     void test_CreateTable();
+    void test_listSize();
     void test_save();
     void test_update();
     void test_find();
@@ -76,6 +77,17 @@ void Test_ORMObject::test_CreateTable()
 {
     MyModel model;
     QCOMPARE(model.createTable(), true);
+}
+
+void Test_ORMObject::test_listSize()
+{
+    db.exec("DELETE FROM MyModel;");
+    MyModel model;
+    QCOMPARE(model.listSize(), 0);
+    model.save();
+    QCOMPARE(model.listSize(), 0);
+    model.first();
+    QCOMPARE(model.listSize(), 1);
 }
 
 void Test_ORMObject::test_save()
@@ -119,7 +131,7 @@ void Test_ORMObject::test_update()
     model3.setnameInt(15);
     QCOMPARE(model3.update(), true);
     QCOMPARE(model2.findAll(), true);
-    QCOMPARE(model2.toList<MyModel>().size(), 1);
+    QCOMPARE(model2.listSize(), 1);
     QCOMPARE(model2.getnameInt(), 15);
 }
 
@@ -158,7 +170,7 @@ void Test_ORMObject::test_findAll()
     model2.save();
     model3.save();
     QCOMPARE(resultModel.findAll(), true);
-    QCOMPARE(resultModel.toList<MyModel>().size(), 4);
+    QCOMPARE(resultModel.listSize(), 4);
 }
 
 void Test_ORMObject::test_findByValue()
@@ -192,7 +204,7 @@ void Test_ORMObject::test_findByValues()
     vector.append(10);
     vector.append(11);
     QCOMPARE(resultModel.findBy("nameInt", vector), true);
-    QCOMPARE(resultModel.toList<MyModel>().size(), 2);
+    QCOMPARE(resultModel.listSize(), 2);
     QCOMPARE(resultModel.getId(), model1.getId());
     vector.clear();
     QCOMPARE(resultModel.findBy("nameInt", vector), false);
@@ -296,14 +308,14 @@ void Test_ORMObject::test_remove()
     int id = model.getId();
     int id2 = model2.getId();
     QCOMPARE(resultModel.findAll(), true);
-    QCOMPARE(resultModel.toList<MyModel>().size(), 3);
+    QCOMPARE(resultModel.listSize(), 3);
     QCOMPARE(resultModel.find(id), true);
     QCOMPARE(model.remove(), true);
     QCOMPARE(resultModel.find(id), false);
     QCOMPARE(resultModel.find(id2), true);
     QCOMPARE(model2.remove(), true);
     QCOMPARE(resultModel.findAll(), true);
-    QCOMPARE(resultModel.toList<MyModel>().size(), 1);
+    QCOMPARE(resultModel.listSize(), 1);
     QCOMPARE(resultModel.find(id2), false);
     QCOMPARE(model3.remove(), true);
     QCOMPARE(resultModel.findAll(), false);
@@ -333,7 +345,7 @@ void Test_ORMObject::test_removeAll()
     model2.save();
     model3.save();
     QCOMPARE(model1.findAll(), true);
-    QCOMPARE(model1.toList<MyModel>().size(), 3);
+    QCOMPARE(model1.listSize(), 3);
     model1.removeAll();
     QCOMPARE(model1.findAll(), false);
 }

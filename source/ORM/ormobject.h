@@ -133,6 +133,7 @@ public:
        \return true if property updated, otherwise return false
      */
     bool exists();
+    bool exists(int id);
     bool updateProperty(QString fieldName, QVariant value);
     bool remove();
     bool removeBy(ORMWhere condition);

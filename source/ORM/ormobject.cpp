@@ -185,6 +185,12 @@ bool ORMObject::exists()
     return !ORMDatabase::adapter->findAll(metaObject()->className()).isEmpty();
 }
 
+bool ORMObject::exists(int id)
+{
+    return !ORMDatabase::adapter->find(metaObject()->className(), QString("id = %1")
+                                      .arg(id)).isEmpty();
+}
+
 bool ORMObject::updateProperty(QString fieldName, QVariant value)
 {
     if(id < 0)

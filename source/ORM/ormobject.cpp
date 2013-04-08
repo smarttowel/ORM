@@ -229,7 +229,12 @@ bool ORMObject::removeAll()
 
 int ORMObject::count()
 {
-    return ORMDatabase::adapter->count(metaObject()->className());
+    return ORMDatabase::adapter->count(metaObject()->className(), "*");
+}
+
+int ORMObject::count(QString fieldName)
+{
+    return ORMDatabase::adapter->count(metaObject()->className(), fieldName);
 }
 
 void ORMObject::translateRecToThisObj(const QSqlRecord &record)

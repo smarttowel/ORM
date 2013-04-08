@@ -132,9 +132,10 @@ bool MySqlAdapter::removeAll(const QString tableName)
     return m_query.exec(m_lastQuery);
 }
 
-int MySqlAdapter::count(const QString tableName)
+int MySqlAdapter::count(const QString tableName, const QString arg)
 {
-    m_lastQuery = QString("SELECT COUNT(*) FROM %1;")
+    m_lastQuery = QString("SELECT COUNT(%1) FROM %2;")
+            .arg(arg)
             .arg(tableName);
     if(m_query.exec(m_lastQuery))
     {

@@ -237,6 +237,11 @@ int ORMObject::count(QString fieldName)
     return ORMDatabase::adapter->count(metaObject()->className(), fieldName);
 }
 
+int ORMObject::count(ORMWhere condition)
+{
+    return ORMDatabase::adapter->countBy(metaObject()->className(), condition.getWhereCondition());
+}
+
 void ORMObject::translateRecToThisObj(const QSqlRecord &record)
 {
     for(int i = 0; i < record.count(); i++)

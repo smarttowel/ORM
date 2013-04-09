@@ -146,6 +146,20 @@ int MySqlAdapter::count(const QString tableName, const QString arg)
         return -1;
 }
 
+int MySqlAdapter::countBy(const QString tableName, const QString whereString)
+{
+    m_lastQuery = QString("SELECT COUNT(*) FROM %1 WHERE %2;")
+            .arg(tableName)
+            .arg(whereString);
+    if(m_query.exec(m_lastQuery))
+    {
+        m_query.next();
+        return m_query.value(0).toInt();
+    }
+    else
+        return -1;
+}
+
 void MySqlAdapter::initDB(QString name)
 {
     m_lastQuery = QString("USE %1;")

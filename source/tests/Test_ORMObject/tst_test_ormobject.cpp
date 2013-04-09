@@ -62,6 +62,7 @@ private Q_SLOTS:
     void test_removeAll();
     void test_count();
     void test_countByFieldName();
+    void test_countByWhere();
     void test_dropTable();
 };
 
@@ -420,6 +421,23 @@ void Test_ORMObject::test_countByFieldName()
     QCOMPARE(model1.count("nameInt"), 3);
     QCOMPARE(model2.count("nameString"), 3);
     QCOMPARE(model2.count("someField"), -1);
+}
+
+void Test_ORMObject::test_countByWhere()
+{
+    db.exec("DELETE FROM MyModel;");
+    MyModel model1, model2, model3;
+    model1.setnameInt(10);
+    model2.setnameInt(15);
+    model3.setnameString("abc");
+    model3.setnameInt(20);
+    model1.save();
+    model2.save();
+    model3.save();
+    QCOMPARE(model1.count(ORMWhere("nameInt", ORMWhere::Equals, 10) || ORMWhere("nameInt", ORMWhere::Equals, 15)), 2);
+    QCOMPARE(model1.count(ORMWhere("nameInt", ORMWhere::LessThan, 20) || ORMWhere("nameString", ORMWhere::Equals, "abc")), 3);
+    QCOMPARE(model1.count(ORMWhere("nameInt", ORMWhere::GreaterOrEquals, 30)), 0);
+    QCOMPARE(model1.count(ORMWhere("a", ORMWhere::GreaterOrEquals, 30)), -1);
 }
 
 void Test_ORMObject::test_first()

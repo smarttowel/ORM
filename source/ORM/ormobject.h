@@ -141,6 +141,7 @@ public:
     bool removeAll();
     int count();
     int count(QString fieldName);
+    int count(ORMWhere condition);
     //
     template<class T>
     /*!

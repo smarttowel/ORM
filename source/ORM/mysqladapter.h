@@ -22,6 +22,7 @@ public:
     virtual bool remove(const QString tableName, const QString whereString);
     virtual bool removeAll(const QString tableName);
     virtual int count(const QString tableName, const QString arg);
+    virtual int countBy(const QString tableName, const QString whereString);
 
 protected:
     void fillTableTypes();

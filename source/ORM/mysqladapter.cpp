@@ -160,6 +160,16 @@ int MySqlAdapter::countBy(const QString tableName, const QString whereString)
         return -1;
 }
 
+double MySqlAdapter::average(const QString tableName, const QString fieldName)
+{
+    m_lastQuery = QString("SELECT AVG(%1) FROM %2;")
+            .arg(fieldName)
+            .arg(tableName);
+    m_query.exec(m_lastQuery);
+    m_query.next();
+    return m_query.value(0).toDouble();
+}
+
 void MySqlAdapter::initDB(QString name)
 {
     m_lastQuery = QString("USE %1;")

@@ -23,6 +23,7 @@ public:
     virtual bool removeAll(const QString tableName);
     virtual int count(const QString tableName, const QString arg);
     virtual int countBy(const QString tableName, const QString whereString);
+    virtual double average(const QString tableName, const QString fieldName);
 
 protected:
     void fillTableTypes();

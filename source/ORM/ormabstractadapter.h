@@ -28,6 +28,7 @@ public:
     virtual bool removeAll(const QString tableName) = 0;
     virtual int count(const QString tableName, const QString arg) = 0;
     virtual int countBy(const QString tableName, const QString whereString) = 0;
+    virtual double average(const QString tableName, const QString fieldName) = 0;
 
 protected:
     QHash<QString, QString> m_tableTypes;

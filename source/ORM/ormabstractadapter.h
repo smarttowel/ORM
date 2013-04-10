@@ -30,6 +30,7 @@ public:
     virtual int countBy(const QString tableName, const QString whereString) = 0;
     virtual double average(const QString tableName, const QString fieldName) = 0;
     virtual double maximum(const QString tableName, const QString fieldName) = 0;
+    virtual double minimum(const QString tableName, const QString filedName) = 0;
 
 protected:
     QHash<QString, QString> m_tableTypes;

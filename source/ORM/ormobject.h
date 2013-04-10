@@ -144,6 +144,7 @@ public:
     int count(ORMWhere condition);
     double average(QString fieldName);
     double maximum(QString fieldName);
+    double minimum(QString fieldName);
     //
     template<class T>
     /*!

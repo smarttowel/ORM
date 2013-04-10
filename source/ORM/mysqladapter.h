@@ -25,6 +25,7 @@ public:
     virtual int countBy(const QString tableName, const QString whereString);
     virtual double average(const QString tableName, const QString fieldName);
     virtual double maximum(const QString tableName, const QString fieldName);
+    virtual double minimum(const QString tableName, const QString fieldName);
 
 protected:
     void fillTableTypes();

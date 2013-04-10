@@ -252,6 +252,11 @@ double ORMObject::maximum(QString fieldName)
     return ORMDatabase::adapter->maximum(metaObject()->className(), fieldName);
 }
 
+double ORMObject::minimum(QString fieldName)
+{
+    return ORMDatabase::adapter->minimum(metaObject()->className(), fieldName);
+}
+
 void ORMObject::translateRecToThisObj(const QSqlRecord &record)
 {
     for(int i = 0; i < record.count(); i++)

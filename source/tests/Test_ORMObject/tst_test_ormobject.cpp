@@ -64,6 +64,7 @@ private Q_SLOTS:
     void test_countByFieldName();
     void test_countByWhere();
     void test_average();
+    void test_max();
     void test_dropTable();
 };
 
@@ -456,6 +457,24 @@ void Test_ORMObject::test_average()
     QCOMPARE(model1.average("nameInt"), double(20));
     model2.updateProperty("nameInt", -30);
     QCOMPARE(model1.average("nameInt"), double(0));
+}
+
+void Test_ORMObject::test_max()
+{
+    db.exec("DELETE FROM MyModel;");
+    MyModel model1, model2, model3;
+    model1.setnameInt(10);
+    model2.setnameInt(15);
+    model3.setnameInt(20);
+    QCOMPARE(model1.maximum("nameInt"), double(0));
+    model1.save();
+    model2.save();
+    model3.save();
+    QCOMPARE(model1.maximum("nameInt"), double(20));
+    model2.updateProperty("nameInt", -5);
+    QCOMPARE(model1.maximum("nameInt"), double(20));
+    model3.updateProperty("nameInt", 100);
+    QCOMPARE(model1.maximum("nameInt"), double(100));
 }
 
 void Test_ORMObject::test_first()

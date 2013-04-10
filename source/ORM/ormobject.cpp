@@ -247,6 +247,11 @@ double ORMObject::average(QString fieldName)
     return ORMDatabase::adapter->average(metaObject()->className(), fieldName);
 }
 
+double ORMObject::maximum(QString fieldName)
+{
+    return ORMDatabase::adapter->maximum(metaObject()->className(), fieldName);
+}
+
 void ORMObject::translateRecToThisObj(const QSqlRecord &record)
 {
     for(int i = 0; i < record.count(); i++)

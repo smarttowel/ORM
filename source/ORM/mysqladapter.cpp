@@ -170,6 +170,16 @@ double MySqlAdapter::average(const QString tableName, const QString fieldName)
     return m_query.value(0).toDouble();
 }
 
+double MySqlAdapter::maximum(const QString tableName, const QString fieldName)
+{
+    m_lastQuery = QString("SELECT MAX(%1) FROM %2;")
+            .arg(fieldName)
+            .arg(tableName);
+    m_query.exec(m_lastQuery);
+    m_query.next();
+    return m_query.value(0).toDouble();
+}
+
 void MySqlAdapter::initDB(QString name)
 {
     m_lastQuery = QString("USE %1;")

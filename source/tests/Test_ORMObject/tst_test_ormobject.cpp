@@ -66,6 +66,7 @@ private Q_SLOTS:
     void test_average();
     void test_max();
     void test_min();
+    void test_sum();
     void test_dropTable();
 };
 
@@ -494,6 +495,24 @@ void Test_ORMObject::test_min()
     QCOMPARE(model1.minimum("nameInt"), double(-5));
     model3.updateProperty("nameInt", 100);
     QCOMPARE(model1.minimum("nameInt"), double(-5));
+}
+
+void Test_ORMObject::test_sum()
+{
+    db.exec("DELETE FROM MyModel;");
+    MyModel model1, model2, model3;
+    model1.setnameInt(10);
+    model2.setnameInt(15);
+    model3.setnameInt(20);
+    QCOMPARE(model1.sum("nameInt"), double(0));
+    model1.save();
+    model2.save();
+    model3.save();
+    QCOMPARE(model1.sum("nameInt"), double(45));
+    model2.updateProperty("nameInt", -5);
+    QCOMPARE(model1.sum("nameInt"), double(25));
+    model3.updateProperty("nameInt", 100);
+    QCOMPARE(model1.sum("nameInt"), double(105));
 }
 
 void Test_ORMObject::test_first()

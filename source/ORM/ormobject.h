@@ -145,6 +145,7 @@ public:
     double average(QString fieldName);
     double maximum(QString fieldName);
     double minimum(QString fieldName);
+    double sum(QString fieldName);
     //
     template<class T>
     /*!

@@ -26,6 +26,7 @@ public:
     virtual double average(const QString tableName, const QString fieldName);
     virtual double maximum(const QString tableName, const QString fieldName);
     virtual double minimum(const QString tableName, const QString fieldName);
+    virtual double sum(const QString tableName, const QString fieldName);
 
 protected:
     void fillTableTypes();

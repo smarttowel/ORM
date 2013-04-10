@@ -257,6 +257,11 @@ double ORMObject::minimum(QString fieldName)
     return ORMDatabase::adapter->minimum(metaObject()->className(), fieldName);
 }
 
+double ORMObject::sum(QString fieldName)
+{
+    return ORMDatabase::adapter->sum(metaObject()->className(), fieldName);
+}
+
 void ORMObject::translateRecToThisObj(const QSqlRecord &record)
 {
     for(int i = 0; i < record.count(); i++)

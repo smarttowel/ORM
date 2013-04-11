@@ -33,6 +33,7 @@ public:
     virtual double maximum(const QString tableName, const QString fieldName) = 0;
     virtual double maximum(const QString tableName, const QString fieldName, const QString whereString) = 0;
     virtual double minimum(const QString tableName, const QString filedName) = 0;
+    virtual double minimum(const QString tableName, const QString fieldName, const QString whereString) = 0;
     virtual double sum(const QString tableName, const QString fieldName) = 0;
 
 protected:

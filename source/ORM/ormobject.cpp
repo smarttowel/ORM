@@ -267,6 +267,11 @@ double ORMObject::minimum(QString fieldName)
     return ORMDatabase::adapter->minimum(metaObject()->className(), fieldName);
 }
 
+double ORMObject::minimum(QString fieldName, ORMWhere condition)
+{
+    return ORMDatabase::adapter->minimum(metaObject()->className(), fieldName, condition.getWhereCondition());
+}
+
 double ORMObject::sum(QString fieldName)
 {
     return ORMDatabase::adapter->sum(metaObject()->className(), fieldName);

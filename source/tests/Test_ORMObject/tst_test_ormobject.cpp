@@ -68,6 +68,7 @@ private Q_SLOTS:
     void test_max();
     void test_maxByWhere();
     void test_min();
+    void test_minByWhere();
     void test_sum();
     void test_dropTable();
 };
@@ -533,6 +534,24 @@ void Test_ORMObject::test_min()
     QCOMPARE(model1.minimum("nameInt"), double(-5));
     model3.updateProperty("nameInt", 100);
     QCOMPARE(model1.minimum("nameInt"), double(-5));
+}
+
+void Test_ORMObject::test_minByWhere()
+{
+    db.exec("DELETE FROM MyModel;");
+    MyModel model1, model2, model3;
+    model1.setnameInt(10);
+    model1.setnameString("abc");
+    model2.setnameInt(15);
+    model2.setnameString("abc");
+    model3.setnameInt(-20);
+    model3.setnameString("cba");
+    model1.save();
+    model2.save();
+    model3.save();
+    QCOMPARE(model1.minimum("nameInt", ORMWhere("nameString", ORMWhere::Equals, "abc")), double(10));
+    QCOMPARE(model1.minimum("nameInt", ORMWhere("nameString", ORMWhere::Equals, "abc")
+                            || ORMWhere("nameString", ORMWhere::Equals, "cba")), double(-20));
 }
 
 void Test_ORMObject::test_sum()

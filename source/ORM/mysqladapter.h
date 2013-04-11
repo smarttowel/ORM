@@ -28,6 +28,7 @@ public:
     virtual double maximum(const QString tableName, const QString fieldName);
     virtual double maximum(const QString tableName, const QString fieldName, const QString whereString);
     virtual double minimum(const QString tableName, const QString fieldName);
+    virtual double minimum(const QString tableName, const QString fieldName, const QString whereString);
     virtual double sum(const QString tableName, const QString fieldName);
 
 protected:

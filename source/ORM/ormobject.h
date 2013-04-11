@@ -147,6 +147,7 @@ public:
     double maximum(QString fieldName);
     double maximum(QString fieldName, ORMWhere condition);
     double minimum(QString fieldName);
+    double minimum(QString fieldName, ORMWhere condition);
     double sum(QString fieldName);
     //
     template<class T>

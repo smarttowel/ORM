@@ -189,42 +189,28 @@ double MySqlAdapter::calculation(Calculation func, const QString tableName, cons
     return m_query.value(0).toDouble();
 }
 
-double MySqlAdapter::average(const QString tableName, const QString fieldName, const QString whereString)
+double MySqlAdapter::calculation(ORMAbstractAdapter::Calculation func, const QString tableName, const QString fieldName, const QString whereString)
 {
-    m_lastQuery = QString("SELECT AVG(%1) FROM %2 WHERE %3;")
-            .arg(fieldName)
-            .arg(tableName)
-            .arg(whereString);
-    m_query.exec(m_lastQuery);
-    m_query.next();
-    return m_query.value(0).toDouble();
-}
-
-double MySqlAdapter::maximum(const QString tableName, const QString fieldName, const QString whereString)
-{
-    m_lastQuery = QString("SELECT MAX(%1) FROM %2 WHERE %3;")
-            .arg(fieldName)
-            .arg(tableName)
-            .arg(whereString);
-    m_query.exec(m_lastQuery);
-    m_query.next();
-    return m_query.value(0).toDouble();
-}
-
-double MySqlAdapter::minimum(const QString tableName, const QString fieldName, const QString whereString)
-{
-    m_lastQuery = QString("SELECT MIN(%1) FROM %2 WHERE %3;")
-            .arg(fieldName)
-            .arg(tableName)
-            .arg(whereString);
-    m_query.exec(m_lastQuery);
-    m_query.next();
-    return m_query.value(0).toDouble();
-}
-
-double MySqlAdapter::sum(const QString tableName, const QString fieldName, const QString whereString)
-{
-    m_lastQuery = QString("SELECT SUM(%1) FROM %2 WHERE %3;")
+    QString funcName;
+    switch(func)
+    {
+    case Average:
+        funcName = "AVG";
+        break;
+    case Maximum:
+        funcName = "MAX";
+        break;
+    case Minimum:
+        funcName = "MIN";
+        break;
+    case Sum:
+        funcName = "SUM";
+        break;
+    default:
+        return 0;
+    }
+    m_lastQuery = QString("SELECT %1(%2) FROM %3 WHERE %4;")
+            .arg(funcName)
             .arg(fieldName)
             .arg(tableName)
             .arg(whereString);

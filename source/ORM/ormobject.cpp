@@ -249,7 +249,8 @@ double ORMObject::average(QString fieldName)
 
 double ORMObject::average(QString fieldName, ORMWhere condition)
 {
-    return ORMDatabase::adapter->average(metaObject()->className(), fieldName, condition.getWhereCondition());
+    return ORMDatabase::adapter->calculation(ORMAbstractAdapter::Average, metaObject()->className(),
+                                             fieldName, condition.getWhereCondition());
 }
 
 double ORMObject::maximum(QString fieldName)
@@ -259,7 +260,8 @@ double ORMObject::maximum(QString fieldName)
 
 double ORMObject::maximum(QString fieldName, ORMWhere condition)
 {
-    return ORMDatabase::adapter->maximum(metaObject()->className(), fieldName, condition.getWhereCondition());
+    return ORMDatabase::adapter->calculation(ORMAbstractAdapter::Maximum, metaObject()->className(),
+                                             fieldName, condition.getWhereCondition());
 }
 
 double ORMObject::minimum(QString fieldName)
@@ -269,7 +271,8 @@ double ORMObject::minimum(QString fieldName)
 
 double ORMObject::minimum(QString fieldName, ORMWhere condition)
 {
-    return ORMDatabase::adapter->minimum(metaObject()->className(), fieldName, condition.getWhereCondition());
+    return ORMDatabase::adapter->calculation(ORMAbstractAdapter::Minimum, metaObject()->className(),
+                                             fieldName, condition.getWhereCondition());
 }
 
 double ORMObject::sum(QString fieldName)
@@ -279,7 +282,8 @@ double ORMObject::sum(QString fieldName)
 
 double ORMObject::sum(QString fieldName, ORMWhere condition)
 {
-    return ORMDatabase::adapter->sum(metaObject()->className(), fieldName, condition.getWhereCondition());
+    return ORMDatabase::adapter->calculation(ORMAbstractAdapter::Sum, metaObject()->className(),
+                                             fieldName, condition.getWhereCondition());
 }
 
 void ORMObject::translateRecToThisObj(const QSqlRecord &record)

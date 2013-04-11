@@ -244,7 +244,7 @@ int ORMObject::count(ORMWhere condition)
 
 double ORMObject::average(QString fieldName)
 {
-    return ORMDatabase::adapter->average(metaObject()->className(), fieldName);
+    return ORMDatabase::adapter->calculation(ORMAbstractAdapter::Average, metaObject()->className(), fieldName);
 }
 
 double ORMObject::average(QString fieldName, ORMWhere condition)
@@ -254,7 +254,7 @@ double ORMObject::average(QString fieldName, ORMWhere condition)
 
 double ORMObject::maximum(QString fieldName)
 {
-    return ORMDatabase::adapter->maximum(metaObject()->className(), fieldName);
+    return ORMDatabase::adapter->calculation(ORMAbstractAdapter::Maximum, metaObject()->className(), fieldName);
 }
 
 double ORMObject::maximum(QString fieldName, ORMWhere condition)
@@ -264,7 +264,7 @@ double ORMObject::maximum(QString fieldName, ORMWhere condition)
 
 double ORMObject::minimum(QString fieldName)
 {
-    return ORMDatabase::adapter->minimum(metaObject()->className(), fieldName);
+    return ORMDatabase::adapter->calculation(ORMAbstractAdapter::Minimum, metaObject()->className(), fieldName);
 }
 
 double ORMObject::minimum(QString fieldName, ORMWhere condition)
@@ -274,7 +274,7 @@ double ORMObject::minimum(QString fieldName, ORMWhere condition)
 
 double ORMObject::sum(QString fieldName)
 {
-    return ORMDatabase::adapter->sum(metaObject()->className(), fieldName);
+    return ORMDatabase::adapter->calculation(ORMAbstractAdapter::Sum, metaObject()->className(), fieldName);
 }
 
 double ORMObject::sum(QString fieldName, ORMWhere condition)

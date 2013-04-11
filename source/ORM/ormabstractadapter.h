@@ -10,6 +10,14 @@ class ORMAbstractAdapter
 {
 public:
     ORMAbstractAdapter();
+    enum Calculation
+    {
+        Average,
+        Maximum,
+        Minimum,
+        Sum
+    };
+
     virtual bool createDatabase(const QString name) = 0;
     virtual bool createTable(const QString tableName, const QHash<QString, QString> &info) = 0;
     virtual bool dropTable(const QString tableName) = 0;
@@ -28,13 +36,10 @@ public:
     virtual bool removeAll(const QString tableName) = 0;
     virtual int count(const QString tableName, const QString arg) = 0;
     virtual int countBy(const QString tableName, const QString whereString) = 0;
-    virtual double average(const QString tableName, const QString fieldName) = 0;
+    virtual double calculation(Calculation func, const QString tableName, const QString fieldName) = 0;
     virtual double average(const QString tableName, const QString fieldName, const QString whereString) = 0;
-    virtual double maximum(const QString tableName, const QString fieldName) = 0;
     virtual double maximum(const QString tableName, const QString fieldName, const QString whereString) = 0;
-    virtual double minimum(const QString tableName, const QString filedName) = 0;
     virtual double minimum(const QString tableName, const QString fieldName, const QString whereString) = 0;
-    virtual double sum(const QString tableName, const QString fieldName) = 0;
     virtual double sum(const QString tableName, const QString fieldName, const QString whereString) = 0;
 
 protected:

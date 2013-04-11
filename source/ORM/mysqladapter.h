@@ -30,6 +30,7 @@ public:
     virtual double minimum(const QString tableName, const QString fieldName);
     virtual double minimum(const QString tableName, const QString fieldName, const QString whereString);
     virtual double sum(const QString tableName, const QString fieldName);
+    virtual double sum(const QString tableName, const QString fieldName, const QString whereString);
 
 protected:
     void fillTableTypes();

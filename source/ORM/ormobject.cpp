@@ -277,6 +277,11 @@ double ORMObject::sum(QString fieldName)
     return ORMDatabase::adapter->sum(metaObject()->className(), fieldName);
 }
 
+double ORMObject::sum(QString fieldName, ORMWhere condition)
+{
+    return ORMDatabase::adapter->sum(metaObject()->className(), fieldName, condition.getWhereCondition());
+}
+
 void ORMObject::translateRecToThisObj(const QSqlRecord &record)
 {
     for(int i = 0; i < record.count(); i++)

@@ -149,6 +149,7 @@ public:
     double minimum(QString fieldName);
     double minimum(QString fieldName, ORMWhere condition);
     double sum(QString fieldName);
+    double sum(QString fieldName, ORMWhere condition);
     //
     template<class T>
     /*!

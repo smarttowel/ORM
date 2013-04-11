@@ -247,6 +247,11 @@ double ORMObject::average(QString fieldName)
     return ORMDatabase::adapter->average(metaObject()->className(), fieldName);
 }
 
+double ORMObject::average(QString fieldName, ORMWhere condition)
+{
+    return ORMDatabase::adapter->average(metaObject()->className(), fieldName, condition.getWhereCondition());
+}
+
 double ORMObject::maximum(QString fieldName)
 {
     return ORMDatabase::adapter->maximum(metaObject()->className(), fieldName);

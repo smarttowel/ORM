@@ -143,6 +143,7 @@ public:
     int count(QString fieldName);
     int count(ORMWhere condition);
     double average(QString fieldName);
+    double average(QString fieldName, ORMWhere condition);
     double maximum(QString fieldName);
     double minimum(QString fieldName);
     double sum(QString fieldName);

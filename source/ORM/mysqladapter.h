@@ -24,6 +24,7 @@ public:
     virtual int count(const QString tableName, const QString arg);
     virtual int countBy(const QString tableName, const QString whereString);
     virtual double average(const QString tableName, const QString fieldName);
+    virtual double average(const QString tableName, const QString fieldName, const QString whereString);
     virtual double maximum(const QString tableName, const QString fieldName);
     virtual double minimum(const QString tableName, const QString fieldName);
     virtual double sum(const QString tableName, const QString fieldName);

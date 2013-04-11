@@ -257,6 +257,11 @@ double ORMObject::maximum(QString fieldName)
     return ORMDatabase::adapter->maximum(metaObject()->className(), fieldName);
 }
 
+double ORMObject::maximum(QString fieldName, ORMWhere condition)
+{
+    return ORMDatabase::adapter->maximum(metaObject()->className(), fieldName, condition.getWhereCondition());
+}
+
 double ORMObject::minimum(QString fieldName)
 {
     return ORMDatabase::adapter->minimum(metaObject()->className(), fieldName);

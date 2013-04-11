@@ -191,6 +191,17 @@ double MySqlAdapter::maximum(const QString tableName, const QString fieldName)
     return m_query.value(0).toDouble();
 }
 
+double MySqlAdapter::maximum(const QString tableName, const QString fieldName, const QString whereString)
+{
+    m_lastQuery = QString("SELECT MAX(%1) FROM %2 WHERE %3;")
+            .arg(fieldName)
+            .arg(tableName)
+            .arg(whereString);
+    m_query.exec(m_lastQuery);
+    m_query.next();
+    return m_query.value(0).toDouble();
+}
+
 double MySqlAdapter::minimum(const QString tableName, const QString fieldName)
 {
     m_lastQuery = QString("SELECT MIN(%1) FROM %2;")

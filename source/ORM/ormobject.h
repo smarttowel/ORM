@@ -145,6 +145,7 @@ public:
     double average(QString fieldName);
     double average(QString fieldName, ORMWhere condition);
     double maximum(QString fieldName);
+    double maximum(QString fieldName, ORMWhere condition);
     double minimum(QString fieldName);
     double sum(QString fieldName);
     //

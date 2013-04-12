@@ -163,7 +163,6 @@ public:
     bool remove();
     /*!
        Remove all objects, that match \a condition
-       \param condition - ORMWhere object
        \return true if success, otherwise return false
      */
     bool removeBy(ORMWhere condition);
@@ -172,16 +171,49 @@ public:
        \return true is success, otherwise return false
      */
     bool removeAll();
+    /*!
+       \return number of objects in table
+     */
     int count();
+    /*!
+       \return number of not null fields with given \a fieldName column
+     */
     int count(QString fieldName);
+    /*!
+       \return number of objects that match \a condition
+     */
     int count(ORMWhere condition);
+    /*!
+       \return average value from given \a fieldName column
+     */
     double average(QString fieldName);
+    /*!
+       \return average value from given \a fieldName column that match \a condition
+     */
     double average(QString fieldName, ORMWhere condition);
+    /*!
+       \return maximum value from given \a fieldName column
+     */
     double maximum(QString fieldName);
+    /*!
+       \return maximum value from given \a fieldName column that match \a condition
+     */
     double maximum(QString fieldName, ORMWhere condition);
+    /*!
+       \return minimum value from given \a fieldName column
+     */
     double minimum(QString fieldName);
+    /*!
+       \return minimum value from given \a fieldName column that match \a condition
+     */
     double minimum(QString fieldName, ORMWhere condition);
+    /*!
+       \return sum of values \a fieldName column
+     */
     double sum(QString fieldName);
+    /*!
+       \return sum of values \a fieldName column that match \a condition
+     */
     double sum(QString fieldName, ORMWhere condition);
     //
     template<class T>

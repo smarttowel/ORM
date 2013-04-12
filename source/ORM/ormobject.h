@@ -64,13 +64,19 @@ public:
        \return Id contains current object id. Immediately after creation id = -1.
      */
     int getId() const;
+    /*!
+       \return size of list objects
+     */
     int listSize();
     /*!
-       Read all meta-property from model and save their into table.
-       If object's id less than 0 - create new object, otherwise updated existing object.
+       Create new record in table. Read all meta-property from model and save their into table.
        \return true if success, otherwise return false
      */
     bool save();
+    /*!
+       Update existing record in table with object's \a id.
+       \return true if success, otherwise return false
+     */
     bool update();
     /*!
        Find object by id
@@ -78,6 +84,10 @@ public:
        \return true if object is found, otherwise return false
      */
     bool find(int id);
+    /*!
+       Find all records in table.
+       \return true is success, otherwise retur false. If table is empty return false
+     */
     bool findAll();
     /*!
         Find first object in table
@@ -127,17 +137,40 @@ public:
      */
     bool where(ORMWhere condition);
     /*!
+       \return true if table is empty, otherwise return false
+     */
+    bool exists();
+    /*!
+       \return true if object with given \a id exist, otherwise return false
+     */
+    bool exists(int id);
+    /*!
+       Verification existence of objects with specified conditions
+       \return true if exist at least one object, otherwise return false
+     */
+    bool exists(ORMWhere con);
+    /*!
        Immediately updates object field in table.
        \param fieldName - field name, value of which will be updated
        \param value - value for write to table
        \return true if property updated, otherwise return false
      */
-    bool exists();
-    bool exists(int id);
-    bool exists(ORMWhere con);
     bool updateProperty(QString fieldName, QVariant value);
+    /*!
+       Remove table's record with object's id
+       \return true if success, otherwise return false
+     */
     bool remove();
+    /*!
+       Remove all objects, that match \a condition
+       \param condition - ORMWhere object
+       \return true if success, otherwise return false
+     */
     bool removeBy(ORMWhere condition);
+    /*!
+       Remove all records from table.
+       \return true is success, otherwise return false
+     */
     bool removeAll();
     int count();
     int count(QString fieldName);
@@ -171,7 +204,7 @@ public:
 
 protected:
     /*!
-     * Id is a primary key in any table.
+       Id is a primary key in any table.
      */
     qlonglong id;
 

@@ -10,19 +10,34 @@ class ORMAbstractAdapter
 {
 public:
     ORMAbstractAdapter();
-    virtual bool createDatabase(QString name) = 0;
-    virtual bool createTable(QString tableName, const QHash<QString, QString> &info) = 0;
-    virtual bool dropTable(QString tableName) = 0;
-    virtual bool dropDatabase(QString name) = 0;
+    enum Calculation
+    {
+        Average,
+        Maximum,
+        Minimum,
+        Sum
+    };
+
+    virtual bool createDatabase(const QString name) = 0;
+    virtual bool createTable(const QString tableName, const QHash<QString, QString> &info) = 0;
+    virtual bool dropTable(const QString tableName) = 0;
+    virtual bool dropDatabase(const QString name) = 0;
     //
-    QSqlError lastError();
-    QString lastQuery();
+    QSqlError lastError() const;
+    QString lastQuery() const;
     //
-    virtual int addRecord(QString tableName, const QHash<QString, QVariant> &info) = 0;
-    virtual bool updateRecord(QString tableName, qlonglong id, const QHash<QString, QVariant> &info) = 0;
-    virtual QList<QSqlRecord> find(QString tableName, QString findString) = 0;
-    virtual QSqlRecord first(QString tableName) = 0;
-    virtual QSqlRecord last(QString tableName) = 0;
+    virtual int addRecord(const QString tableName, const QHash<QString, QVariant> &info) = 0;
+    virtual bool updateRecord(const QString tableName, const qlonglong id, const QHash<QString, QVariant> &info) = 0;
+    virtual QList<QSqlRecord> find(const QString tableName, const QString findString) = 0;
+    virtual QList<QSqlRecord> findAll(const QString tableName) = 0;
+    virtual QSqlRecord first(const QString tableName) = 0;
+    virtual QSqlRecord last(const QString tableName) = 0;
+    virtual bool remove(const QString tableName, const QString whereString) = 0;
+    virtual bool removeAll(const QString tableName) = 0;
+    virtual int count(const QString tableName, const QString arg) = 0;
+    virtual int countBy(const QString tableName, const QString whereString) = 0;
+    virtual double calculation(Calculation func, const QString tableName, const QString fieldName) = 0;
+    virtual double calculation(Calculation func, const QString tableName, const QString fieldName, const QString whereString) = 0;
 
 protected:
     QHash<QString, QString> m_tableTypes;

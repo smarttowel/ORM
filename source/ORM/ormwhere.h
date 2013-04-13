@@ -62,14 +62,11 @@ public:
         IsNull
     };
     /*!
-       Construct empty ORMWhere object
+       Constructs empty ORMWhere object.
      */
     ORMWhere();
     /*!
-       Construct ORMWhere object with the given parameters
-       \param fieldName field name from which get values for comparison with \a value
-       \param con condition
-       \param value value
+       Constructs ORMWhere object with the given parameters.
      */
     ORMWhere(QString fieldName, Condition con, QVariant value);
     /*!
@@ -78,18 +75,21 @@ public:
     void operator= (ORMWhere b);
     /*!
        Logical AND for ORMWhere object.
-       \return new ORMWhere object, which contain \a WHERE expression
+
+       Returns new ORMWhere object, which contain \a WHERE expression.
      */
     ORMWhere operator&& (ORMWhere b);
     /*!
        Logical OR for ORMWhere object.
-       \return new ORMWhere object, which contain \a WHERE expression
+
+       Returns new ORMWhere object, which contain \a WHERE expression.
      */
     ORMWhere operator|| (ORMWhere b);
     /*!
-       Return current \a WHERE expression
+       Returns current \a WHERE expression.
      */
     QString getWhereCondition();
+
 private:
     QString m_whereCondition;
 };

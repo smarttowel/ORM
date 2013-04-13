@@ -9,15 +9,22 @@ class MySqlAdapter : public ORMAbstractAdapter
 {
 public:
     MySqlAdapter();
-    bool createDatabase(QString name);
-    bool createTable(QString tableName, const QHash<QString, QString> &info);
-    bool dropTable(QString tableName);
-    bool dropDatabase(QString name);
-    int addRecord(QString tableName, const QHash<QString, QVariant> &info);
-    bool updateRecord(QString tableName, qlonglong id, const QHash<QString, QVariant> &info);
-    QList<QSqlRecord> find(QString tableName, QString findString);
-    virtual QSqlRecord first(QString tableName);
-    virtual QSqlRecord last(QString tableName);
+    bool createDatabase(const QString name);
+    bool createTable(const QString tableName, const QHash<QString, QString> &info);
+    bool dropTable(const QString tableName);
+    bool dropDatabase(const QString name);
+    int addRecord(const QString tableName, const QHash<QString, QVariant> &info);
+    bool updateRecord(const QString tableName, const qlonglong id, const QHash<QString, QVariant> &info);
+    QList<QSqlRecord> find(const QString tableName, const QString findString);
+    QList<QSqlRecord> findAll(const QString tableName);
+    virtual QSqlRecord first(const QString tableName);
+    virtual QSqlRecord last(const QString tableName);
+    virtual bool remove(const QString tableName, const QString whereString);
+    virtual bool removeAll(const QString tableName);
+    virtual int count(const QString tableName, const QString arg);
+    virtual int countBy(const QString tableName, const QString whereString);
+    virtual double calculation(Calculation func, const QString tableName, const QString fieldName);
+    virtual double calculation(Calculation func, const QString tableName, const QString fieldName, const QString whereString);
 
 protected:
     void fillTableTypes();

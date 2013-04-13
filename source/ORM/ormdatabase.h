@@ -32,8 +32,7 @@ public:
      */
     ORMDatabase();
     /*!
-       Constructs ORMDatabase with given driverName.
-       \param driverName driver that support Qt
+       Constructs ORMDatabase with given driverName. \a driverName must be supported Qt.
      */
     ORMDatabase(QString driverName);
     /*!
@@ -45,20 +44,19 @@ public:
      */
     static ORMDatabase addORMDatabase(QString driverName);
     /*!
-       Create database with given name
-       \param name - database name
-       \return true if database created, otherwise return false
+       Creates database with given \a name.
+
+       Returns true if database created, otherwise return false.
      */
     bool createDatabase(QString name);
     /*!
-       Delete database with given name
-       \param name - database name
-       \return true if database deleted, otherwise return false
+       Deletes database with given \a name.
+
+       Returns true if database deleted, otherwise return false
      */
     bool dropDatabase(QString name);
     /*!
-       Return last query to database.
-       \return SQL query
+       Returns last query to database.
      */
     QString lastQuery();
 };

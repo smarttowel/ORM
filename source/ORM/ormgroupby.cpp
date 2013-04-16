@@ -23,3 +23,8 @@ ORMGroupBy ORMGroupBy::operator &&(ORMGroupBy b)
             .arg(b.m_groupString.right(b.m_groupString.size() - 9));
     return result;
 }
+
+void ORMGroupBy::operator =(ORMGroupBy b)
+{
+    m_groupString = b.getGroupString();
+}

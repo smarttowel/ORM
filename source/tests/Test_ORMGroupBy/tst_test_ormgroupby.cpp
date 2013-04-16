@@ -12,6 +12,7 @@ public:
 private Q_SLOTS:
     void constructor();
     void operatorAND();
+    void operatorEquals();
 };
 
 Test_ORMGroupBy::Test_ORMGroupBy()
@@ -32,6 +33,15 @@ void Test_ORMGroupBy::operatorAND()
     QCOMPARE(group1.getGroupString(), QString("GROUP BY field1"));
     QCOMPARE((group1 && group2).getGroupString(), QString("GROUP BY field1, field2"));
     QCOMPARE(((group1 && group2) && group3).getGroupString(), QString("GROUP BY field1, field2, field3"));
+}
+
+void Test_ORMGroupBy::operatorEquals()
+{
+    ORMGroupBy group1("field"), group2, group3;
+    group2 = group1;
+    QCOMPARE(group2.getGroupString(), QString("GROUP BY field"));
+    group1 = group3;
+    QCOMPARE(group1.getGroupString(), QString(""));
 }
 
 QTEST_APPLESS_MAIN(Test_ORMGroupBy)

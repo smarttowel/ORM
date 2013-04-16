@@ -11,6 +11,7 @@ public:
     ORMGroupBy(QString field);
     QString getGroupString();
     ORMGroupBy operator&& (ORMGroupBy b);
+    void operator= (ORMGroupBy b);
 
 private:
     QString m_groupString;

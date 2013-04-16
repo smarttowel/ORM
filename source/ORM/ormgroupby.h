@@ -10,6 +10,7 @@ public:
     ORMGroupBy();
     ORMGroupBy(QString field);
     QString getGroupString();
+    ORMGroupBy operator&& (ORMGroupBy b);
 
 private:
     QString m_groupString;

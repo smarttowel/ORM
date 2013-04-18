@@ -9,7 +9,7 @@ class ORMGroupBy
 public:
     ORMGroupBy();
     ORMGroupBy(QString field);
-    QString getGroupString();
+    QString getGroupString() const;
     ORMGroupBy operator&& (ORMGroupBy b);
     void operator= (ORMGroupBy b);
 

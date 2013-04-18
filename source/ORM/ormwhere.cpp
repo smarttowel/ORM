@@ -83,7 +83,7 @@ ORMWhere ORMWhere::operator ||(ORMWhere b)
     return result;
 }
 
-QString ORMWhere::getWhereCondition()
+QString ORMWhere::getWhereCondition() const
 {
     return m_whereCondition;
 }

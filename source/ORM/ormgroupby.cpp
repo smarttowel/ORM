@@ -10,7 +10,7 @@ ORMGroupBy::ORMGroupBy(QString field)
             .arg(field);
 }
 
-QString ORMGroupBy::getGroupString()
+QString ORMGroupBy::getGroupString() const
 {
     return m_groupString;
 }

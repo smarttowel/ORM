@@ -1,5 +1,26 @@
 #include "ormobject.h"
 
+#define RETURN_MANY \
+    if(list.isEmpty()) \
+        return false; \
+    else \
+    { \
+        m_records = list; \
+        translateRecToThisObj(list.first()); \
+        return true; \
+    } \
+
+#define RETURN_ONE \
+    if(list.isEmpty()) \
+        return false; \
+    else \
+    { \
+        m_records.clear(); \
+        m_records.append(list.first()); \
+        translateRecToThisObj(list.first()); \
+        return true; \
+    } \
+
 ORMObject::ORMObject(QObject *parent) :
     QObject(parent)
 {
@@ -57,29 +78,14 @@ bool ORMObject::find(int id)
 {
     QList<QSqlRecord> list;
     list = ORMDatabase::adapter->find(metaObject()->className(), ORMWhere("id", ORMWhere::Equals, id).getWhereCondition());
-    if(list.isEmpty())
-        return false;
-    else
-    {
-        m_records.clear();
-        m_records.append(list.first());
-        translateRecToThisObj(list.first());
-        return true;
-    }
+    RETURN_ONE
 }
 
 bool ORMObject::findAll(ORMGroupBy group)
 {
     QList<QSqlRecord> list;
     list = ORMDatabase::adapter->find(metaObject()->className(), group.getGroupString());
-    if(list.isEmpty())
-        return false;
-    else
-    {
-        m_records = list;
-        translateRecToThisObj(list.first());
-        return true;
-    }
+    RETURN_MANY
 }
 
 bool ORMObject::first()
@@ -115,14 +121,7 @@ bool ORMObject::findBy(const QString fieldName, const QVariant value, ORMGroupBy
     QList<QSqlRecord> list = ORMDatabase::adapter->find(metaObject()->className(),
                                                         ORMWhere(fieldName, ORMWhere::Equals, value).getWhereCondition() + " " +
                                                         group.getGroupString());
-    if(list.isEmpty())
-        return false;
-    else
-    {
-        m_records = list;
-        translateRecToThisObj(list.first());
-        return true;
-    }
+    RETURN_MANY
 }
 
 bool ORMObject::findBy(const QString fieldName, const QVector<QVariant> &values, ORMGroupBy group)
@@ -137,14 +136,7 @@ bool ORMObject::findBy(const QString fieldName, const QVector<QVariant> &values,
                 .arg(value.toString());
     whereString.resize(whereString.size() - 4);
     QList<QSqlRecord> list = ORMDatabase::adapter->find(metaObject()->className(), whereString + " " + group.getGroupString());
-    if(list.isEmpty())
-        return false;
-    else
-    {
-        m_records = list;
-        translateRecToThisObj(m_records.first());
-        return true;
-    }
+    RETURN_MANY
 }
 
 bool ORMObject::findBy(const QHash<QString, QVariant> &params)
@@ -160,28 +152,14 @@ bool ORMObject::findBy(const QHash<QString, QVariant> &params)
                 .arg(params.value(key).toString());
     whereString.resize(whereString.size() - 4);
     list = ORMDatabase::adapter->find(metaObject()->className(), whereString);
-    if(list.isEmpty())
-        return false;
-    else
-    {
-        m_records = list;
-        translateRecToThisObj(m_records.first());
-        return true;
-    }
+    RETURN_MANY
 }
 
 bool ORMObject::where(ORMWhere condition, ORMGroupBy group)
 {
     QList<QSqlRecord> list;
     list = ORMDatabase::adapter->find(metaObject()->className(), condition.getWhereCondition() + " " + group.getGroupString());
-    if(list.isEmpty())
-        return false;
-    else
-    {
-        m_records = list;
-        translateRecToThisObj(m_records.first());
-        return true;
-    }
+    RETURN_MANY
 }
 
 bool ORMObject::exists()
@@ -194,9 +172,9 @@ bool ORMObject::exists(int id)
     return !ORMDatabase::adapter->find(metaObject()->className(), ORMWhere("id", ORMWhere::Equals, id).getWhereCondition()).isEmpty();
 }
 
-bool ORMObject::exists(ORMWhere con)
+bool ORMObject::exists(ORMWhere condition)
 {
-    return !ORMDatabase::adapter->find(metaObject()->className(), con.getWhereCondition()).isEmpty();
+    return !ORMDatabase::adapter->find(metaObject()->className(), condition.getWhereCondition()).isEmpty();
 }
 
 bool ORMObject::updateProperty(QString fieldName, QVariant value)
@@ -224,65 +202,65 @@ bool ORMObject::removeBy(ORMWhere condition)
     return ORMDatabase::adapter->remove(metaObject()->className(), condition.getWhereCondition());
 }
 
-bool ORMObject::removeAll()
+bool ORMObject::removeAll() const
 {
     return ORMDatabase::adapter->remove(metaObject()->className(), "");
 }
 
-int ORMObject::count()
+int ORMObject::count() const
 {
     return ORMDatabase::adapter->count(metaObject()->className(), "*");
 }
 
-int ORMObject::count(QString fieldName)
+int ORMObject::count(QString fieldName) const
 {
     return ORMDatabase::adapter->count(metaObject()->className(), fieldName);
 }
 
-int ORMObject::count(ORMWhere condition)
+int ORMObject::count(ORMWhere condition) const
 {
     return ORMDatabase::adapter->countBy(metaObject()->className(), condition.getWhereCondition());
 }
 
-double ORMObject::average(QString fieldName)
+double ORMObject::average(QString fieldName) const
 {
     return ORMDatabase::adapter->calculation(ORMAbstractAdapter::Average, metaObject()->className(), fieldName, "");
 }
 
-double ORMObject::average(QString fieldName, ORMWhere condition)
+double ORMObject::average(QString fieldName, ORMWhere condition) const
 {
     return ORMDatabase::adapter->calculation(ORMAbstractAdapter::Average, metaObject()->className(),
                                              fieldName, condition.getWhereCondition());
 }
 
-double ORMObject::maximum(QString fieldName)
+double ORMObject::maximum(QString fieldName) const
 {
     return ORMDatabase::adapter->calculation(ORMAbstractAdapter::Maximum, metaObject()->className(), fieldName, "");
 }
 
-double ORMObject::maximum(QString fieldName, ORMWhere condition)
+double ORMObject::maximum(QString fieldName, ORMWhere condition) const
 {
     return ORMDatabase::adapter->calculation(ORMAbstractAdapter::Maximum, metaObject()->className(),
                                              fieldName, condition.getWhereCondition());
 }
 
-double ORMObject::minimum(QString fieldName)
+double ORMObject::minimum(QString fieldName) const
 {
     return ORMDatabase::adapter->calculation(ORMAbstractAdapter::Minimum, metaObject()->className(), fieldName, "");
 }
 
-double ORMObject::minimum(QString fieldName, ORMWhere condition)
+double ORMObject::minimum(QString fieldName, ORMWhere condition) const
 {
     return ORMDatabase::adapter->calculation(ORMAbstractAdapter::Minimum, metaObject()->className(),
                                              fieldName, condition.getWhereCondition());
 }
 
-double ORMObject::sum(QString fieldName)
+double ORMObject::sum(QString fieldName) const
 {
     return ORMDatabase::adapter->calculation(ORMAbstractAdapter::Sum, metaObject()->className(), fieldName, "");
 }
 
-double ORMObject::sum(QString fieldName, ORMWhere condition)
+double ORMObject::sum(QString fieldName, ORMWhere condition) const
 {
     return ORMDatabase::adapter->calculation(ORMAbstractAdapter::Sum, metaObject()->className(),
                                              fieldName, condition.getWhereCondition());

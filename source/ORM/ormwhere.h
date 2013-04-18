@@ -88,7 +88,7 @@ public:
     /*!
        Returns current \a WHERE expression.
      */
-    QString getWhereCondition();
+    QString getWhereCondition() const;
 
 private:
     QString m_whereCondition;

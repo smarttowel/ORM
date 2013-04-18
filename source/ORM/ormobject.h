@@ -152,7 +152,7 @@ public:
 
        Returns true if exist at least one object, otherwise return false.
      */
-    bool exists(ORMWhere con);
+    bool exists(ORMWhere condition);
     /*!
        Immediately updates object field in table.
 
@@ -176,51 +176,51 @@ public:
 
        Returns true is success, otherwise return false.
      */
-    bool removeAll();
+    bool removeAll() const;
     /*!
        Returns number of objects in table.
      */
-    int count();
+    int count() const;
     /*!
        Returns number of not null fields with given \a fieldName column.
      */
-    int count(QString fieldName);
+    int count(QString fieldName) const;
     /*!
        Returns number of objects that match \a condition.
      */
-    int count(ORMWhere condition);
+    int count(ORMWhere condition) const;
     /*!
        Returns average value from given \a fieldName column.
      */
-    double average(QString fieldName);
+    double average(QString fieldName) const;
     /*!
        Returns average value from given \a fieldName column that match \a condition.
      */
-    double average(QString fieldName, ORMWhere condition);
+    double average(QString fieldName, ORMWhere condition) const;
     /*!
        Returns maximum value from given \a fieldName column.
      */
-    double maximum(QString fieldName);
+    double maximum(QString fieldName) const;
     /*!
        Returns maximum value from given \a fieldName column that match \a condition.
      */
-    double maximum(QString fieldName, ORMWhere condition);
+    double maximum(QString fieldName, ORMWhere condition) const;
     /*!
        Returns minimum value from given \a fieldName column.
      */
-    double minimum(QString fieldName);
+    double minimum(QString fieldName) const;
     /*!
        Returns minimum value from given \a fieldName column that match \a condition.
      */
-    double minimum(QString fieldName, ORMWhere condition);
+    double minimum(QString fieldName, ORMWhere condition) const;
     /*!
        Returns sum of values \a fieldName column.
      */
-    double sum(QString fieldName);
+    double sum(QString fieldName) const;
     /*!
        Returns sum of values \a fieldName column that match \a condition.
      */
-    double sum(QString fieldName, ORMWhere condition);
+    double sum(QString fieldName, ORMWhere condition) const;
     //
     template<class T>
     /*!

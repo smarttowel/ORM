@@ -93,7 +93,7 @@ public:
 
        Returns true is success, otherwise retur false. If table is empty return false.
      */
-    bool findAll();
+    bool findAll(ORMGroupBy group = ORMGroupBy());
     /*!
        Finds first object in table.
 
@@ -111,13 +111,13 @@ public:
 
        Returns true if object is found, otherwise return false.
      */
-    bool findBy(const QString fieldName, const QVariant value);
+    bool findBy(const QString fieldName, const QVariant value, ORMGroupBy group = ORMGroupBy());
     /*!
        Finds objects by vector of values. If found more than one object, you can get them by toList().
 
        Returns true if object is found, otherwise return false.
      */
-    bool findBy(const QString fieldName, const QVector<QVariant> &values);
+    bool findBy(const QString fieldName, const QVector<QVariant> &values, ORMGroupBy group = ORMGroupBy());
     /*!
        Finds object by many fields and values. If there is more than one object, you can get them by toList().
        \a params - QHash<fieldName, value>, of which will be searched.
@@ -138,7 +138,7 @@ public:
 
        Returns true if object is found, otherwise return false.
      */
-    bool where(ORMWhere condition);
+    bool where(ORMWhere condition, ORMGroupBy group = ORMGroupBy());
     /*!
        Returns true if table is empty, otherwise return false.
      */

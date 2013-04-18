@@ -68,10 +68,10 @@ bool ORMObject::find(int id)
     }
 }
 
-bool ORMObject::findAll()
+bool ORMObject::findAll(ORMGroupBy group)
 {
     QList<QSqlRecord> list;
-    list = ORMDatabase::adapter->find(metaObject()->className(), "");
+    list = ORMDatabase::adapter->find(metaObject()->className(), group.getGroupString());
     if(list.isEmpty())
         return false;
     else
@@ -110,10 +110,11 @@ bool ORMObject::last()
     }
 }
 
-bool ORMObject::findBy(const QString fieldName, const QVariant value)
+bool ORMObject::findBy(const QString fieldName, const QVariant value, ORMGroupBy group)
 {
     QList<QSqlRecord> list = ORMDatabase::adapter->find(metaObject()->className(),
-                                                        ORMWhere(fieldName, ORMWhere::Equals, value).getWhereCondition());
+                                                        ORMWhere(fieldName, ORMWhere::Equals, value).getWhereCondition() + " " +
+                                                        group.getGroupString());
     if(list.isEmpty())
         return false;
     else
@@ -124,7 +125,7 @@ bool ORMObject::findBy(const QString fieldName, const QVariant value)
     }
 }
 
-bool ORMObject::findBy(const QString fieldName, const QVector<QVariant> &values)
+bool ORMObject::findBy(const QString fieldName, const QVector<QVariant> &values, ORMGroupBy group)
 {
     if(values.isEmpty())
         return false;
@@ -135,7 +136,7 @@ bool ORMObject::findBy(const QString fieldName, const QVector<QVariant> &values)
                 .arg(fieldName)
                 .arg(value.toString());
     whereString.resize(whereString.size() - 4);
-    QList<QSqlRecord> list = ORMDatabase::adapter->find(metaObject()->className(), whereString);
+    QList<QSqlRecord> list = ORMDatabase::adapter->find(metaObject()->className(), whereString + " " + group.getGroupString());
     if(list.isEmpty())
         return false;
     else
@@ -169,10 +170,10 @@ bool ORMObject::findBy(const QHash<QString, QVariant> &params)
     }
 }
 
-bool ORMObject::where(ORMWhere condition)
+bool ORMObject::where(ORMWhere condition, ORMGroupBy group)
 {
     QList<QSqlRecord> list;
-    list = ORMDatabase::adapter->find(metaObject()->className(), condition.getWhereCondition());
+    list = ORMDatabase::adapter->find(metaObject()->className(), condition.getWhereCondition() + " " + group.getGroupString());
     if(list.isEmpty())
         return false;
     else

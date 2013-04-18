@@ -15,16 +15,13 @@ public:
     bool dropDatabase(const QString name);
     int addRecord(const QString tableName, const QHash<QString, QVariant> &info);
     bool updateRecord(const QString tableName, const qlonglong id, const QHash<QString, QVariant> &info);
-    QList<QSqlRecord> find(const QString tableName, const QString findString);
-    QList<QSqlRecord> findAll(const QString tableName);
+    QList<QSqlRecord> find(const QString tableName, const QString params);
     virtual QSqlRecord first(const QString tableName);
     virtual QSqlRecord last(const QString tableName);
-    virtual bool remove(const QString tableName, const QString whereString);
-    virtual bool removeAll(const QString tableName);
+    virtual bool remove(const QString tableName, const QString params);
     virtual int count(const QString tableName, const QString arg);
-    virtual int countBy(const QString tableName, const QString whereString);
-    virtual double calculation(Calculation func, const QString tableName, const QString fieldName);
-    virtual double calculation(Calculation func, const QString tableName, const QString fieldName, const QString whereString);
+    virtual int countBy(const QString tableName, const QString params);
+    virtual double calculation(Calculation func, const QString tableName, const QString fieldName, const QString params);
 
 protected:
     void fillTableTypes();

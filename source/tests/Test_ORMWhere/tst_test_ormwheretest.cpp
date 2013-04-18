@@ -24,34 +24,34 @@ Test_ORMWhereTest::Test_ORMWhereTest()
 void Test_ORMWhereTest::test_constructor()
 {
     ORMWhere *a = new ORMWhere("field1", ORMWhere::Equals, "1");
-    QCOMPARE(a->getWhereCondition(), QString("(field1 = '1')"));
+    QCOMPARE(a->getWhereCondition(), QString("WHERE (field1 = '1')"));
     delete a;
     a = new ORMWhere("field1", ORMWhere::NotEquals, "1");
-    QCOMPARE(a->getWhereCondition(), QString("(field1 <> '1')"));
+    QCOMPARE(a->getWhereCondition(), QString("WHERE (field1 <> '1')"));
     delete a;
     a = new ORMWhere("field1", ORMWhere::LessThan, "1");
-    QCOMPARE(a->getWhereCondition(), QString("(field1 < '1')"));
+    QCOMPARE(a->getWhereCondition(), QString("WHERE (field1 < '1')"));
     delete a;
     a = new ORMWhere("field1", ORMWhere::LessOrEquals, "1");
-    QCOMPARE(a->getWhereCondition(), QString("(field1 <= '1')"));
+    QCOMPARE(a->getWhereCondition(), QString("WHERE (field1 <= '1')"));
     delete a;
     a = new ORMWhere("field1", ORMWhere::GreaterThan, "1");
-    QCOMPARE(a->getWhereCondition(), QString("(field1 > '1')"));
+    QCOMPARE(a->getWhereCondition(), QString("WHERE (field1 > '1')"));
     delete a;
     a = new ORMWhere("field1", ORMWhere::GreaterOrEquals, "1");
-    QCOMPARE(a->getWhereCondition(), QString("(field1 >= '1')"));
+    QCOMPARE(a->getWhereCondition(), QString("WHERE (field1 >= '1')"));
     delete a;
     a = new ORMWhere("field1", ORMWhere::IsNull, "1");
-    QCOMPARE(a->getWhereCondition(), QString("(field1 IS NULL)"));
+    QCOMPARE(a->getWhereCondition(), QString("WHERE (field1 IS NULL)"));
     delete a;
     a = new ORMWhere("field1", ORMWhere::StartsWith, "1");
-    QCOMPARE(a->getWhereCondition(), QString("(field1 LIKE '1%')"));
+    QCOMPARE(a->getWhereCondition(), QString("WHERE (field1 LIKE '1%')"));
     delete a;
     a = new ORMWhere("field1", ORMWhere::EndsWith, "1");
-    QCOMPARE(a->getWhereCondition(), QString("(field1 LIKE '%1')"));
+    QCOMPARE(a->getWhereCondition(), QString("WHERE (field1 LIKE '%1')"));
     delete a;
     a = new ORMWhere("field1", ORMWhere::Contains, "1");
-    QCOMPARE(a->getWhereCondition(), QString("(field1 LIKE '%1%')"));
+    QCOMPARE(a->getWhereCondition(), QString("WHERE (field1 LIKE '%1%')"));
     delete a;
 }
 
@@ -59,14 +59,14 @@ void Test_ORMWhereTest::test_operatorAND()
 {
     ORMWhere a("field1", ORMWhere::LessThan, 1);
     ORMWhere b("field2", ORMWhere::GreaterThan, 2);
-    QCOMPARE((a && b).getWhereCondition(), QString("((field1 < '1') AND (field2 > '2'))"));
+    QCOMPARE((a && b).getWhereCondition(), QString("WHERE ((field1 < '1') AND (field2 > '2'))"));
 }
 
 void Test_ORMWhereTest::test_operatorOR()
 {
     ORMWhere a("field1", ORMWhere::LessThan, 1);
     ORMWhere b("field2", ORMWhere::GreaterThan, 2);
-    QCOMPARE((a || b).getWhereCondition(), QString("((field1 < '1') OR (field2 > '2'))"));
+    QCOMPARE((a || b).getWhereCondition(), QString("WHERE ((field1 < '1') OR (field2 > '2'))"));
 }
 
 void Test_ORMWhereTest::test_operatorEquals()
@@ -75,7 +75,7 @@ void Test_ORMWhereTest::test_operatorEquals()
     QCOMPARE(a.getWhereCondition().isEmpty(), true);
     ORMWhere b("field2", ORMWhere::GreaterOrEquals, 2);
     a = b;
-    QCOMPARE(a.getWhereCondition(), QString("(field2 >= '2')"));
+    QCOMPARE(a.getWhereCondition(), QString("WHERE (field2 >= '2')"));
 }
 
 QTEST_APPLESS_MAIN(Test_ORMWhereTest)

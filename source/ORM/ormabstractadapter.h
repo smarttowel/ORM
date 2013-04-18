@@ -28,16 +28,13 @@ public:
     //
     virtual int addRecord(const QString tableName, const QHash<QString, QVariant> &info) = 0;
     virtual bool updateRecord(const QString tableName, const qlonglong id, const QHash<QString, QVariant> &info) = 0;
-    virtual QList<QSqlRecord> find(const QString tableName, const QString findString) = 0;
-    virtual QList<QSqlRecord> findAll(const QString tableName) = 0;
+    virtual QList<QSqlRecord> find(const QString tableName, const QString params) = 0;
     virtual QSqlRecord first(const QString tableName) = 0;
     virtual QSqlRecord last(const QString tableName) = 0;
-    virtual bool remove(const QString tableName, const QString whereString) = 0;
-    virtual bool removeAll(const QString tableName) = 0;
+    virtual bool remove(const QString tableName, const QString params) = 0;
     virtual int count(const QString tableName, const QString arg) = 0;
-    virtual int countBy(const QString tableName, const QString whereString) = 0;
-    virtual double calculation(Calculation func, const QString tableName, const QString fieldName) = 0;
-    virtual double calculation(Calculation func, const QString tableName, const QString fieldName, const QString whereString) = 0;
+    virtual int countBy(const QString tableName, const QString params) = 0;
+    virtual double calculation(Calculation func, const QString tableName, const QString fieldName, const QString params) = 0;
 
 protected:
     QHash<QString, QString> m_tableTypes;

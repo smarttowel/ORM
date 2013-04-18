@@ -7,7 +7,7 @@ ORMWhere::ORMWhere()
 
 ORMWhere::ORMWhere(QString fieldName, ORMWhere::Condition con, QVariant value)
 {
-    m_whereCondition += QString("(%1 %3 '%2')")
+    m_whereCondition += QString("WHERE (%1 %3 '%2')")
             .arg(fieldName)
             .arg(value.toString());
     switch(con)
@@ -37,22 +37,22 @@ ORMWhere::ORMWhere(QString fieldName, ORMWhere::Condition con, QVariant value)
                 .arg(">=");
         break;
     case ORMWhere::StartsWith:
-        m_whereCondition = QString("(%1 LIKE '%2%')")
+        m_whereCondition = QString("WHERE (%1 LIKE '%2%')")
                 .arg(fieldName)
                 .arg(value.toString());
         break;
     case ORMWhere::EndsWith:
-        m_whereCondition = QString("(%1 LIKE '%%2')")
+        m_whereCondition = QString("WHERE (%1 LIKE '%%2')")
                 .arg(fieldName)
                 .arg(value.toString());
         break;
     case ORMWhere::Contains:
-        m_whereCondition = QString("(%1 LIKE '%%2%')")
+        m_whereCondition = QString("WHERE (%1 LIKE '%%2%')")
                 .arg(fieldName)
                 .arg(value.toString());
         break;
     case ORMWhere::IsNull:
-        m_whereCondition = QString("(%1 IS NULL)")
+        m_whereCondition = QString("WHERE (%1 IS NULL)")
                 .arg(fieldName);
         break;
     default:
@@ -68,18 +68,18 @@ void ORMWhere::operator =(ORMWhere b)
 ORMWhere ORMWhere::operator &&(ORMWhere b)
 {
     ORMWhere result;
-    result.m_whereCondition = QString("(%1 AND %2)")
-            .arg(this->m_whereCondition)
-            .arg(b.m_whereCondition);
+    result.m_whereCondition = QString("WHERE (%1 AND %2)")
+            .arg(this->m_whereCondition.remove(0, 6))
+            .arg(b.m_whereCondition.remove(0, 6));
     return result;
 }
 
 ORMWhere ORMWhere::operator ||(ORMWhere b)
 {
     ORMWhere result;
-    result.m_whereCondition = QString("(%1 OR %2)")
-            .arg(this->m_whereCondition)
-            .arg(b.m_whereCondition);
+    result.m_whereCondition = QString("WHERE (%1 OR %2)")
+            .arg(this->m_whereCondition.remove(0, 6))
+            .arg(b.m_whereCondition.remove(0, 6));
     return result;
 }
 

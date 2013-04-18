@@ -76,23 +76,12 @@ bool MySqlAdapter::updateRecord(const QString tableName, const qlonglong id, con
     return m_query.exec(m_lastQuery);
 }
 
-QList<QSqlRecord> MySqlAdapter::find(const QString tableName, const QString findString)
+QList<QSqlRecord> MySqlAdapter::find(const QString tableName, const QString params)
 {
     QList<QSqlRecord> result;
-    m_lastQuery = QString("SELECT * FROM %1 WHERE %2;")
+    m_lastQuery = QString("SELECT * FROM %1 %2;")
             .arg(tableName)
-            .arg(findString);
-    if(m_query.exec(m_lastQuery))
-        while(m_query.next())
-            result.append(m_query.record());
-    return result;
-}
-
-QList<QSqlRecord> MySqlAdapter::findAll(const QString tableName)
-{
-    QList<QSqlRecord> result;
-    m_lastQuery = QString("SELECT * FROM %1;")
-            .arg(tableName);
+            .arg(params);
     if(m_query.exec(m_lastQuery))
         while(m_query.next())
             result.append(m_query.record());
@@ -117,18 +106,11 @@ QSqlRecord MySqlAdapter::last(const QString tableName)
     return m_query.record();
 }
 
-bool MySqlAdapter::remove(const QString tableName, const QString whereString)
+bool MySqlAdapter::remove(const QString tableName, const QString params)
 {
-    m_lastQuery = QString("DELETE FROM %1 WHERE %2;")
+    m_lastQuery = QString("DELETE FROM %1 %2;")
             .arg(tableName)
-            .arg(whereString);
-    return m_query.exec(m_lastQuery);
-}
-
-bool MySqlAdapter::removeAll(const QString tableName)
-{
-    m_lastQuery = QString("DELETE FROM %1;")
-            .arg(tableName);
+            .arg(params);
     return m_query.exec(m_lastQuery);
 }
 
@@ -146,11 +128,11 @@ int MySqlAdapter::count(const QString tableName, const QString arg)
         return -1;
 }
 
-int MySqlAdapter::countBy(const QString tableName, const QString whereString)
+int MySqlAdapter::countBy(const QString tableName, const QString params)
 {
-    m_lastQuery = QString("SELECT COUNT(*) FROM %1 WHERE %2;")
+    m_lastQuery = QString("SELECT COUNT(*) FROM %1 %2;")
             .arg(tableName)
-            .arg(whereString);
+            .arg(params);
     if(m_query.exec(m_lastQuery))
     {
         m_query.next();
@@ -160,7 +142,7 @@ int MySqlAdapter::countBy(const QString tableName, const QString whereString)
         return -1;
 }
 
-double MySqlAdapter::calculation(Calculation func, const QString tableName, const QString fieldName)
+double MySqlAdapter::calculation(ORMAbstractAdapter::Calculation func, const QString tableName, const QString fieldName, const QString params)
 {
     QString funcName;
     switch(func)
@@ -180,40 +162,11 @@ double MySqlAdapter::calculation(Calculation func, const QString tableName, cons
     default:
         return 0;
     }
-    m_lastQuery = QString("SELECT %1(%2) FROM %3;")
-            .arg(funcName)
-            .arg(fieldName)
-            .arg(tableName);
-    m_query.exec(m_lastQuery);
-    m_query.next();
-    return m_query.value(0).toDouble();
-}
-
-double MySqlAdapter::calculation(ORMAbstractAdapter::Calculation func, const QString tableName, const QString fieldName, const QString whereString)
-{
-    QString funcName;
-    switch(func)
-    {
-    case Average:
-        funcName = "AVG";
-        break;
-    case Maximum:
-        funcName = "MAX";
-        break;
-    case Minimum:
-        funcName = "MIN";
-        break;
-    case Sum:
-        funcName = "SUM";
-        break;
-    default:
-        return 0;
-    }
-    m_lastQuery = QString("SELECT %1(%2) FROM %3 WHERE %4;")
+    m_lastQuery = QString("SELECT %1(%2) FROM %3 %4;")
             .arg(funcName)
             .arg(fieldName)
             .arg(tableName)
-            .arg(whereString);
+            .arg(params);
     m_query.exec(m_lastQuery);
     m_query.next();
     return m_query.value(0).toDouble();

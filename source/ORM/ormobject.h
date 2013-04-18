@@ -21,6 +21,7 @@
 #include <QVector>
 #include "ormdatabase.h"
 #include "ormwhere.h"
+#include "ormgroupby.h"
 
 /*!
    \class ORMObject

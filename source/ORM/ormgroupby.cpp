@@ -6,25 +6,25 @@ ORMGroupBy::ORMGroupBy()
 
 ORMGroupBy::ORMGroupBy(QString field)
 {
-    m_groupString = QString("GROUP BY %1")
-            .arg(field);
+    m_groupString = field;
 }
 
 QString ORMGroupBy::getGroupString() const
 {
-    return m_groupString;
+    if(m_groupString.isEmpty())
+        return m_groupString;
+    else
+        return "GROUP BY " + m_groupString;
 }
 
 ORMGroupBy ORMGroupBy::operator &&(ORMGroupBy b)
 {
     ORMGroupBy result;
-    result.m_groupString = QString("GROUP BY %1, %2")
-            .arg(QString(this->m_groupString).remove(0, 9))
-            .arg(QString(b.m_groupString).remove(0, 9));
+    result.m_groupString = this->m_groupString + ", " + b.m_groupString;
     return result;
 }
 
 void ORMGroupBy::operator =(ORMGroupBy b)
 {
-    m_groupString = b.getGroupString();
+    m_groupString = b.m_groupString;
 }

@@ -88,10 +88,10 @@ public:
     /*!
        Returns current \a WHERE expression.
      */
-    QString getWhereCondition() const;
+    QString getWhereString() const;
 
 private:
-    QString m_whereCondition;
+    QString m_whereString;
 };
 
 #endif // ORMWHERE_H

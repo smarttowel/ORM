@@ -10,6 +10,7 @@
 #include "ormobject.cpp"
 #include "ormwhere.cpp"
 #include "ormgroupby.cpp"
+#include "ormorderby.cpp"
 
 class MyModel : public ORMObject
 {
@@ -204,6 +205,11 @@ void Test_ORMObject::test_findAll()
     model2.updateProperty("nameInt", "0");
     QCOMPARE(resultModel.findAll(ORMGroupBy("nameInt") && ORMGroupBy("nameString")), true);
     QCOMPARE(resultModel.listSize(), 2);
+    QCOMPARE(resultModel.findAll(ORMGroupBy(), ORMOrderBy("nameInt", ORMOrderBy::Descending)), true);
+    QCOMPARE(resultModel.getnameInt(), 2);
+    QCOMPARE(resultModel.findAll(ORMGroupBy("nameInt") && ORMGroupBy("nameString"), ORMOrderBy("nameInt", ORMOrderBy::Descending)), true);
+    QCOMPARE(resultModel.listSize(), 2);
+    QCOMPARE(resultModel.getnameInt(), 2);
 }
 
 void Test_ORMObject::test_findByValue()
@@ -211,6 +217,7 @@ void Test_ORMObject::test_findByValue()
     db.exec("DELETE FROM MyModel;");
     MyModel model;
     model.setnameInt(15);
+    model.setnameString("a");
     model.save();
     QCOMPARE(model.listSize(), 0);
     QCOMPARE(model.findBy("nameInt", QVariant(15)), true);
@@ -225,9 +232,14 @@ void Test_ORMObject::test_findByValue()
     QCOMPARE(model2.listSize(), 1);
     MyModel model3;
     model3.setnameInt(15);
+    model3.setnameString("b");
     model3.save();
     QCOMPARE(model2.findBy("nameInt", 15, ORMGroupBy("nameInt")), true);
     QCOMPARE(model2.listSize(), 1);
+    QCOMPARE(model3.findBy("nameInt", 15, ORMGroupBy(), ORMOrderBy("id", ORMOrderBy::Ascending)), true);
+    QCOMPARE(model3.getnameString(), QString("a"));
+    QCOMPARE(model3.findBy("nameInt", 15, ORMGroupBy(), ORMOrderBy("id", ORMOrderBy::Descending)), true);
+    QCOMPARE(model3.getnameString(), QString("b"));
 }
 
 void Test_ORMObject::test_findByValues()
@@ -257,6 +269,9 @@ void Test_ORMObject::test_findByValues()
     model3.updateProperty("nameInt", 10);
     QCOMPARE(resultModel.findBy("nameInt", vector, ORMGroupBy("nameInt")), true);
     QCOMPARE(resultModel.listSize(), 2);
+    QCOMPARE(resultModel.findBy("nameInt", vector, ORMGroupBy("nameInt"), ORMOrderBy("nameInt", ORMOrderBy::Descending)), true);
+    QCOMPARE(resultModel.listSize(), 2);
+    QCOMPARE(resultModel.getnameInt(), 11);
 }
 
 void Test_ORMObject::test_findByParams()
@@ -331,6 +346,9 @@ void Test_ORMObject::test_where()
     QCOMPARE(resultModel.where(ORMWhere("nameInt", ORMWhere::Equals, 3) || ORMWhere("nameInt", ORMWhere::Equals, 1),
                                ORMGroupBy("nameInt")), true);
     QCOMPARE(resultModel.listSize(), 2);
+    QCOMPARE(resultModel.where(ORMWhere("nameInt", ORMWhere::Equals, 3) || ORMWhere("nameInt", ORMWhere::Equals, 1),
+                               ORMGroupBy("nameInt"), ORMOrderBy("nameInt", ORMOrderBy::Descending)), true);
+    QCOMPARE(resultModel.getnameInt(), 3);
 }
 
 void Test_ORMObject::test_updateProperty()

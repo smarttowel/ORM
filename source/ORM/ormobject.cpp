@@ -81,10 +81,10 @@ bool ORMObject::find(int id)
     RETURN_ONE
 }
 
-bool ORMObject::findAll(ORMGroupBy group)
+bool ORMObject::findAll(ORMGroupBy group, ORMOrderBy order)
 {
     QList<QSqlRecord> list;
-    list = ORMDatabase::adapter->find(metaObject()->className(), group.getGroupString());
+    list = ORMDatabase::adapter->find(metaObject()->className(), group.getGroupString() + " " + order.getOrderString());
     RETURN_MANY
 }
 
@@ -116,15 +116,15 @@ bool ORMObject::last()
     }
 }
 
-bool ORMObject::findBy(const QString fieldName, const QVariant value, ORMGroupBy group)
+bool ORMObject::findBy(const QString fieldName, const QVariant value, ORMGroupBy group, ORMOrderBy order)
 {
     QList<QSqlRecord> list = ORMDatabase::adapter->find(metaObject()->className(),
                                                         ORMWhere(fieldName, ORMWhere::Equals, value).getWhereCondition() + " " +
-                                                        group.getGroupString());
+                                                        group.getGroupString() + " " + order.getOrderString());
     RETURN_MANY
 }
 
-bool ORMObject::findBy(const QString fieldName, const QVector<QVariant> &values, ORMGroupBy group)
+bool ORMObject::findBy(const QString fieldName, const QVector<QVariant> &values, ORMGroupBy group, ORMOrderBy order)
 {
     if(values.isEmpty())
         return false;
@@ -135,7 +135,8 @@ bool ORMObject::findBy(const QString fieldName, const QVector<QVariant> &values,
                 .arg(fieldName)
                 .arg(value.toString());
     whereString.resize(whereString.size() - 4);
-    QList<QSqlRecord> list = ORMDatabase::adapter->find(metaObject()->className(), whereString + " " + group.getGroupString());
+    QList<QSqlRecord> list = ORMDatabase::adapter->find(metaObject()->className(), whereString + " " + group.getGroupString() + " " +
+                                                        order.getOrderString());
     RETURN_MANY
 }
 
@@ -155,10 +156,11 @@ bool ORMObject::findBy(const QHash<QString, QVariant> &params)
     RETURN_MANY
 }
 
-bool ORMObject::where(ORMWhere condition, ORMGroupBy group)
+bool ORMObject::where(ORMWhere condition, ORMGroupBy group, ORMOrderBy order)
 {
     QList<QSqlRecord> list;
-    list = ORMDatabase::adapter->find(metaObject()->className(), condition.getWhereCondition() + " " + group.getGroupString());
+    list = ORMDatabase::adapter->find(metaObject()->className(), condition.getWhereCondition() + " " + group.getGroupString() + " " +
+                                      order.getOrderString());
     RETURN_MANY
 }
 

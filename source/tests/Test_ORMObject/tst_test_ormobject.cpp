@@ -27,8 +27,28 @@ class MyModel : public ORMObject
     ORM_PROPERTY(QTime, nameTime)
     ORM_PROPERTY(QDateTime, nameDatetime)
     ORM_PROPERTY(QString, nameString)
+
 public:
     MyModel() {}
+};
+
+class DriverLicense : public ORMObject
+{
+    Q_OBJECT
+    ORM_PROPERTY(int, Number)
+
+public:
+    DriverLicense() {}
+};
+
+class CarDriver : public ORMObject
+{
+    Q_OBJECT
+    ORM_HAS_ONE(DriverLicense)
+    ORM_PROPERTY(QString, Name)
+
+public:
+    CarDriver() {}
 };
 
 class Test_ORMObject : public QObject
@@ -73,6 +93,7 @@ private Q_SLOTS:
     void test_minByWhere();
     void test_sum();
     void test_sumByWhere();
+    void test_ORM_HAS_ONE();
     void test_dropTable();
 };
 
@@ -667,6 +688,34 @@ void Test_ORMObject::test_last()
     QVERIFY(model3.listSize() != 0);
     db.exec("DELETE FROM MyModel;");
     QCOMPARE(model.last(), false);
+}
+
+void Test_ORMObject::test_ORM_HAS_ONE()
+{
+    CarDriver driver1, driver2;
+    DriverLicense license;
+    QCOMPARE(driver1.createTable(), true);
+    QCOMPARE(license.createTable(), true);
+    driver1.setName("Alex");
+    driver2.setName("Paul");
+    driver1.save();
+    driver2.save();
+    QVERIFY(driver1.getDriverLicense() == 0);
+    QHash<QString, QVariant> info;
+    info.insert("Number", 123);
+    QCOMPARE(driver1.createDriverLicense(info)->getNumber(), 123);
+    QCOMPARE(driver1.getDriverLicense()->getNumber(), 123);
+    QVERIFY(driver2.getDriverLicense() == 0);
+    license.setNumber(456);
+    license.save();
+    driver2.setDriverLicense(license);
+    QCOMPARE(driver2.getDriverLicense()->getNumber(), 456);
+    int idDr2Lic = driver2.getDriverLicense()->getId();
+    QCOMPARE(license.exists(idDr2Lic), true);
+    driver2.removeDriverLicense();
+    QCOMPARE(license.exists(idDr2Lic), true);
+    QVERIFY(driver2.getDriverLicense() == 0);
+    QVERIFY(driver1.getDriverLicense() != 0);
 }
 
 void Test_ORMObject::test_dropTable()

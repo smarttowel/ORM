@@ -11,6 +11,7 @@ public:
     MySqlAdapter();
     bool createDatabase(const QString &name);
     bool createTable(const QString &tableName, const QHash<QString, QString> &info);
+    bool createTableRelations(const QString &tableName);
     bool dropTable(const QString &tableName);
     bool dropDatabase(const QString &name);
     int addRecord(const QString &tableName, const QHash<QString, QVariant> &info);

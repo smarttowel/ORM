@@ -32,7 +32,15 @@ bool ORMObject::createTable() const
     QHash<QString, QString> info; //QHash<name, type>
     for(int i = 1; i < metaObject()->propertyCount(); i++)
         info.insert(metaObject()->property(i).name(), metaObject()->property(i).typeName());
-    return ORMDatabase::adapter->createTable(metaObject()->className(), info);
+    if(!ORMDatabase::adapter->createTable(metaObject()->className(), info))
+        return false;
+    for(int i = 0; i < metaObject()->classInfoCount(); i++)
+        if(QString(metaObject()->classInfo(i).name()).contains("HAS_ONE:"))
+            if(!ORMDatabase::adapter->createTableRelations(QString("%1_HAS_ONE_%2")
+                                                          .arg(metaObject()->className())
+                                                          .arg(metaObject()->classInfo(i).value())))
+                return false;
+    return true;
 }
 
 bool ORMObject::dropTable() const

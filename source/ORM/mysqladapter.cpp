@@ -1,4 +1,5 @@
 #include "mysqladapter.h"
+#include <QDebug>
 
 MySqlAdapter::MySqlAdapter()
 {
@@ -25,6 +26,13 @@ bool MySqlAdapter::createTable(const QString &tableName, const QHash<QString, QS
                 .arg(name)
                 .arg(m_tableTypes.value(info.value(name)));
     m_lastQuery += "PRIMARY KEY (id));";
+    return m_query.exec(m_lastQuery);
+}
+
+bool MySqlAdapter::createTableRelations(const QString &tableName)
+{
+    m_lastQuery = QString("CREATE TABLE %1(parent_id BIGINT, child_id BIGINT);")
+            .arg(tableName);
     return m_query.exec(m_lastQuery);
 }
 

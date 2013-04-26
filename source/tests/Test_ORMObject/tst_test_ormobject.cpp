@@ -32,6 +32,15 @@ public:
     MyModel() {}
 };
 
+class Car : public ORMObject
+{
+    Q_OBJECT
+    ORM_PROPERTY(QString, Number)
+
+    public:
+        Car() {}
+};
+
 class DriverLicense : public ORMObject
 {
     Q_OBJECT
@@ -45,6 +54,7 @@ class CarDriver : public ORMObject
 {
     Q_OBJECT
     ORM_HAS_ONE(DriverLicense)
+    ORM_HAS_MANY(Car)
     ORM_PROPERTY(QString, Name)
 
 public:
@@ -94,6 +104,7 @@ private Q_SLOTS:
     void test_sum();
     void test_sumByWhere();
     void test_ORM_HAS_ONE();
+    void test_ORM_HAS_MANY();
     void test_dropTable();
 };
 
@@ -107,13 +118,20 @@ Test_ORMObject::Test_ORMObject()
 
 Test_ORMObject::~Test_ORMObject()
 {
-    //db.exec("DROP DATABASE Test_ORMDatabase;");
+    db.exec("DROP DATABASE Test_ORMDatabase;");
 }
 
 void Test_ORMObject::test_CreateTable()
 {
     MyModel model;
+    CarDriver driver;
+    DriverLicense license;
+    Car car;
     QCOMPARE(model.createTable(), true);
+    QCOMPARE(model.createTable(), false);
+    QCOMPARE(driver.createTable(), true);
+    QCOMPARE(license.createTable(), true);
+    QCOMPARE(car.createTable(), true);
 }
 
 void Test_ORMObject::test_listSize()
@@ -694,8 +712,8 @@ void Test_ORMObject::test_ORM_HAS_ONE()
 {
     CarDriver driver1, driver2;
     DriverLicense license;
-    QCOMPARE(driver1.createTable(), true);
-    QCOMPARE(license.createTable(), true);
+    driver1.removeAll();
+    license.removeAll();
     driver1.setName("Alex");
     driver2.setName("Paul");
     driver1.save();
@@ -716,15 +734,69 @@ void Test_ORMObject::test_ORM_HAS_ONE()
     QCOMPARE(license.exists(idDr2Lic), true);
     QVERIFY(driver2.getDriverLicense() == 0);
     QVERIFY(driver1.getDriverLicense() != 0);
-    QCOMPARE(driver1.dropTable(), true);
-    QCOMPARE(license.dropTable(), true);
+}
+
+void Test_ORMObject::test_ORM_HAS_MANY()
+{
+    CarDriver driver1, driver2;
+    Car car1, car2, car3;
+    driver1.removeAll();
+    car1.removeAll();
+    driver1.setName("Alex");
+    driver2.setName("Paul");
+    driver1.save();
+    driver2.save();
+    QVERIFY(driver1.getAllCar().size() == 0);
+    QHash<QString, QVariant> info;
+    info.insert("Number", "123");
+    QCOMPARE(driver1.createCar(info)->getNumber(), QString("123"));
+    info.clear();
+    info.insert("Number", "456");
+    QCOMPARE(driver1.createCar(info)->getNumber(), QString("456"));
+    QList<Car*> list = driver1.getAllCar();
+    QCOMPARE(list.size(), 2);
+    QCOMPARE(list.first()->getNumber(), QString("123"));
+    QCOMPARE(list.value(1)->getNumber(), QString("456"));
+    QVERIFY(driver2.getAllCar().size() == 0);
+    car1.setNumber("111");
+    car2.setNumber("111");
+    car3.setNumber("222");
+    car1.save();
+    car2.save();
+    car3.save();
+    driver2.addCar(car1);
+    driver2.addCar(car2);
+    driver2.addCar(car3);
+    list = driver2.getAllCar();
+    QCOMPARE(list.size(), 3);
+    QCOMPARE(list.first()->getNumber(), QString("111"));
+    QCOMPARE(list.value(1)->getNumber(), QString("111"));
+    QCOMPARE(list.value(2)->getNumber(), QString("222"));
+    list = driver2.findCarWhere(ORMWhere("Number", ORMWhere::Equals, "111") || ORMWhere("Number", ORMWhere::Equals, "222"),
+                                ORMGroupBy("Number"), ORMOrderBy("Number", ORMOrderBy::Descending));
+    QCOMPARE(list.size(), 2);
+    QCOMPARE(list.first()->getNumber(), QString("222"));
+    QCOMPARE(list.value(1)->getNumber(), QString("111"));
+    list = driver2.getAllCar(ORMGroupBy("Number"), ORMOrderBy("Number", ORMOrderBy::Descending));
+    QCOMPARE(list.size(), 2);
+    QCOMPARE(list.first()->getNumber(), QString("222"));
+    QCOMPARE(list.value(1)->getNumber(), QString("111"));
+    driver2.removeCar(car1);
+    QCOMPARE(driver2.getAllCar().size(), 2);
+    QCOMPARE(car1.exists(car1.getId()), true);
 }
 
 void Test_ORMObject::test_dropTable()
 {
     MyModel model;
+    CarDriver driver;
+    DriverLicense license;
+    Car car;
     QCOMPARE(model.dropTable(), true);
     QCOMPARE(model.dropTable(), false);
+    QCOMPARE(driver.dropTable(), true);
+    QCOMPARE(license.dropTable(), true);
+    QCOMPARE(car.dropTable(), true);
 }
 
 QTEST_MAIN(Test_ORMObject)

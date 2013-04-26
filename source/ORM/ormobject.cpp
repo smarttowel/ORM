@@ -34,12 +34,20 @@ bool ORMObject::createTable() const
         info.insert(metaObject()->property(i).name(), metaObject()->property(i).typeName());
     if(!ORMDatabase::adapter->createTable(metaObject()->className(), info))
         return false;
+    QString tableNamePattern;
+    QString tempString;
     for(int i = 0; i < metaObject()->classInfoCount(); i++)
-        if(QString(metaObject()->classInfo(i).name()).contains("HAS_ONE:"))
-            if(!ORMDatabase::adapter->createTableRelations(QString("%1_HAS_ONE_%2")
-                                                          .arg(metaObject()->className())
-                                                          .arg(metaObject()->classInfo(i).value())))
-                return false;
+    {
+        tempString = metaObject()->classInfo(i).name();
+        if(tempString.contains("HAS_ONE:") || tempString.contains("HAS_MANY:"))
+            tableNamePattern = "%1_" + QString(metaObject()->classInfo(i).name()).remove(':') + "_%2";
+        else
+            continue;
+        if(!ORMDatabase::adapter->createTableRelations(tableNamePattern
+                                                      .arg(metaObject()->className())
+                                                      .arg(metaObject()->classInfo(i).value())))
+            return false;
+    }
     return true;
 }
 
@@ -47,12 +55,20 @@ bool ORMObject::dropTable() const
 {
     if(!ORMDatabase::adapter->dropTable(metaObject()->className()))
         return false;
+    QString tableNamePattern;
+    QString tempString;
     for(int i = 0; i < metaObject()->classInfoCount(); i++)
-        if(QString(metaObject()->classInfo(i).name()).contains("HAS_ONE:"))
-            if(!ORMDatabase::adapter->dropTable(QString("%1_HAS_ONE_%2")
-                                                          .arg(metaObject()->className())
-                                                          .arg(metaObject()->classInfo(i).value())))
-                return false;
+    {
+        tempString = metaObject()->classInfo(i).name();
+        if(tempString.contains("HAS_ONE:") || tempString.contains("HAS_MANY:"))
+            tableNamePattern = "%1_" + QString(metaObject()->classInfo(i).name()).remove(':') + "_%2";
+        else
+            continue;
+        if(!ORMDatabase::adapter->dropTable(tableNamePattern
+                                            .arg(metaObject()->className())
+                                            .arg(metaObject()->classInfo(i).value())))
+            return false;
+    }
     return true;
 }
 

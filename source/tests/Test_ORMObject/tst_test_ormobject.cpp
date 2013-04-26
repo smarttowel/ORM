@@ -107,7 +107,7 @@ Test_ORMObject::Test_ORMObject()
 
 Test_ORMObject::~Test_ORMObject()
 {
-    db.exec("DROP DATABASE Test_ORMDatabase;");
+    //db.exec("DROP DATABASE Test_ORMDatabase;");
 }
 
 void Test_ORMObject::test_CreateTable()
@@ -716,6 +716,8 @@ void Test_ORMObject::test_ORM_HAS_ONE()
     QCOMPARE(license.exists(idDr2Lic), true);
     QVERIFY(driver2.getDriverLicense() == 0);
     QVERIFY(driver1.getDriverLicense() != 0);
+    QCOMPARE(driver1.dropTable(), true);
+    QCOMPARE(license.dropTable(), true);
 }
 
 void Test_ORMObject::test_dropTable()

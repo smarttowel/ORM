@@ -45,7 +45,15 @@ bool ORMObject::createTable() const
 
 bool ORMObject::dropTable() const
 {
-    return ORMDatabase::adapter->dropTable(metaObject()->className());
+    if(!ORMDatabase::adapter->dropTable(metaObject()->className()))
+        return false;
+    for(int i = 0; i < metaObject()->classInfoCount(); i++)
+        if(QString(metaObject()->classInfo(i).name()).contains("HAS_ONE:"))
+            if(!ORMDatabase::adapter->dropTable(QString("%1_HAS_ONE_%2")
+                                                          .arg(metaObject()->className())
+                                                          .arg(metaObject()->classInfo(i).value())))
+                return false;
+    return true;
 }
 
 int ORMObject::getId() const

@@ -19,7 +19,8 @@ HEADERS += orm.h \
     mysqladapter.h \
     ormwhere.h \
     ormgroupby.h \
-    ormorderby.h
+    ormorderby.h \
+    macros.h
 
 SOURCES += orm.cpp \
     ormobject.cpp \

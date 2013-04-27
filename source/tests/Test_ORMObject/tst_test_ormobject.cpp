@@ -73,7 +73,7 @@ private:
     ORMDatabase db;
 
 private Q_SLOTS:
-    void test_CreateTable();
+    void test_createTable();
     void test_listSize();
     void test_save();
     void test_find();
@@ -121,7 +121,7 @@ Test_ORMObject::~Test_ORMObject()
     db.exec("DROP DATABASE Test_ORMDatabase;");
 }
 
-void Test_ORMObject::test_CreateTable()
+void Test_ORMObject::test_createTable()
 {
     MyModel model;
     CarDriver driver;

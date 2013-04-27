@@ -31,7 +31,9 @@ void Test_ORMGroupBy::operatorAND()
 {
     ORMGroupBy group1("field1"), group2("field2"), group3("field3");
     QCOMPARE(group1.getGroupString(), QString("GROUP BY field1"));
+    group1 = ORMGroupBy("field1");
     QCOMPARE((group1 && group2).getGroupString(), QString("GROUP BY field1, field2"));
+    group1 = ORMGroupBy("field1");
     QCOMPARE(((group1 && group2) && group3).getGroupString(), QString("GROUP BY field1, field2, field3"));
 }
 

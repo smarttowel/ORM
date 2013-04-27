@@ -14,7 +14,7 @@ public:
     ORMOrderBy();
     ORMOrderBy(QString fieldName, OrderType type);
     QString getOrderString() const;
-    ORMOrderBy operator&& (ORMOrderBy b);
+    ORMOrderBy& operator&& (ORMOrderBy b);
     void operator= (ORMOrderBy b);
 
 private:

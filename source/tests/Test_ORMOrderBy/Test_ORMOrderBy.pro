@@ -12,7 +12,7 @@ TARGET = tst_test_ormorderby
 CONFIG   += console
 CONFIG   -= app_bundle
 
-INCLUDEPATH += ../../ORM
+INCLUDEPATH += ../../lib
 TEMPLATE = app
 
 

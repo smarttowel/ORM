@@ -28,11 +28,10 @@ QString ORMOrderBy::getOrderString() const
         return "ORDER BY " + m_orderString;
 }
 
-ORMOrderBy ORMOrderBy::operator &&(ORMOrderBy b)
+ORMOrderBy& ORMOrderBy::operator &&(ORMOrderBy b)
 {
-    ORMOrderBy result;
-    result.m_orderString = this->m_orderString + ", " + b.m_orderString;
-    return result;
+    m_orderString += ", " + b.m_orderString;
+    return *this;
 }
 
 void ORMOrderBy::operator =(ORMOrderBy b)

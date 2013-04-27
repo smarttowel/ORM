@@ -14,7 +14,7 @@ CONFIG   -= app_bundle
 
 TEMPLATE = app
 
-INCLUDEPATH += ../../ORM
+INCLUDEPATH += ../../lib
 
 SOURCES += tst_test_ormgroupby.cpp
 DEFINES += SRCDIR=\\\"$$PWD/\\\"

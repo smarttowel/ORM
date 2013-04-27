@@ -64,22 +64,20 @@ void ORMWhere::operator =(ORMWhere b)
     this->m_whereString = b.m_whereString;
 }
 
-ORMWhere ORMWhere::operator &&(ORMWhere b)
+ORMWhere& ORMWhere::operator &&(ORMWhere b)
 {
-    ORMWhere result;
-    result.m_whereString = QString("(%1 AND %2)")
-            .arg(this->m_whereString)
+    m_whereString = QString("(%1 AND %2)")
+            .arg(m_whereString)
             .arg(b.m_whereString);
-    return result;
+    return *this;
 }
 
-ORMWhere ORMWhere::operator ||(ORMWhere b)
+ORMWhere& ORMWhere::operator ||(ORMWhere b)
 {
-    ORMWhere result;
-    result.m_whereString = QString("(%1 OR %2)")
-            .arg(this->m_whereString)
+    m_whereString = QString("(%1 OR %2)")
+            .arg(m_whereString)
             .arg(b.m_whereString);
-    return result;
+    return *this;
 }
 
 QString ORMWhere::getWhereString() const

@@ -78,13 +78,13 @@ public:
 
        Returns new ORMWhere object, which contain \a WHERE expression.
      */
-    ORMWhere operator&& (ORMWhere b);
+    ORMWhere& operator&& (ORMWhere b);
     /*!
        Logical OR for ORMWhere object.
 
        Returns new ORMWhere object, which contain \a WHERE expression.
      */
-    ORMWhere operator|| (ORMWhere b);
+    ORMWhere& operator|| (ORMWhere b);
     /*!
        Returns current \a WHERE expression.
      */

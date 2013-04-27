@@ -1,3 +1,3 @@
 TEMPLATE = subdirs
 
-SUBDIRS += ORM tests
+SUBDIRS += lib tests

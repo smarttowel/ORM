@@ -17,11 +17,10 @@ QString ORMGroupBy::getGroupString() const
         return "GROUP BY " + m_groupString;
 }
 
-ORMGroupBy ORMGroupBy::operator &&(ORMGroupBy b)
+ORMGroupBy& ORMGroupBy::operator &&(ORMGroupBy b)
 {
-    ORMGroupBy result;
-    result.m_groupString = this->m_groupString + ", " + b.m_groupString;
-    return result;
+    m_groupString += ", " + b.m_groupString;
+    return *this;
 }
 
 void ORMGroupBy::operator =(ORMGroupBy b)

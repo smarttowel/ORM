@@ -31,7 +31,9 @@ void Test_ORMOrderBy::operatorAND()
 {
     ORMOrderBy order1("field1", ORMOrderBy::Descending), order2("field2", ORMOrderBy::Ascending), order3("field3", ORMOrderBy::Descending);
     QCOMPARE((order1 && order2).getOrderString(), QString("ORDER BY field1 DESC, field2 ASC"));
+    order1 = ORMOrderBy("field1", ORMOrderBy::Descending);
     QCOMPARE((order1 && order2 && order3).getOrderString(), QString("ORDER BY field1 DESC, field2 ASC, field3 DESC"));
+    order1 = ORMOrderBy("field1", ORMOrderBy::Descending);
     QCOMPARE(((order1 && order2) && order3).getOrderString(), QString("ORDER BY field1 DESC, field2 ASC, field3 DESC"));
 }
 

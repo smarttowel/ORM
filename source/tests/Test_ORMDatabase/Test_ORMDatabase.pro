@@ -12,7 +12,7 @@ TARGET = tst_test_ormdatabase
 CONFIG   += console
 CONFIG   -= app_bundle
 
-INCLUDEPATH += ../../ORM
+INCLUDEPATH += ../../lib
 TEMPLATE = app
 
 SOURCES += tst_test_ormdatabase.cpp

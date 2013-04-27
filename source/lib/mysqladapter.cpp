@@ -19,7 +19,7 @@ bool MySqlAdapter::createDatabase(const QString &name)
 bool MySqlAdapter::createTable(const QString &tableName, const QHash<QString, QString> &info)
 {
     QString name;
-    m_lastQuery = QString("CREATE TABLE %1(id INT AUTO_INCREMENT, ")
+    m_lastQuery = QString("CREATE TABLE %1(id BIGINT AUTO_INCREMENT, ")
             .arg(tableName);
     foreach(name, info.keys())
         m_lastQuery += QString("%1 %2, ")
@@ -45,7 +45,7 @@ bool MySqlAdapter::dropTable(const QString &tableName)
 
 bool MySqlAdapter::dropDatabase(const QString &name)
 {
-    m_lastQuery = QString("DROP DATABASE %1")
+    m_lastQuery = QString("DROP DATABASE %1;")
             .arg(name);
     return m_query.exec(m_lastQuery);
 }

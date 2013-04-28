@@ -17,14 +17,19 @@ HEADERS += orm.h \
     ormdatabase.h \
     ormabstractadapter.h \
     mysqladapter.h \
-    ormwhere.h
+    ormwhere.h \
+    ormgroupby.h \
+    ormorderby.h \
+    macros.h
 
 SOURCES += orm.cpp \
     ormobject.cpp \
     ormdatabase.cpp \
     ormabstractadapter.cpp \
     mysqladapter.cpp \
-    ormwhere.cpp
+    ormwhere.cpp \
+    ormgroupby.cpp \
+    ormorderby.cpp
 
 unix:!symbian {
     maemo5 {

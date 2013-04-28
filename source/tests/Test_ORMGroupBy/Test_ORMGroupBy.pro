@@ -1,19 +1,20 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2013-03-20T18:41:13
+# Project created by QtCreator 2013-04-16T18:13:23
 #
 #-------------------------------------------------
 
-QT       += sql testlib
+QT       += testlib
 
 QT       -= gui
 
-TARGET = tst_test_ormdatabase
+TARGET = tst_test_ormgroupby
 CONFIG   += console
 CONFIG   -= app_bundle
 
-INCLUDEPATH += ../../lib
 TEMPLATE = app
 
-SOURCES += tst_test_ormdatabase.cpp
+INCLUDEPATH += ../../lib
+
+SOURCES += tst_test_ormgroupby.cpp
 DEFINES += SRCDIR=\\\"$$PWD/\\\"

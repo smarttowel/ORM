@@ -1,26 +1,15 @@
 ﻿#ifndef ORMOBJECT_H
 #define ORMOBJECT_H
 
-/*!
-  \def ORM_PROPERTY(type, name)
-  Declares property of model. Macros declare private property
-  and public getter and setter.
- */
-
-#define ORM_PROPERTY(type, name) \
-    Q_PROPERTY(type name READ get##name WRITE set##name) \
-    private: \
-    type name; \
-    public: \
-    type get##name() const { return name; } \
-    void set##name(type input_##name) { name = input_##name; } \
-
 #include <QObject>
 #include <QMetaProperty>
 #include <QSqlRecord>
 #include <QVector>
 #include "ormdatabase.h"
 #include "ormwhere.h"
+#include "ormgroupby.h"
+#include "ormorderby.h"
+#include "macros.h"
 
 /*!
    \class ORMObject
@@ -92,7 +81,7 @@ public:
 
        Returns true is success, otherwise retur false. If table is empty return false.
      */
-    bool findAll();
+    bool findAll(ORMGroupBy group = ORMGroupBy(), ORMOrderBy order = ORMOrderBy());
     /*!
        Finds first object in table.
 
@@ -110,13 +99,13 @@ public:
 
        Returns true if object is found, otherwise return false.
      */
-    bool findBy(const QString fieldName, const QVariant value);
+    bool findBy(const QString fieldName, const QVariant value, ORMGroupBy group = ORMGroupBy(), ORMOrderBy order = ORMOrderBy());
     /*!
        Finds objects by vector of values. If found more than one object, you can get them by toList().
 
        Returns true if object is found, otherwise return false.
      */
-    bool findBy(const QString fieldName, const QVector<QVariant> &values);
+    bool findBy(const QString fieldName, const QVector<QVariant> &values, ORMGroupBy group = ORMGroupBy(), ORMOrderBy order = ORMOrderBy());
     /*!
        Finds object by many fields and values. If there is more than one object, you can get them by toList().
        \a params - QHash<fieldName, value>, of which will be searched.
@@ -137,7 +126,7 @@ public:
 
        Returns true if object is found, otherwise return false.
      */
-    bool where(ORMWhere condition);
+    bool where(ORMWhere condition, ORMGroupBy group = ORMGroupBy(), ORMOrderBy order = ORMOrderBy());
     /*!
        Returns true if table is empty, otherwise return false.
      */
@@ -151,7 +140,7 @@ public:
 
        Returns true if exist at least one object, otherwise return false.
      */
-    bool exists(ORMWhere con);
+    bool exists(ORMWhere condition);
     /*!
        Immediately updates object field in table.
 
@@ -175,51 +164,51 @@ public:
 
        Returns true is success, otherwise return false.
      */
-    bool removeAll();
+    bool removeAll() const;
     /*!
        Returns number of objects in table.
      */
-    int count();
+    int count() const;
     /*!
        Returns number of not null fields with given \a fieldName column.
      */
-    int count(QString fieldName);
+    int count(QString fieldName) const;
     /*!
        Returns number of objects that match \a condition.
      */
-    int count(ORMWhere condition);
+    int count(ORMWhere condition) const;
     /*!
        Returns average value from given \a fieldName column.
      */
-    double average(QString fieldName);
+    double average(QString fieldName) const;
     /*!
        Returns average value from given \a fieldName column that match \a condition.
      */
-    double average(QString fieldName, ORMWhere condition);
+    double average(QString fieldName, ORMWhere condition) const;
     /*!
        Returns maximum value from given \a fieldName column.
      */
-    double maximum(QString fieldName);
+    double maximum(QString fieldName) const;
     /*!
        Returns maximum value from given \a fieldName column that match \a condition.
      */
-    double maximum(QString fieldName, ORMWhere condition);
+    double maximum(QString fieldName, ORMWhere condition) const;
     /*!
        Returns minimum value from given \a fieldName column.
      */
-    double minimum(QString fieldName);
+    double minimum(QString fieldName) const;
     /*!
        Returns minimum value from given \a fieldName column that match \a condition.
      */
-    double minimum(QString fieldName, ORMWhere condition);
+    double minimum(QString fieldName, ORMWhere condition) const;
     /*!
        Returns sum of values \a fieldName column.
      */
-    double sum(QString fieldName);
+    double sum(QString fieldName) const;
     /*!
        Returns sum of values \a fieldName column that match \a condition.
      */
-    double sum(QString fieldName, ORMWhere condition);
+    double sum(QString fieldName, ORMWhere condition) const;
     //
     template<class T>
     /*!
@@ -242,13 +231,12 @@ protected:
        Id is a primary key in any table. Immediately after creation object id = -1. After call save() id sets the positive value.
      */
     qlonglong id;
+    template<class T>
+    T* translateRecToObj(const QSqlRecord &record);
 
 private:
     QList<QSqlRecord> m_records;
     void translateRecToThisObj(const QSqlRecord &record);
-
-    template<class T>
-    T* translateRecToObj(const QSqlRecord &record);
 };
 
 #endif // ORMOBJECT_H

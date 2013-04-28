@@ -2,88 +2,88 @@
 
 ORMWhere::ORMWhere()
 {
-    m_whereCondition = "";
 }
 
 ORMWhere::ORMWhere(QString fieldName, ORMWhere::Condition con, QVariant value)
 {
-    m_whereCondition += QString("(%1 %3 '%2')")
+    m_whereString += QString("(%1 %3 '%2')")
             .arg(fieldName)
             .arg(value.toString());
     switch(con)
     {
     case ORMWhere::Equals:
-        m_whereCondition = m_whereCondition
+        m_whereString = m_whereString
                 .arg("=");
         break;
     case ORMWhere::NotEquals:
-        m_whereCondition = m_whereCondition
+        m_whereString = m_whereString
                 .arg("<>");
         break;
     case ORMWhere::LessThan:
-        m_whereCondition = m_whereCondition
+        m_whereString = m_whereString
                 .arg("<");
         break;
     case ORMWhere::LessOrEquals:
-        m_whereCondition = m_whereCondition
+        m_whereString = m_whereString
                 .arg("<=");
         break;
     case ORMWhere::GreaterThan:
-        m_whereCondition = m_whereCondition
+        m_whereString = m_whereString
                 .arg(">");
         break;
     case ORMWhere::GreaterOrEquals:
-        m_whereCondition = m_whereCondition
+        m_whereString = m_whereString
                 .arg(">=");
         break;
     case ORMWhere::StartsWith:
-        m_whereCondition = QString("(%1 LIKE '%2%')")
+        m_whereString = QString("(%1 LIKE '%2%')")
                 .arg(fieldName)
                 .arg(value.toString());
         break;
     case ORMWhere::EndsWith:
-        m_whereCondition = QString("(%1 LIKE '%%2')")
+        m_whereString = QString("(%1 LIKE '%%2')")
                 .arg(fieldName)
                 .arg(value.toString());
         break;
     case ORMWhere::Contains:
-        m_whereCondition = QString("(%1 LIKE '%%2%')")
+        m_whereString = QString("(%1 LIKE '%%2%')")
                 .arg(fieldName)
                 .arg(value.toString());
         break;
     case ORMWhere::IsNull:
-        m_whereCondition = QString("(%1 IS NULL)")
+        m_whereString = QString("(%1 IS NULL)")
                 .arg(fieldName);
         break;
     default:
-        m_whereCondition.clear();
+        m_whereString.clear();
     }
 }
 
 void ORMWhere::operator =(ORMWhere b)
 {
-    this->m_whereCondition = b.m_whereCondition;
+    this->m_whereString = b.m_whereString;
 }
 
-ORMWhere ORMWhere::operator &&(ORMWhere b)
+ORMWhere& ORMWhere::operator &&(ORMWhere b)
 {
-    ORMWhere result;
-    result.m_whereCondition = QString("(%1 AND %2)")
-            .arg(this->m_whereCondition)
-            .arg(b.m_whereCondition);
-    return result;
+    m_whereString = QString("(%1 AND %2)")
+            .arg(m_whereString)
+            .arg(b.m_whereString);
+    return *this;
 }
 
-ORMWhere ORMWhere::operator ||(ORMWhere b)
+ORMWhere& ORMWhere::operator ||(ORMWhere b)
 {
-    ORMWhere result;
-    result.m_whereCondition = QString("(%1 OR %2)")
-            .arg(this->m_whereCondition)
-            .arg(b.m_whereCondition);
-    return result;
+    m_whereString = QString("(%1 OR %2)")
+            .arg(m_whereString)
+            .arg(b.m_whereString);
+    return *this;
 }
 
-QString ORMWhere::getWhereCondition()
+QString ORMWhere::getWhereString() const
 {
-    return m_whereCondition;
+    if(m_whereString.isEmpty())
+        return m_whereString;
+    else
+        return "WHERE " + m_whereString;
 }

@@ -29,7 +29,7 @@ bool ORMDatabase::dropDatabase(QString name)
     return adapter->dropDatabase(name);
 }
 
-QString ORMDatabase::lastQuery()
+QString ORMDatabase::lastQuery() const
 {
     return adapter->lastQuery();
 }

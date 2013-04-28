@@ -58,7 +58,7 @@ public:
     /*!
        Returns last query to database.
      */
-    QString lastQuery();
+    QString lastQuery() const;
 };
 
 #endif // ORMDATABASE_H

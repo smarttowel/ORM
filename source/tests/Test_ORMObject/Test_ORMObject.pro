@@ -14,10 +14,10 @@ CONFIG   -= app_bundle
 
 TEMPLATE = app
 
-INCLUDEPATH += ../../ORM
+INCLUDEPATH += ../../lib
 
-HEADERS += ../../ORM/ormobject.h
+HEADERS += ../../lib/ormobject.h
 
-SOURCES += ../../ORM/ormobject.cpp tst_test_ormobject.cpp
+SOURCES += ../../lib/ormobject.cpp tst_test_ormobject.cpp
 
 DEFINES += SRCDIR=\\\"$$PWD/\\\"

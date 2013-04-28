@@ -681,6 +681,10 @@ INPUT                  = ../source/lib/ormobject.h \
                          ../source/lib/ormdatabase.cpp \
                          ../source/lib/ormwhere.h \
                          ../source/lib/ormwhere.cpp \
+                         ../source/lib/ormgroupby.h \
+                         ../source/lib/ormgroupby.cpp \
+                         ../source/lib/ormorderby.h \
+                         ../source/lib/ormorderby.cpp \
                          ../source/lib/macros.h 
 
 # This tag can be used to specify the character encoding of the source files 

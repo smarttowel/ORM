@@ -26,7 +26,7 @@ class ORMWhere
 public:
     /*!
        \enum ORMWhere::Condition
-       \brief Enumeration of type of comparisons
+       \brief Enumeration of type of comparisons.
        \var ORMWhere::Condition ORMWhere::Equals
        Equivalent for \a =
        \var ORMWhere::Condition ORMWhere::NotEquals
@@ -76,13 +76,13 @@ public:
     /*!
        Logical AND for ORMWhere object.
 
-       Returns new ORMWhere object, which contain \a WHERE expression.
+       Returns this ORMWhere object, which contain new \a WHERE expression.
      */
     ORMWhere& operator&& (ORMWhere b);
     /*!
        Logical OR for ORMWhere object.
 
-       Returns new ORMWhere object, which contain \a WHERE expression.
+       Returns this ORMWhere object, which contain new \a WHERE expression.
      */
     ORMWhere& operator|| (ORMWhere b);
     /*!

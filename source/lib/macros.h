@@ -42,12 +42,13 @@
    Returns child \a ClassName, associated with model or 0, if no such child object.
 
    <b>void set\a ClassName(const \a Classname &object) \n</b>
-   Assigns \a object with model. If the association already exists, this method removes the old and create a new one. \n
+   Assigns \a object with model. If the association already exists, this method removes the old and create a new one.
+   Old relation removed.\n
    \b NOTE: \a object must exists in table!
 
    <b>\a ClassName* create\a ClassName(const QHash<QString, QVariant> &values) \n</b>
    Creates new \a ClassName object from QHash<fieldName, value> \a values and call save() method. After assigns \a object with model
-   and return pointer to it.
+   and return pointer to it. Old relation removed.
 
    <b>void remove\a ClassName() \n </b>
    Removes existing association, but not delete child object from table. If association not exist, does nothing.
@@ -94,6 +95,7 @@
         QHash<QString, QVariant> hash; \
         hash.insert("parent_id", QString::number(id)); \
         hash.insert("child_id", QString::number(childId)); \
+        ORMDatabase::adapter->remove(tableName, "WHERE parent_id = " + QString::number(id)); \
         ORMDatabase::adapter->addRecord(tableName, hash); \
         return translateRecToObj<ClassName>(ORMDatabase::adapter->find(#ClassName, "WHERE id = " + QString::number(childId)).first()); \
     } \

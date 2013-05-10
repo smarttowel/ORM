@@ -13,23 +13,23 @@ TEMPLATE = lib
 CONFIG += staticlib
 
 HEADERS += orm.h \
-    ormobject.h \
     ormdatabase.h \
     ormabstractadapter.h \
     mysqladapter.h \
     ormwhere.h \
     ormgroupby.h \
     ormorderby.h \
-    macros.h
+    macros.h \
+    ormobject.h
 
 SOURCES += orm.cpp \
-    ormobject.cpp \
     ormdatabase.cpp \
     ormabstractadapter.cpp \
     mysqladapter.cpp \
     ormwhere.cpp \
     ormgroupby.cpp \
-    ormorderby.cpp
+    ormorderby.cpp \
+    ormobject.cpp
 
 unix:!symbian {
     maemo5 {

@@ -7,12 +7,12 @@
 #include "ormdatabase.cpp"
 #include "mysqladapter.cpp"
 #include "ormabstractadapter.cpp"
-#include "ormobject.cpp"
+#include "ormobject.h"
 #include "ormwhere.cpp"
 #include "ormgroupby.cpp"
 #include "ormorderby.cpp"
 
-class MyModel : public ORMObject
+class MyModel : public ORMObject<MyModel>
 {
     Q_OBJECT
     ORM_PROPERTY(bool, nameBool)
@@ -32,7 +32,7 @@ public:
     MyModel() {}
 };
 
-class Car : public ORMObject
+class Car : public ORMObject<Car>
 {
     Q_OBJECT
     ORM_PROPERTY(QString, Number)
@@ -41,7 +41,7 @@ class Car : public ORMObject
         Car() {}
 };
 
-class DriverLicense : public ORMObject
+class DriverLicense : public ORMObject<DriverLicense>
 {
     Q_OBJECT
     ORM_PROPERTY(int, Number)
@@ -50,7 +50,7 @@ public:
     DriverLicense() {}
 };
 
-class CarDriver : public ORMObject
+class CarDriver : public ORMObject<CarDriver>
 {
     Q_OBJECT
     ORM_HAS_ONE(DriverLicense)
@@ -74,7 +74,6 @@ private:
 
 private Q_SLOTS:
     void test_createTable();
-    void test_listSize();
     void test_save();
     void test_find();
     void test_findAll();
@@ -134,17 +133,6 @@ void Test_ORMObject::test_createTable()
     QCOMPARE(car.createTable(), true);
 }
 
-void Test_ORMObject::test_listSize()
-{
-    db.exec("DELETE FROM MyModel;");
-    MyModel model;
-    QCOMPARE(model.listSize(), 0);
-    model.save();
-    QCOMPARE(model.listSize(), 0);
-    model.first();
-    QCOMPARE(model.listSize(), 1);
-}
-
 void Test_ORMObject::test_save()
 {
     db.exec("DELETE FROM MyModel;");
@@ -162,9 +150,7 @@ void Test_ORMObject::test_save()
     model.setnameTime(time);
     model.setnameUint(60000);
     model.setnameUlonglong(123456789123456789);
-    QCOMPARE(model.listSize(), 0);
     QCOMPARE(model.save(), true);
-    QCOMPARE(model.listSize(), 0);
     QSqlQuery query = db.exec("SELECT * FROM MyModel;");
     query.next();
     for(int i = 0; i < query.size(); i++)
@@ -177,17 +163,17 @@ void Test_ORMObject::test_save()
 void Test_ORMObject::test_update()
 {
     db.exec("DELETE FROM MyModel;");
-    MyModel model2, model3;
+    MyModel model, model2;
     model2.setnameInt(10);
     QCOMPARE(model2.update(), false);
-    QCOMPARE(model3.findAll(), false);
+    QCOMPARE(model.findAll().isEmpty(), true);
     model2.save();
-    QCOMPARE(model3.findAll(), true);
-    model3.setnameInt(15);
-    QCOMPARE(model3.update(), true);
-    QCOMPARE(model2.findAll(), true);
-    QCOMPARE(model2.listSize(), 1);
-    QCOMPARE(model2.getnameInt(), 15);
+    QCOMPARE(model.findAll().isEmpty(), false);
+    model.setId(model2.getId());
+    model.setnameInt(15);
+    QCOMPARE(model.update(), true);
+    QCOMPARE(model2.findAll().isEmpty(), false);
+    QCOMPARE(model2.first()->getnameInt(), 15);
 }
 
 void Test_ORMObject::test_find()
@@ -198,13 +184,9 @@ void Test_ORMObject::test_find()
     QCOMPARE(model.save(), true);
     int id = model.getId();
     QVERIFY(id >= 0);
-    QCOMPARE(model.listSize(), 0);
-    QCOMPARE(model.find(id), true);
-    QVERIFY(model.listSize() != 0);
+    QCOMPARE(model.find(id)->getId(), id);
+    QCOMPARE(model.find(13423)->getId(), -1);
     QCOMPARE(model.getId(), id);
-    QCOMPARE(model.find(13423), false);
-    QCOMPARE(model.getId(), id);
-    QVERIFY(model.listSize() != 0);
     QSqlQuery query = db.exec(QString("SELECT * FROM MyModel WHERE id = %1;")
                               .arg(id));
     query.next();
@@ -219,7 +201,7 @@ void Test_ORMObject::test_findAll()
 {
     db.exec("DELETE FROM MyModel;");
     MyModel model, model1, model2, model3, resultModel;
-    QCOMPARE(resultModel.findAll(), false);
+    QCOMPARE(resultModel.findAll().isEmpty(), true);
     model.setnameInt(0);
     model.setnameString("a");
     model1.setnameInt(0);
@@ -232,23 +214,24 @@ void Test_ORMObject::test_findAll()
     model1.save();
     model2.save();
     model3.save();
-    QCOMPARE(resultModel.findAll(), true);
-    QCOMPARE(resultModel.listSize(), 4);
-    QCOMPARE(resultModel.findAll(ORMGroupBy("id")), true);
-    QCOMPARE(resultModel.listSize(), 4);
-    QCOMPARE(resultModel.findAll(ORMGroupBy("nameInt")), true);
-    QCOMPARE(resultModel.listSize(), 3);
-    QCOMPARE(resultModel.findAll(ORMGroupBy("nameInt") && ORMGroupBy("nameString")), true);
-    QCOMPARE(resultModel.listSize(), 4);
+    QList<MyModel*> list;
+    list = resultModel.findAll();
+    QCOMPARE(list.size(), 4);
+    list = resultModel.findAll(ORMGroupBy("id"));
+    QCOMPARE(list.size(), 4);
+    list = resultModel.findAll(ORMGroupBy("nameInt"));
+    QCOMPARE(list.size(), 3);
+    list = resultModel.findAll(ORMGroupBy("nameInt") && ORMGroupBy("nameString"));
+    QCOMPARE(list.size(), 4);
     model1.updateProperty("nameString", "a");
     model2.updateProperty("nameInt", "0");
-    QCOMPARE(resultModel.findAll(ORMGroupBy("nameInt") && ORMGroupBy("nameString")), true);
-    QCOMPARE(resultModel.listSize(), 2);
-    QCOMPARE(resultModel.findAll(ORMGroupBy(), ORMOrderBy("nameInt", ORMOrderBy::Descending)), true);
-    QCOMPARE(resultModel.getnameInt(), 2);
-    QCOMPARE(resultModel.findAll(ORMGroupBy("nameInt") && ORMGroupBy("nameString"), ORMOrderBy("nameInt", ORMOrderBy::Descending)), true);
-    QCOMPARE(resultModel.listSize(), 2);
-    QCOMPARE(resultModel.getnameInt(), 2);
+    list = resultModel.findAll(ORMGroupBy("nameInt") && ORMGroupBy("nameString"));
+    QCOMPARE(list.size(), 2);
+    list = resultModel.findAll(ORMGroupBy(), ORMOrderBy("nameInt", ORMOrderBy::Descending));
+    QCOMPARE(list.first()->getnameInt(), 2);
+    list = resultModel.findAll(ORMGroupBy("nameInt") && ORMGroupBy("nameString"), ORMOrderBy("nameInt", ORMOrderBy::Descending));
+    QCOMPARE(list.size(), 2);
+    QCOMPARE(list.first()->getnameInt(), 2);
 }
 
 void Test_ORMObject::test_findByValue()
@@ -258,27 +241,25 @@ void Test_ORMObject::test_findByValue()
     model.setnameInt(15);
     model.setnameString("a");
     model.save();
-    QCOMPARE(model.listSize(), 0);
-    QCOMPARE(model.findBy("nameInt", QVariant(15)), true);
-    QCOMPARE(model.getnameInt(), 15);
-    QVERIFY(model.listSize() != 0);
+    QList<MyModel*> list;
+    list = model.findBy("nameInt", QVariant(15));
+    QCOMPARE(list.first()->getnameInt(), 15);
     MyModel model2;
-    QCOMPARE(model2.listSize(), 0);
-    QCOMPARE(model2.findBy("nameString", QVariant("sdjkfhsjk")), false);
+    list = model2.findBy("nameString", QVariant("sdjkfhsjk"));
     QCOMPARE(model2.getId(), -1);
-    QCOMPARE(model2.listSize(), 0);
-    QCOMPARE(model2.findBy("nameInt", 15, ORMGroupBy("nameInt")), true);
-    QCOMPARE(model2.listSize(), 1);
+    QCOMPARE(list.size(), 0);
+    list = model2.findBy("nameInt", 15, ORMGroupBy("nameInt"));
+    QCOMPARE(list.size(), 1);
     MyModel model3;
     model3.setnameInt(15);
     model3.setnameString("b");
     model3.save();
-    QCOMPARE(model2.findBy("nameInt", 15, ORMGroupBy("nameInt")), true);
-    QCOMPARE(model2.listSize(), 1);
-    QCOMPARE(model3.findBy("nameInt", 15, ORMGroupBy(), ORMOrderBy("id", ORMOrderBy::Ascending)), true);
-    QCOMPARE(model3.getnameString(), QString("a"));
-    QCOMPARE(model3.findBy("nameInt", 15, ORMGroupBy(), ORMOrderBy("id", ORMOrderBy::Descending)), true);
-    QCOMPARE(model3.getnameString(), QString("b"));
+    list = model2.findBy("nameInt", 15, ORMGroupBy("nameInt"));
+    QCOMPARE(list.size(), 1);
+    list = model3.findBy("nameInt", 15, ORMGroupBy(), ORMOrderBy("id", ORMOrderBy::Ascending));
+    QCOMPARE(list.first()->getnameString(), QString("a"));
+    list = model3.findBy("nameInt", 15, ORMGroupBy(), ORMOrderBy("id", ORMOrderBy::Descending));
+    QCOMPARE(list.first()->getnameString(), QString("b"));
 }
 
 void Test_ORMObject::test_findByValues()
@@ -294,23 +275,25 @@ void Test_ORMObject::test_findByValues()
     QVector<QVariant> vector;
     vector.append(10);
     vector.append(11);
-    QCOMPARE(resultModel.findBy("nameInt", vector), true);
-    QCOMPARE(resultModel.listSize(), 2);
-    QCOMPARE(resultModel.getId(), model1.getId());
+    QList<MyModel*> list;
+    list = resultModel.findBy("nameInt", vector);
+    QCOMPARE(list.size(), 2);
+    QCOMPARE(list.first()->getId(), model1.getId());
     vector.clear();
-    QCOMPARE(resultModel.findBy("nameInt", vector), false);
-    QCOMPARE(resultModel.getId(), model1.getId());
+    list = resultModel.findBy("nameInt", vector);
+    QCOMPARE(list.isEmpty(), true);
     vector.append(20);
-    QCOMPARE(resultModel.findBy("nameInt", vector), false);
+    list = resultModel.findBy("nameInt", vector);
+    QCOMPARE(list.isEmpty(), true);
     vector.clear();
     vector.append(10);
     vector.append(11);
     model3.updateProperty("nameInt", 10);
-    QCOMPARE(resultModel.findBy("nameInt", vector, ORMGroupBy("nameInt")), true);
-    QCOMPARE(resultModel.listSize(), 2);
-    QCOMPARE(resultModel.findBy("nameInt", vector, ORMGroupBy("nameInt"), ORMOrderBy("nameInt", ORMOrderBy::Descending)), true);
-    QCOMPARE(resultModel.listSize(), 2);
-    QCOMPARE(resultModel.getnameInt(), 11);
+    list = resultModel.findBy("nameInt", vector, ORMGroupBy("nameInt"));
+    QCOMPARE(list.size(), 2);
+    list = resultModel.findBy("nameInt", vector, ORMGroupBy("nameInt"), ORMOrderBy("nameInt", ORMOrderBy::Descending));
+    QCOMPARE(list.size(), 2);
+    QCOMPARE(list.first()->getnameInt(), 11);
 }
 
 void Test_ORMObject::test_findByParams()
@@ -328,8 +311,8 @@ void Test_ORMObject::test_findByParams()
     findHash.insert("nameInt", QVariant(3));
     findHash.insert("nameDouble", QVariant(1.23));
     findHash.insert("nameChar", QVariant('X'));
-    QCOMPARE(resultModel.findBy(findHash), true);
-    QList<MyModel*> list = resultModel.toList<MyModel>();
+    QList<MyModel*> list;
+    list = resultModel.findBy(findHash);
     QCOMPARE(list.size(), 3);
     for(int i = 0; i < list.size(); i++)
     {
@@ -347,9 +330,8 @@ void Test_ORMObject::test_findByParams()
     }
     findHash.clear();
     findHash.insert("id", QVariant(-100));
-    QVERIFY(resultModel.listSize() != 0);
-    QCOMPARE(resultModel.findBy(findHash), false);
-    QVERIFY(resultModel.listSize() != 0);
+    list = resultModel.findBy(findHash);
+    QCOMPARE(list.isEmpty(), true);
 }
 
 void Test_ORMObject::test_where()
@@ -362,32 +344,32 @@ void Test_ORMObject::test_where()
     model1.save();
     model2.save();
     model3.save();
-    QCOMPARE(resultModel.where(ORMWhere("nameInt", ORMWhere::Equals, 3)), true);
-    QCOMPARE(resultModel.listSize(), 1);
-    QCOMPARE(resultModel.getnameInt(), 3);
-    QVERIFY(resultModel.getId() >= 0);
-    QCOMPARE(resultModel.where(ORMWhere("nameString", ORMWhere::Equals, "Hello")), false);
-    QVERIFY(resultModel.listSize() != 0);
-    QCOMPARE(resultModel.where(ORMWhere("nameInt", ORMWhere::Equals, 1) && ORMWhere("nameInt", ORMWhere::Equals, 5)), false);
-    QVERIFY(resultModel.listSize() != 0);
-    QCOMPARE(resultModel.where(ORMWhere("nameInt", ORMWhere::Equals, 1) || ORMWhere("nameInt", ORMWhere::LessThan, 5)), true);
-    QCOMPARE(resultModel.listSize(), 2);
-    QCOMPARE(resultModel.where(ORMWhere("nameInt", ORMWhere::Equals, 1) || ORMWhere("nameString", ORMWhere::Equals, "")), true);
-    QCOMPARE(resultModel.listSize(), 3);
-    resultModel.where(ORMWhere("nameInt", ORMWhere::Equals, 1) &&
+    QList<MyModel*> list;
+    list = resultModel.where(ORMWhere("nameInt", ORMWhere::Equals, 3));
+    QCOMPARE(list.size(), 1);
+    QCOMPARE(list.first()->getnameInt(), 3);
+    QVERIFY(resultModel.getId() < 0);
+    list = resultModel.where(ORMWhere("nameString", ORMWhere::Equals, "Hello"));
+    QCOMPARE(list.isEmpty(), true);
+    list = resultModel.where(ORMWhere("nameInt", ORMWhere::Equals, 1) && ORMWhere("nameInt", ORMWhere::Equals, 5));
+    QCOMPARE(list.isEmpty(), true);
+    list = resultModel.where(ORMWhere("nameInt", ORMWhere::Equals, 1) || ORMWhere("nameInt", ORMWhere::LessThan, 5));
+    QCOMPARE(list.size(), 2);
+    list = resultModel.where(ORMWhere("nameInt", ORMWhere::Equals, 1) || ORMWhere("nameString", ORMWhere::Equals, ""));
+    QCOMPARE(list.size(), 3);
+    list = resultModel.where(ORMWhere("nameInt", ORMWhere::Equals, 1) &&
                       (ORMWhere("nameString", ORMWhere::Equals, "") || ORMWhere("nameInt", ORMWhere::GreaterThan, 3)));
-    QCOMPARE(resultModel.listSize(), 1);
-    QCOMPARE(resultModel.getnameInt(), 1);
-    QCOMPARE(resultModel.getnameInt(), 1);
+    QCOMPARE(list.size(), 1);
+    QCOMPARE(list.first()->getnameInt(), 1);
     model3.updateProperty("nameInt", 3);
-    QCOMPARE(resultModel.where(ORMWhere("nameInt", ORMWhere::Equals, 3), ORMGroupBy("nameInt")), true);
-    QCOMPARE(resultModel.listSize(), 1);
-    QCOMPARE(resultModel.where(ORMWhere("nameInt", ORMWhere::Equals, 3) || ORMWhere("nameInt", ORMWhere::Equals, 1),
-                               ORMGroupBy("nameInt")), true);
-    QCOMPARE(resultModel.listSize(), 2);
-    QCOMPARE(resultModel.where(ORMWhere("nameInt", ORMWhere::Equals, 3) || ORMWhere("nameInt", ORMWhere::Equals, 1),
-                               ORMGroupBy("nameInt"), ORMOrderBy("nameInt", ORMOrderBy::Descending)), true);
-    QCOMPARE(resultModel.getnameInt(), 3);
+    list = resultModel.where(ORMWhere("nameInt", ORMWhere::Equals, 3), ORMGroupBy("nameInt"));
+    QCOMPARE(list.size(), 1);
+    list = resultModel.where(ORMWhere("nameInt", ORMWhere::Equals, 3) || ORMWhere("nameInt", ORMWhere::Equals, 1),
+                               ORMGroupBy("nameInt"));
+    QCOMPARE(list.size(), 2);
+    list = resultModel.where(ORMWhere("nameInt", ORMWhere::Equals, 3) || ORMWhere("nameInt", ORMWhere::Equals, 1),
+                               ORMGroupBy("nameInt"), ORMOrderBy("nameInt", ORMOrderBy::Descending));
+    QCOMPARE(list.first()->getnameInt(), 3);
 }
 
 void Test_ORMObject::test_updateProperty()
@@ -399,8 +381,7 @@ void Test_ORMObject::test_updateProperty()
     QCOMPARE(model.updateProperty("nameString", "Hello"), true);
     QCOMPARE(model.updateProperty("ololoProperty", 123), false);
     QCOMPARE(model2.updateProperty("nameInt", 20), false);
-    model2.first();
-    QCOMPARE(model2.getnameString(), QString("Hello"));
+    QCOMPARE(model2.first()->getnameString(), QString("Hello"));
 }
 
 void Test_ORMObject::test_exists()
@@ -450,18 +431,20 @@ void Test_ORMObject::test_remove()
     model3.save();
     int id = model.getId();
     int id2 = model2.getId();
-    QCOMPARE(resultModel.findAll(), true);
-    QCOMPARE(resultModel.listSize(), 3);
-    QCOMPARE(resultModel.find(id), true);
+    QList<MyModel*> list = resultModel.findAll();
+    QCOMPARE(list.isEmpty(), false);
+    QCOMPARE(list.size(), 3);
+    QCOMPARE(resultModel.find(id)->getId(), id);
     QCOMPARE(model.remove(), true);
-    QCOMPARE(resultModel.find(id), false);
-    QCOMPARE(resultModel.find(id2), true);
+    QCOMPARE(resultModel.find(id)->getId(), -1);
+    QCOMPARE(resultModel.find(id2)->getId(), id2);
     QCOMPARE(model2.remove(), true);
-    QCOMPARE(resultModel.findAll(), true);
-    QCOMPARE(resultModel.listSize(), 1);
-    QCOMPARE(resultModel.find(id2), false);
+    list = resultModel.findAll();
+    QCOMPARE(list.isEmpty(), false);
+    QCOMPARE(list.size(), 1);
+    QCOMPARE(resultModel.find(id2)->getId(), -1);
     QCOMPARE(model3.remove(), true);
-    QCOMPARE(resultModel.findAll(), false);
+    QCOMPARE(resultModel.findAll().isEmpty(), true);
 }
 
 void Test_ORMObject::test_removeBy()
@@ -475,9 +458,9 @@ void Test_ORMObject::test_removeBy()
     model1.save();
     model2.save();
     model3.save();
-    QCOMPARE(resultModel.findAll(), true);
+    QCOMPARE(resultModel.findAll().isEmpty(), false);
     QCOMPARE(resultModel.removeBy(ORMWhere("nameString", ORMWhere::Equals, "foo") || ORMWhere("nameInt", ORMWhere::Equals, "15")), true);
-    QCOMPARE(resultModel.findAll(), false);
+    QCOMPARE(resultModel.findAll().isEmpty(), true);
 }
 
 void Test_ORMObject::test_removeAll()
@@ -487,10 +470,11 @@ void Test_ORMObject::test_removeAll()
     model1.save();
     model2.save();
     model3.save();
-    QCOMPARE(model1.findAll(), true);
-    QCOMPARE(model1.listSize(), 3);
+    QList<MyModel*> list;
+    list = model1.findAll();
+    QCOMPARE(list.size(), 3);
     model1.removeAll();
-    QCOMPARE(model1.findAll(), false);
+    QCOMPARE(model1.findAll().isEmpty(), true);
 }
 
 void Test_ORMObject::test_count()
@@ -688,11 +672,9 @@ void Test_ORMObject::test_first()
     MyModel model, model2, model3;
     QCOMPARE(model.save(), true);
     QCOMPARE(model2.save(), true);
-    QCOMPARE(model3.first(), true);
-    QCOMPARE(model3.getId(), model.getId());
-    QVERIFY(model3.listSize() != 0);
+    QCOMPARE(model3.first()->getId(), model.getId());
     db.exec("DELETE FROM MyModel;");
-    QCOMPARE(model.first(), false);
+    QCOMPARE(model.first()->getId(), -1);
 }
 
 void Test_ORMObject::test_last()
@@ -701,11 +683,9 @@ void Test_ORMObject::test_last()
     MyModel model, model2, model3;
     QCOMPARE(model.save(), true);
     QCOMPARE(model2.save(), true);
-    QCOMPARE(model3.last(), true);
-    QCOMPARE(model3.getId(), model2.getId());
-    QVERIFY(model3.listSize() != 0);
+    QCOMPARE(model3.last()->getId(), model2.getId());
     db.exec("DELETE FROM MyModel;");
-    QCOMPARE(model.last(), false);
+    QCOMPARE(model.last()->getId(), -1);
 }
 
 void Test_ORMObject::test_ORM_HAS_ONE()
@@ -718,12 +698,12 @@ void Test_ORMObject::test_ORM_HAS_ONE()
     driver2.setName("Paul");
     driver1.save();
     driver2.save();
-    QVERIFY(driver1.getDriverLicense() == 0);
+    QCOMPARE(driver1.getDriverLicense()->getId(), -1);
     QHash<QString, QVariant> info;
     info.insert("Number", 123);
     QCOMPARE(driver1.createDriverLicense(info)->getNumber(), 123);
     QCOMPARE(driver1.getDriverLicense()->getNumber(), 123);
-    QVERIFY(driver2.getDriverLicense() == 0);
+    QCOMPARE(driver2.getDriverLicense()->getId(),  -1);
     license.setNumber(456);
     license.save();
     driver2.setDriverLicense(license);
@@ -732,8 +712,8 @@ void Test_ORMObject::test_ORM_HAS_ONE()
     QCOMPARE(license.exists(idDr2Lic), true);
     driver2.removeDriverLicense();
     QCOMPARE(license.exists(idDr2Lic), true);
-    QVERIFY(driver2.getDriverLicense() == 0);
-    QVERIFY(driver1.getDriverLicense() != 0);
+    QCOMPARE(driver2.getDriverLicense()->getId(), -1);
+    QVERIFY(driver1.getDriverLicense()->getId() >= 0);
 }
 
 void Test_ORMObject::test_ORM_HAS_MANY()

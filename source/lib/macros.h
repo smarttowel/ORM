@@ -61,7 +61,7 @@
     ClassName* get##ClassName() \
     { \
         if(id < 0) \
-            return 0; \
+            return new ClassName; \
         QString tableName = QString("%1_HAS_ONE_" #ClassName) \
                                 .arg(metaObject()->className()); \
         QString whereString = QString("WHERE id = (SELECT child_id FROM %1 WHERE parent_id = %2)") \
@@ -69,7 +69,7 @@
                                 .arg(id); \
         QList<QSqlRecord> list = ORMDatabase::adapter->find( #ClassName, whereString); \
         if(list.isEmpty()) \
-            return 0; \
+            return new ClassName; \
         else \
             return translateRecToObj<ClassName>(list.first()); \
     } \
@@ -88,7 +88,7 @@
     ClassName* create##ClassName(const QHash<QString, QVariant> &values) \
     { \
         if(id < 0) \
-            return 0; \
+            return new ClassName; \
         int childId = ORMDatabase::adapter->addRecord(#ClassName, values); \
         QString tableName = QString("%1_HAS_ONE_" #ClassName) \
                                 .arg(metaObject()->className()); \
@@ -184,7 +184,7 @@
     ClassName* create##ClassName(const QHash<QString, QVariant> &values) \
     { \
         if(id < 0) \
-            return 0; \
+            return new ClassName; \
         int childId = ORMDatabase::adapter->addRecord(#ClassName, values); \
         QString tableName = QString("%1_HAS_MANY_" #ClassName) \
                                 .arg(metaObject()->className()); \

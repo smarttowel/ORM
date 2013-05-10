@@ -1,3 +1,4 @@
 TEMPLATE = subdirs
 
-SUBDIRS += lib tests
+SUBDIRS += lib tests \
+    ormtool

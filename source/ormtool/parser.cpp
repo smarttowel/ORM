@@ -16,7 +16,7 @@ void Parser::process(QStringList files)
         QTextStream stream(&file);
         while(!stream.atEnd())
             m_currentFile += removeTrash(stream.readLine());
-        simplified();
+        m_currentFile = simplified(m_currentFile);
         QRegularExpressionMatchIterator i = m_modelNamePattern.globalMatch(m_currentFile);
         while (i.hasNext())
         {
@@ -36,13 +36,13 @@ QString Parser::removeTrash(QString str)
     str.remove(QRegularExpression("\".*[^\\\\]\""));
     if(str.indexOf("//") < str.indexOf("*/")) //  abc//def
         str.remove(str.indexOf("//"), str.indexOf("*/") - str.indexOf("//"));
-    qDebug() << str;
     str.remove(QRegularExpression("//.*"));
     return str;
 }
 
-void Parser::simplified()
+QString &Parser::simplified(QString &str)
 {
-    m_currentFile.simplified();
-    m_currentFile.remove(QRegularExpression("\\/\\*.*\\*\\/"));
+    str = str.simplified();
+    str.remove(QRegularExpression("/\\*.*\\*/"));
+    return str;
 }

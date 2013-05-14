@@ -13,7 +13,7 @@ public:
     Parser();
     void process(QStringList files);
     QString removeTrash(QString str);
-    void simplified();
+    QString& simplified(QString &str);
     QString getCurrentFile();
 
 private:

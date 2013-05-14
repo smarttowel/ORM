@@ -5,4 +5,5 @@ SUBDIRS += \
     Test_ORMObject \
     Test_ORMWhere \
     Test_ORMGroupBy \
-    Test_ORMOrderBy
+    Test_ORMOrderBy \
+    Test_ormtool

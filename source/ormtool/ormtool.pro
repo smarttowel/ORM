@@ -17,8 +17,10 @@ TEMPLATE = app
 
 SOURCES += main.cpp \
     property.cpp \
-    model.cpp
+    model.cpp \
+    parser.cpp
 
 HEADERS += \
     property.h \
-    model.h
+    model.h \
+    parser.h

@@ -12,6 +12,7 @@ public:
 private Q_SLOTS:
     void removeTrash();
     void simplified();
+    void cutModelInfo();
 };
 
 Test_ormtool::Test_ormtool()
@@ -47,6 +48,22 @@ void Test_ormtool::simplified()
     QCOMPARE(parser.simplified(str), QString("a b c ghi"));
     str = "a\nb\n  c\t\rg/*hi*/ ";
     QCOMPARE(parser.simplified(str), QString("a b c g"));
+}
+
+void Test_ormtool::cutModelInfo()
+{
+    Parser parser;
+    QString str = "abcORMObject<Class1>abcORMObject<Class2>gfi";
+    QList<QString> list = parser.cutModelInfo(str);
+    QCOMPARE(list.value(0), QString("ORMObject<Class1>abc"));
+    QCOMPARE(list.value(1), QString("ORMObject<Class2>gfi"));
+    str = "ORMObject<Class1>abcORMObject<Class2>";
+    list = parser.cutModelInfo(str);
+    QCOMPARE(list.value(0), QString("ORMObject<Class1>abc"));
+    QCOMPARE(list.value(1), QString("ORMObject<Class2>"));
+    str = "abcgfi";
+    list = parser.cutModelInfo(str);
+    QCOMPARE(list.isEmpty(), true);
 }
 
 QTEST_APPLESS_MAIN(Test_ormtool)

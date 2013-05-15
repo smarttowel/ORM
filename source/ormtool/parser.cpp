@@ -3,7 +3,6 @@
 
 Parser::Parser()
 {
-    m_modelNamePattern.setPattern("(ORMObject<\\w+>)");
 }
 
 void Parser::process(QStringList files)
@@ -17,18 +16,29 @@ void Parser::process(QStringList files)
         while(!stream.atEnd())
             m_currentFile += removeTrash(stream.readLine());
         m_currentFile = simplified(m_currentFile);
-        QRegularExpressionMatchIterator i = m_modelNamePattern.globalMatch(m_currentFile);
-        while (i.hasNext())
-        {
-            QRegularExpressionMatch match = i.next();
-            m_modelsRef.append(match.capturedRef());
-        }
+
     }
 }
 
 QString Parser::getCurrentFile()
 {
     return m_currentFile;
+}
+
+QList<QString> Parser::cutModelInfo(const QString &str)
+{
+    QList<QString> list;
+    QRegularExpression e("ORMObject<(\\w+)>");
+    QRegularExpressionMatchIterator it = e.globalMatch(str);
+    while(it.hasNext())
+    {
+        QRegularExpressionMatch m = it.next();
+        if(it.hasNext())
+            list.append(str.mid(m.capturedRef(0).position(), it.peekNext().capturedRef(0).position() - m.capturedRef(0).position()));
+        else
+            list.append(str.mid(m.capturedRef(0).position(), str.length() - m.capturedRef(0).position()));
+    }
+    return list;
 }
 
 QString Parser::removeTrash(QString str)

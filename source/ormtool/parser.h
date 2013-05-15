@@ -15,12 +15,12 @@ public:
     QString removeTrash(QString str);
     QString& simplified(QString &str);
     QString getCurrentFile();
+    QList<QString> cutModelInfo(const QString &str);
 
 private:
     QList<Model> m_models;
     QList<QStringRef> m_modelsRef;
     QString m_currentFile;
-    QRegularExpression m_modelNamePattern;
 };
 
 #endif // PARSER_H

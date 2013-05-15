@@ -6,6 +6,8 @@
 #include <QRegularExpression>
 #include <QStringRef>
 #include "model.h"
+#include "property.h"
+
 
 class Parser
 {
@@ -16,6 +18,7 @@ public:
     QString& simplified(QString &str);
     QString getCurrentFile();
     QList<QString> cutModelInfo(const QString &str);
+    Model getModelFromString(const QString &str);
 
 private:
     QList<Model> m_models;

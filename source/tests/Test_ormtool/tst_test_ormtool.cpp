@@ -1,5 +1,8 @@
 #include <QString>
 #include <QtTest>
+#include <QList>
+#include "model.cpp"
+#include "property.cpp"
 #include "parser.cpp"
 
 class Test_ormtool : public QObject
@@ -13,6 +16,7 @@ private Q_SLOTS:
     void removeTrash();
     void simplified();
     void cutModelInfo();
+    void getModelFromString();
 };
 
 Test_ormtool::Test_ormtool()
@@ -64,6 +68,38 @@ void Test_ormtool::cutModelInfo()
     str = "abcgfi";
     list = parser.cutModelInfo(str);
     QCOMPARE(list.isEmpty(), true);
+}
+
+void Test_ormtool::getModelFromString()
+{
+    QString str = "ORMObject<Class1>ORM_PROPERTY(QString, name) ORM_PROPERTY(int,id)ORM_HAS_ONE(Class2)ORM_HAS_MANY(Class3)";
+    Parser parser;
+    Model model = parser.getModelFromString(str);
+    QCOMPARE(model.name(), QString("Class1"));
+    QCOMPARE(model.properties().value(0).getType(), QString("QString"));
+    QCOMPARE(model.properties().value(0).getName(), QString("name"));
+    QCOMPARE(model.properties().value(1).getType(), QString("int"));
+    QCOMPARE(model.properties().value(1).getName(), QString("id"));
+    QCOMPARE(model.properties().size(), 2);
+    QCOMPARE(model.hasOne().first(), QString("Class2"));
+    QCOMPARE(model.hasOne().size(), 1);
+    QCOMPARE(model.hasMany().first(), QString("Class3"));
+    QCOMPARE(model.hasMany().size(), 1);
+    str = "ORMObject<Class0>sdfdkgrlyORM_PROPERTY(QString, name)fsdglORM_PROPERTY(int,id)sdfsdORM_HAS_ONE(Class2)sORM_HAS_ONE(Class3)fdf;"
+            "ORM_HAS_MANY(Class4)sdfsdfORM_HAS_MANY(Class5)";
+    model = parser.getModelFromString(str);
+    QCOMPARE(model.name(), QString("Class0"));
+    QCOMPARE(model.properties().value(0).getType(), QString("QString"));
+    QCOMPARE(model.properties().value(0).getName(), QString("name"));
+    QCOMPARE(model.properties().value(1).getType(), QString("int"));
+    QCOMPARE(model.properties().value(1).getName(), QString("id"));
+    QCOMPARE(model.properties().size(), 2);
+    QCOMPARE(model.hasOne().first(), QString("Class2"));
+    QCOMPARE(model.hasOne().value(1), QString("Class3"));
+    QCOMPARE(model.hasOne().size(), 2);
+    QCOMPARE(model.hasMany().first(), QString("Class4"));
+    QCOMPARE(model.hasMany().value(1), QString("Class5"));
+    QCOMPARE(model.hasMany().size(), 2);
 }
 
 QTEST_APPLESS_MAIN(Test_ormtool)

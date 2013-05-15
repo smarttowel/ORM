@@ -1,5 +1,9 @@
 #include "property.h"
 
+Property::Property()
+{
+}
+
 Property::Property(QString type, QString name)
 {
     m_type = type;

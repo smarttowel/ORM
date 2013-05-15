@@ -6,6 +6,7 @@
 class Property
 {
 public:
+    Property();
     Property(QString type, QString name);
     QString getType();
     QString getName();

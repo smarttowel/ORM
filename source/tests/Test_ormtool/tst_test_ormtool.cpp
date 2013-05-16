@@ -4,6 +4,7 @@
 #include "model.cpp"
 #include "property.cpp"
 #include "parser.cpp"
+#include "sqlscriptbuilder.cpp"
 
 class Test_ormtool : public QObject
 {
@@ -17,6 +18,7 @@ private Q_SLOTS:
     void simplified();
     void cutModelInfo();
     void getModelFromString();
+    void createSqlScriptForTable();
 };
 
 Test_ormtool::Test_ormtool()
@@ -100,6 +102,16 @@ void Test_ormtool::getModelFromString()
     QCOMPARE(model.hasMany().first(), QString("Class4"));
     QCOMPARE(model.hasMany().value(1), QString("Class5"));
     QCOMPARE(model.hasMany().size(), 2);
+}
+
+void Test_ormtool::createSqlScriptForTable()
+{
+    SqlScriptBuilder builder;
+    Model model("Table");
+    model.addProperty(Property("QString", "name"));
+    model.addProperty(Property("int", "number"));
+    QCOMPARE(builder.createSqlScriptForTable(model), QString("CREATE TABLE Table(id BIGINT AUTO_INCREMENT, name TEXT, number INT, "
+                                                             "PRIMARY KEY(id));"));
 }
 
 QTEST_APPLESS_MAIN(Test_ormtool)

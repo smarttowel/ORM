@@ -18,9 +18,11 @@ TEMPLATE = app
 SOURCES += main.cpp \
     property.cpp \
     model.cpp \
-    parser.cpp
+    parser.cpp \
+    sqlscriptbuilder.cpp
 
 HEADERS += \
     property.h \
     model.h \
-    parser.h
+    parser.h \
+    sqlscriptbuilder.h

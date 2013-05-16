@@ -8,6 +8,7 @@
 class Model
 {
 public:
+    Model();
     Model(QString name);
     QString name();
     void addProperty(Property p);

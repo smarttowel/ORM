@@ -18,7 +18,12 @@ SqlScriptBuilder::SqlScriptBuilder()
 
 QString SqlScriptBuilder::process(QList<Model> list)
 {
-
+    QString script;
+    for(int i = 0; i < list.size(); i++)
+        script += createSqlScriptForTable(list.value(i));
+    for(int i = 0; i < list.size(); i++)
+        script += createRelationsForTable(list.value(i));
+    return script;
 }
 
 QString SqlScriptBuilder::createSqlScriptForTable(Model model)
@@ -31,7 +36,7 @@ QString SqlScriptBuilder::createSqlScriptForTable(Model model)
                 .arg(model.properties().value(i).getName())
                 .arg(m_tableTypes.value(model.properties().value(i).getType()));
     }
-    script += "PRIMARY KEY(id));";
+    script += "PRIMARY KEY(id));\n";
     return script;
 }
 

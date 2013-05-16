@@ -1,5 +1,9 @@
 #include "model.h"
 
+Model::Model()
+{
+}
+
 Model::Model(QString name)
 {
     m_name = name;

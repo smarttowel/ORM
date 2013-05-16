@@ -19,6 +19,7 @@ private Q_SLOTS:
     void cutModelInfo();
     void getModelFromString();
     void createSqlScriptForTable();
+    void createRelationsForTable();
 };
 
 Test_ormtool::Test_ormtool()
@@ -112,6 +113,21 @@ void Test_ormtool::createSqlScriptForTable()
     model.addProperty(Property("int", "number"));
     QCOMPARE(builder.createSqlScriptForTable(model), QString("CREATE TABLE Table(id BIGINT AUTO_INCREMENT, name TEXT, number INT, "
                                                              "PRIMARY KEY(id));"));
+}
+
+void Test_ormtool::createRelationsForTable()
+{
+    Model model("Table");
+    model.addHasOne("Class1");
+    model.addHasOne("Class2");
+    model.addHasMany("Class3");
+    model.addHasMany("Class4");
+    SqlScriptBuilder builder;
+    QString result = "ALTER TABLE Class1 ADD Table_id BIGINT AFTER id, ADD FOREIGN KEY(Table_id) REFERENCES Table(id), ADD UNIQUE(Table_id);\n"
+            "ALTER TABLE Class2 ADD Table_id BIGINT AFTER id, ADD FOREIGN KEY(Table_id) REFERENCES Table(id), ADD UNIQUE(Table_id);\n"
+            "ALTER TABLE Class3 ADD Table_id BIGINT AFTER id, ADD FOREIGN KEY(Table_id) REFERENCES Table(id);\n"
+            "ALTER TABLE Class4 ADD Table_id BIGINT AFTER id, ADD FOREIGN KEY(Table_id) REFERENCES Table(id);\n";
+    QCOMPARE(builder.createRelationsForTable(model), result);
 }
 
 QTEST_APPLESS_MAIN(Test_ormtool)

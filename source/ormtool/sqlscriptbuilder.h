@@ -12,6 +12,7 @@ public:
     SqlScriptBuilder();
     QString process(QList<Model> list);
     QString createSqlScriptForTable(Model model);
+    QString createRelationsForTable(Model model);
 
 private:
     QHash<QString, QString> m_tableTypes;

@@ -34,3 +34,26 @@ QString SqlScriptBuilder::createSqlScriptForTable(Model model)
     script += "PRIMARY KEY(id));";
     return script;
 }
+
+QString SqlScriptBuilder::createRelationsForTable(Model model)
+{
+    QString script;
+    QString patternHasMany = QString("ALTER TABLE %1 ADD %2_id BIGINT AFTER id, ADD FOREIGN KEY(%2_id) REFERENCES %2(id);");
+    QString patternHasOne = QString("ALTER TABLE %1 ADD %2_id BIGINT AFTER id, ADD FOREIGN KEY(%2_id) REFERENCES %2(id), "
+                                    "ADD UNIQUE(%2_id);");
+    for(int i = 0; i < model.hasOne().size(); i++)
+    {
+        script += patternHasOne
+                .arg(model.hasOne().value(i))
+                .arg(model.name());
+        script += '\n';
+    }
+    for(int i = 0; i < model.hasMany().size(); i++)
+    {
+        script += patternHasMany
+                .arg(model.hasMany().value(i))
+                .arg(model.name());
+        script += '\n';
+    }
+    return script;
+}

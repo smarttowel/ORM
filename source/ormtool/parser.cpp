@@ -49,29 +49,34 @@ QList<QString> Parser::cutModelInfo(const QString &str)
 
 Model Parser::getModelFromString(const QString &str)
 {
+    QTextStream stream(stdout);
     QRegularExpression object("ORMObject<(\\w+)>");
     QRegularExpression property("ORM_PROPERTY\\((\\w+), ?(\\w+)\\)");
     QRegularExpression hasOne("ORM_HAS_ONE\\((\\w+)\\)");
     QRegularExpression hasMany("ORM_HAS_MANY\\((\\w+)\\)");
     QRegularExpressionMatch m = object.match(str);
     QString name = m.captured(1);
+    stream << "Found model: " << name << endl;
     Model model(name);
     QRegularExpressionMatchIterator it = property.globalMatch(str);
     while(it.hasNext())
     {
         m = it.next();
+        stream << name << ": found property (" << m.captured(1) << ':' << m.captured(2) << ")" << endl;
         model.addProperty(Property(m.captured(1), m.captured(2)));
     }
     it = hasOne.globalMatch(str);
     while(it.hasNext())
     {
         m = it.next();
+        stream << name << ": found \"has one\" relation: " << m.captured(1) << endl;
         model.addHasOne(m.captured(1));
     }
     it = hasMany.globalMatch(str);
     while(it.hasNext())
     {
         m = it.next();
+        stream << name << ": found \"has many\" relation: " << m.captured(1) << endl;
         model.addHasMany(m.captured(1));
     }
     return model;
@@ -80,7 +85,7 @@ Model Parser::getModelFromString(const QString &str)
 QString Parser::removeTrash(QString str)
 {
     str.remove(QRegularExpression("\".*[^\\\\]\""));
-    if(str.indexOf("//") < str.indexOf("*/")) //  abc//def
+    if(str.indexOf("//") < str.indexOf("*/"))
         str.remove(str.indexOf("//"), str.indexOf("*/") - str.indexOf("//"));
     str.remove(QRegularExpression("//.*"));
     return str;

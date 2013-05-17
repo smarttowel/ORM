@@ -30,6 +30,8 @@ QString SqlScriptBuilder::createSqlScriptForTable(Model model)
 {
     QString script = QString("CREATE TABLE %1(id BIGINT AUTO_INCREMENT, ")
             .arg(model.name());
+    QTextStream stream(stdout);
+    stream << "Generate scheme for " << model.name() << "..." << endl;
     for(int i = 0; i < model.properties().size(); i++)
     {
         script += QString("%1 %2, ")

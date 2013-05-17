@@ -3,6 +3,7 @@
 
 #include <QList>
 #include <QHash>
+#include <QTextStream>
 #include "model.h"
 #include "property.h"
 

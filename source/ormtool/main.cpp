@@ -18,5 +18,7 @@ int main(int argc, char *argv[])
     QTextStream stream(&outputFile);
     stream << builder.process(parser.process(files));
     outputFile.close();
+    QTextStream out(stdout);
+    out << "Done!" << endl;
 //    return a.exec();
 }

@@ -1,14 +1,14 @@
 #include "parser.h"
-#include <QDebug>
 
 Parser::Parser()
 {
 }
 
-void Parser::process(QStringList files)
+QList<Model> Parser::process(QStringList files)
 {
     QString currentPath;
     QList<QString> list;
+    QList<Model> returnList;
     foreach (currentPath, files)
     {
         QFile file(currentPath);
@@ -18,8 +18,11 @@ void Parser::process(QStringList files)
             m_currentFile += removeTrash(stream.readLine());
         m_currentFile = simplified(m_currentFile);
         list = cutModelInfo(m_currentFile);
-
+        for(int i = 0; i < list.size(); i++)
+            returnList.append(getModelFromString(list.value(i)));
+        file.close();
     }
+    return returnList;
 }
 
 QString Parser::getCurrentFile()

@@ -13,7 +13,7 @@ class Parser
 {
 public:
     Parser();
-    void process(QStringList files);
+    QList<Model> process(QStringList files);
     QString removeTrash(QString str);
     QString& simplified(QString &str);
     QString getCurrentFile();

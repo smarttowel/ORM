@@ -20,6 +20,7 @@ QList<Model> Parser::process(QStringList files)
         list = cutModelInfo(m_currentFile);
         for(int i = 0; i < list.size(); i++)
             returnList.append(getModelFromString(list.value(i)));
+        m_currentFile.clear();
         file.close();
     }
     return returnList;

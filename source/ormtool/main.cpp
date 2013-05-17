@@ -9,8 +9,11 @@ int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
     QStringList files;
+    QTextStream out(stdout);
     for(int i = 1; i < argc; i++)
         files.append(argv[i]);
+    if(files.isEmpty())
+        out << "No input files!";
     Parser parser;
     SqlScriptBuilder builder;
     QFile outputFile("CreateTables.sql");
@@ -18,7 +21,6 @@ int main(int argc, char *argv[])
     QTextStream stream(&outputFile);
     stream << builder.process(parser.process(files));
     outputFile.close();
-    QTextStream out(stdout);
     out << "Done!" << endl;
 //    return a.exec();
 }

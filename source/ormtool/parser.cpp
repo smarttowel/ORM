@@ -12,12 +12,22 @@ QList<Model> Parser::process(QStringList files)
     foreach (currentPath, files)
     {
         QFile file(currentPath);
-        file.open(QIODevice::ReadOnly);
+        if(!file.open(QIODevice::ReadOnly))
+        {
+            QTextStream out(stdout);
+            out << "WARNING: " << file.errorString() << endl;
+            continue;
+        }
         QTextStream stream(&file);
         while(!stream.atEnd())
             m_currentFile += removeTrash(stream.readLine());
         m_currentFile = simplified(m_currentFile);
         list = cutModelInfo(m_currentFile);
+        if(list.isEmpty())
+        {
+            QTextStream out(stdout);
+            out << "WARNING: In file " << file.fileName() << " models not found!" << endl;
+        }
         for(int i = 0; i < list.size(); i++)
             returnList.append(getModelFromString(list.value(i)));
         m_currentFile.clear();

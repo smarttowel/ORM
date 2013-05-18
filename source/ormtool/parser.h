@@ -14,16 +14,16 @@ class Parser
 public:
     Parser();
     QList<Model> process(QStringList files);
-    QString removeTrash(QString str);
-    QString& simplified(QString &str);
-    QString getCurrentFile();
-    QList<QString> cutModelInfo(const QString &str);
-    Model getModelFromString(const QString &str);
 
 private:
     QList<Model> m_models;
     QList<QStringRef> m_modelsRef;
     QString m_currentFile;
+    QString removeTrash(QString str);
+    QString& simplified(QString &str);
+    QString getCurrentFile();
+    QList<QString> cutModelInfo(const QString &str);
+    Model getModelFromString(const QString &str);
 };
 
 #endif // PARSER_H

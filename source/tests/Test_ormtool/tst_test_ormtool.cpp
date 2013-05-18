@@ -3,8 +3,13 @@
 #include <QList>
 #include "model.cpp"
 #include "property.cpp"
+
+#define private public
+
 #include "parser.cpp"
 #include "sqlscriptbuilder.cpp"
+
+#undef private
 
 class Test_ormtool : public QObject
 {
@@ -111,8 +116,8 @@ void Test_ormtool::createSqlScriptForTable()
     Model model("Table");
     model.addProperty(Property("QString", "name"));
     model.addProperty(Property("int", "number"));
-    QCOMPARE(builder.createSqlScriptForTable(model), QString("CREATE TABLE Table(id BIGINT AUTO_INCREMENT, name TEXT, number INT, "
-                                                             "PRIMARY KEY(id));"));
+    QCOMPARE(builder.createSqlScriptForTable(model).simplified(), QString("CREATE TABLE Table(id BIGINT AUTO_INCREMENT, name TEXT, number INT, "
+                                                             "PRIMARY KEY(id));").simplified());
 }
 
 void Test_ormtool::createRelationsForTable()
@@ -127,7 +132,7 @@ void Test_ormtool::createRelationsForTable()
             "ALTER TABLE Class2 ADD Table_id BIGINT AFTER id, ADD FOREIGN KEY(Table_id) REFERENCES Table(id), ADD UNIQUE(Table_id);\n"
             "ALTER TABLE Class3 ADD Table_id BIGINT AFTER id, ADD FOREIGN KEY(Table_id) REFERENCES Table(id);\n"
             "ALTER TABLE Class4 ADD Table_id BIGINT AFTER id, ADD FOREIGN KEY(Table_id) REFERENCES Table(id);\n";
-    QCOMPARE(builder.createRelationsForTable(model), result);
+    QCOMPARE(builder.createRelationsForTable(model).simplified(), result.simplified());
 }
 
 QTEST_APPLESS_MAIN(Test_ormtool)

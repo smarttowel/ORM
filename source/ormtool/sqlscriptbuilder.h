@@ -12,11 +12,11 @@ class SqlScriptBuilder
 public:
     SqlScriptBuilder();
     QString process(QList<Model> list);
-    QString createSqlScriptForTable(Model model);
-    QString createRelationsForTable(Model model);
 
 private:
     QHash<QString, QString> m_tableTypes;
+    QString createSqlScriptForTable(Model model);
+    QString createRelationsForTable(Model model);
 };
 
 #endif // SQLSCRIPTBUILDER_H

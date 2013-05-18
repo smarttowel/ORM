@@ -34,20 +34,20 @@ QString SqlScriptBuilder::createSqlScriptForTable(Model model)
     stream << "Generate scheme for " << model.name() << "..." << endl;
     for(int i = 0; i < model.properties().size(); i++)
     {
-        script += QString("%1 %2, ")
+        script += QString("\n         %1 %2, ")
                 .arg(model.properties().value(i).getName())
                 .arg(m_tableTypes.value(model.properties().value(i).getType()));
     }
-    script += "PRIMARY KEY(id));\n";
+    script += "\n         PRIMARY KEY(id));\n";
     return script;
 }
 
 QString SqlScriptBuilder::createRelationsForTable(Model model)
 {
     QString script;
-    QString patternHasMany = QString("ALTER TABLE %1 ADD %2_id BIGINT AFTER id, ADD FOREIGN KEY(%2_id) REFERENCES %2(id);");
-    QString patternHasOne = QString("ALTER TABLE %1 ADD %2_id BIGINT AFTER id, ADD FOREIGN KEY(%2_id) REFERENCES %2(id), "
-                                    "ADD UNIQUE(%2_id);");
+    QString patternHasMany = QString("ALTER TABLE %1 ADD %2_id BIGINT AFTER id, \n      ADD FOREIGN KEY(%2_id) REFERENCES %2(id);");
+    QString patternHasOne = QString("ALTER TABLE %1 ADD %2_id BIGINT AFTER id, \n      ADD FOREIGN KEY(%2_id) REFERENCES %2(id), "
+                                    "\n      ADD UNIQUE(%2_id);");
     for(int i = 0; i < model.hasOne().size(); i++)
     {
         script += patternHasOne

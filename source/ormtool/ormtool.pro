@@ -19,10 +19,12 @@ SOURCES += main.cpp \
     property.cpp \
     model.cpp \
     parser.cpp \
-    sqlscriptbuilder.cpp
+    sqlscriptbuilder.cpp \
+    logger.cpp
 
 HEADERS += \
     property.h \
     model.h \
     parser.h \
-    sqlscriptbuilder.h
+    sqlscriptbuilder.h \
+    logger.h

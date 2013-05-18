@@ -6,17 +6,18 @@
 #include <QTextStream>
 #include "model.h"
 #include "property.h"
+#include "logger.h"
 
 class SqlScriptBuilder
 {
 public:
     SqlScriptBuilder();
-    QString process(QList<Model> list);
+    QString process(const QList<Model> &list);
 
 private:
     QHash<QString, QString> m_tableTypes;
-    QString createSqlScriptForTable(Model model);
-    QString createRelationsForTable(Model model);
+    QString createSqlScriptForTable(const Model &model) const;
+    QString createRelationsForTable(const Model &model) const;
 };
 
 #endif // SQLSCRIPTBUILDER_H

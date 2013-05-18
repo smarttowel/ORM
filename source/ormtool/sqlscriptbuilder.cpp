@@ -16,7 +16,7 @@ SqlScriptBuilder::SqlScriptBuilder()
     m_tableTypes.insert("QString", "TEXT");
 }
 
-QString SqlScriptBuilder::process(QList<Model> list)
+QString SqlScriptBuilder::process(const QList<Model> &list)
 {
     QString script;
     for(int i = 0; i < list.size(); i++)
@@ -26,12 +26,11 @@ QString SqlScriptBuilder::process(QList<Model> list)
     return script;
 }
 
-QString SqlScriptBuilder::createSqlScriptForTable(Model model)
+QString SqlScriptBuilder::createSqlScriptForTable(const Model &model) const
 {
     QString script = QString("CREATE TABLE %1(id BIGINT AUTO_INCREMENT, ")
             .arg(model.name());
-    QTextStream stream(stdout);
-    stream << "Generate scheme for " << model.name() << "..." << endl;
+    Logger::generateScheme(model.name());
     for(int i = 0; i < model.properties().size(); i++)
     {
         script += QString("\n         %1 %2, ")
@@ -42,7 +41,7 @@ QString SqlScriptBuilder::createSqlScriptForTable(Model model)
     return script;
 }
 
-QString SqlScriptBuilder::createRelationsForTable(Model model)
+QString SqlScriptBuilder::createRelationsForTable(const Model &model) const
 {
     QString script;
     QString patternHasMany = QString("ALTER TABLE %1 ADD %2_id BIGINT AFTER id, \n      ADD FOREIGN KEY(%2_id) REFERENCES %2(id);");

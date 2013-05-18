@@ -3,6 +3,7 @@
 #include <QList>
 #include "model.cpp"
 #include "property.cpp"
+#include "logger.cpp"
 
 #define private public
 

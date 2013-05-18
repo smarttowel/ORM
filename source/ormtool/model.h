@@ -10,13 +10,13 @@ class Model
 public:
     Model();
     Model(QString name);
-    QString name();
+    QString name() const;
     void addProperty(Property p);
     void addHasOne(QString modelName);
     void addHasMany(QString modelName);
-    QStringList hasOne();
-    QStringList hasMany();
-    QList<Property> properties();
+    QStringList hasOne() const;
+    QStringList hasMany() const;
+    QList<Property> properties() const;
 
 private:
     QString m_name;

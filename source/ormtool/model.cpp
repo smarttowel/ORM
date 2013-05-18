@@ -9,7 +9,7 @@ Model::Model(QString name)
     m_name = name;
 }
 
-QString Model::name()
+QString Model::name() const
 {
     return m_name;
 }
@@ -29,17 +29,17 @@ void Model::addHasMany(QString modelName)
     m_hasManyRelations.append(modelName);
 }
 
-QStringList Model::hasOne()
+QStringList Model::hasOne() const
 {
     return m_hasOneRelations;
 }
 
-QStringList Model::hasMany()
+QStringList Model::hasMany() const
 {
     return m_hasManyRelations;
 }
 
-QList<Property> Model::properties()
+QList<Property> Model::properties() const
 {
     return m_properties;
 }

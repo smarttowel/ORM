@@ -1,6 +1,13 @@
 #include "parser.h"
 
-Parser::Parser()
+Parser::Parser() : m_regExpObject("ORMObject<(\\w+)>"),
+    m_regExpProperty("ORM_PROPERTY\\((\\w+), ?(\\w+)\\)"),
+    m_regExpHasOne("ORM_HAS_ONE\\((\\w+)\\)"),
+    m_regExpHasMany("ORM_HAS_MANY\\((\\w+)\\)"),
+    m_regExpLiteral("\".*[^\\\\]\""),
+    m_regExpLineComment("//.*"),
+    m_regExpMultilineComment("/\\*.*\\*/")
+
 {
 }
 
@@ -14,8 +21,7 @@ QList<Model> Parser::process(QStringList files)
         QFile file(currentPath);
         if(!file.open(QIODevice::ReadOnly))
         {
-            QTextStream out(stdout);
-            out << "WARNING: " << file.errorString() << endl;
+            Logger::warning(file.errorString());
             continue;
         }
         QTextStream stream(&file);
@@ -24,10 +30,7 @@ QList<Model> Parser::process(QStringList files)
         m_currentFile = simplified(m_currentFile);
         list = cutModelInfo(m_currentFile);
         if(list.isEmpty())
-        {
-            QTextStream out(stdout);
-            out << "WARNING: In file " << file.fileName() << " models not found!" << endl;
-        }
+             Logger::warning("In file " + file.fileName() + " models not found!");
         for(int i = 0; i < list.size(); i++)
             returnList.append(getModelFromString(list.value(i)));
         m_currentFile.clear();
@@ -36,16 +39,15 @@ QList<Model> Parser::process(QStringList files)
     return returnList;
 }
 
-QString Parser::getCurrentFile()
+QString Parser::getCurrentFile() const
 {
     return m_currentFile;
 }
 
-QList<QString> Parser::cutModelInfo(const QString &str)
+QList<QString> Parser::cutModelInfo(const QString &str) const
 {
     QList<QString> list;
-    QRegularExpression e("ORMObject<\\w+>");
-    QRegularExpressionMatchIterator it = e.globalMatch(str);
+    QRegularExpressionMatchIterator it = m_regExpObject.globalMatch(str);
     while(it.hasNext())
     {
         QRegularExpressionMatch m = it.next();
@@ -57,36 +59,31 @@ QList<QString> Parser::cutModelInfo(const QString &str)
     return list;
 }
 
-Model Parser::getModelFromString(const QString &str)
+Model Parser::getModelFromString(const QString &str) const
 {
-    QTextStream stream(stdout);
-    QRegularExpression object("ORMObject<(\\w+)>");
-    QRegularExpression property("ORM_PROPERTY\\((\\w+), ?(\\w+)\\)");
-    QRegularExpression hasOne("ORM_HAS_ONE\\((\\w+)\\)");
-    QRegularExpression hasMany("ORM_HAS_MANY\\((\\w+)\\)");
-    QRegularExpressionMatch m = object.match(str);
+    QRegularExpressionMatch m = m_regExpObject.match(str);
     QString name = m.captured(1);
-    stream << "Found model: " << name << endl;
+    Logger::foundModel(name);
     Model model(name);
-    QRegularExpressionMatchIterator it = property.globalMatch(str);
+    QRegularExpressionMatchIterator it = m_regExpProperty.globalMatch(str);
     while(it.hasNext())
     {
         m = it.next();
-        stream << name << ": found property (" << m.captured(1) << ':' << m.captured(2) << ")" << endl;
+        Logger::foundProperty(name, m.captured(1), m.captured(2));
         model.addProperty(Property(m.captured(1), m.captured(2)));
     }
-    it = hasOne.globalMatch(str);
+    it = m_regExpHasOne.globalMatch(str);
     while(it.hasNext())
     {
         m = it.next();
-        stream << name << ": found \"has one\" relation: " << m.captured(1) << endl;
+        Logger::foundRelation(name, Logger::HasOne, m.captured(1));
         model.addHasOne(m.captured(1));
     }
-    it = hasMany.globalMatch(str);
+    it = m_regExpHasMany.globalMatch(str);
     while(it.hasNext())
     {
         m = it.next();
-        stream << name << ": found \"has many\" relation: " << m.captured(1) << endl;
+        Logger::foundRelation(name, Logger::HasMany, m.captured(1));
         model.addHasMany(m.captured(1));
     }
     return model;
@@ -94,16 +91,16 @@ Model Parser::getModelFromString(const QString &str)
 
 QString Parser::removeTrash(QString str)
 {
-    str.remove(QRegularExpression("\".*[^\\\\]\""));
+    str.remove(m_regExpLiteral);
     if(str.indexOf("//") < str.indexOf("*/"))
         str.remove(str.indexOf("//"), str.indexOf("*/") - str.indexOf("//"));
-    str.remove(QRegularExpression("//.*"));
+    str.remove(m_regExpLineComment);
     return str;
 }
 
-QString &Parser::simplified(QString &str)
+QString &Parser::simplified(QString &str) const
 {
     str = str.simplified();
-    str.remove(QRegularExpression("/\\*.*\\*/"));
+    str.remove(m_regExpMultilineComment);
     return str;
 }

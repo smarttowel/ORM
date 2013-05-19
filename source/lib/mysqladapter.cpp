@@ -28,17 +28,18 @@ bool MySqlAdapter::createTable(const QString &tableName, const QHash<QString, QS
     return m_query.exec(m_lastQuery);
 }
 
-bool MySqlAdapter::createTableRelations(const QString &tableName)
+bool MySqlAdapter::createTableRelations(const QString &parent, Relation rel, const QString &child)
 {
-    m_lastQuery = QString("CREATE TABLE %1(parent_id BIGINT, child_id BIGINT);")
-            .arg(tableName);
-    if(m_query.exec(m_lastQuery))
-    {
-        m_relationTables.append(tableName);
-        return true;
-    }
-    else
-        return false;
+    if(rel == HasMany)
+        m_lastQuery = QString("ALTER TABLE %1 ADD %2_id BIGINT AFTER id, ADD FOREIGN KEY(%2_id) REFERENCES %2(id);")
+                .arg(child)
+                .arg(parent);
+    else if(rel == HasOne)
+        m_lastQuery = QString("ALTER TABLE %1 ADD %2_id BIGINT AFTER id, ADD FOREIGN KEY(%2_id) REFERENCES %2(id),"
+                              "ADD UNIQUE(%2_id);")
+                .arg(child)
+                .arg(parent);
+    return m_query.exec(m_lastQuery);
 }
 
 bool MySqlAdapter::dropTable(const QString &tableName)
@@ -125,20 +126,7 @@ bool MySqlAdapter::remove(const QString &tableName, const QString &params)
             .arg(tableName)
             .arg(params);
     bool result = m_query.exec(m_lastQuery);
-    removeUnusedRelations(tableName);
     return result;
-}
-
-void MySqlAdapter::removeUnusedRelations(const QString &modelName)
-{
-    QStringList list = m_relationTables.filter('_' + modelName);
-    for(int i = 0; i < list.size(); i++)
-    {
-        m_lastQuery = QString("DELETE FROM %1 WHERE child_id NOT IN (SELECT id FROM %2);")
-                .arg(list.value(i))
-                .arg(modelName);
-        m_query.exec(m_lastQuery);
-    }
 }
 
 int MySqlAdapter::count(const QString &tableName, const QString &arg)

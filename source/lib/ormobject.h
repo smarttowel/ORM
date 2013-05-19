@@ -46,23 +46,11 @@ public:
         QHash<QString, QString> info; //QHash<name, type>
         for(int i = 1; i < metaObject()->propertyCount(); i++)
             info.insert(metaObject()->property(i).name(), metaObject()->property(i).typeName());
-        if(!ORMDatabase::adapter->createTable(metaObject()->className(), info))
-            return false;
-        QString tableNamePattern;
-        QString tempString;
-        for(int i = 0; i < metaObject()->classInfoCount(); i++)
-        {
-            tempString = metaObject()->classInfo(i).name();
-            if(tempString.contains("HAS_ONE:") || tempString.contains("HAS_MANY:"))
-                tableNamePattern = "%1_" + QString(metaObject()->classInfo(i).name()).remove(':') + "_%2";
-            else
-                continue;
-            if(!ORMDatabase::adapter->createTableRelations(tableNamePattern
-                                                           .arg(metaObject()->className())
-                                                           .arg(metaObject()->classInfo(i).value())))
-            return false;
-        }
-        return true;
+        return ORMDatabase::adapter->createTable(metaObject()->className(), info);
+    }
+    bool createTableRelation(ORMAbstractAdapter::Relation rel, QString childModelName) const
+    {
+        return ORMDatabase::adapter->createTableRelations(metaObject()->className(), rel, childModelName);
     }
     /*!
        Deletes table associated with model.
@@ -71,23 +59,7 @@ public:
      */
     bool dropTable() const
     {
-        if(!ORMDatabase::adapter->dropTable(metaObject()->className()))
-            return false;
-        QString tableNamePattern;
-        QString tempString;
-        for(int i = 0; i < metaObject()->classInfoCount(); i++)
-        {
-            tempString = metaObject()->classInfo(i).name();
-            if(tempString.contains("HAS_ONE:") || tempString.contains("HAS_MANY:"))
-                tableNamePattern = "%1_" + QString(metaObject()->classInfo(i).name()).remove(':') + "_%2";
-            else
-                continue;
-            if(!ORMDatabase::adapter->dropTable(tableNamePattern
-                                                .arg(metaObject()->className())
-                                                .arg(metaObject()->classInfo(i).value())))
-                return false;
-        }
-        return true;
+        return ORMDatabase::adapter->dropTable(metaObject()->className());
     }
     /*!
        Returns object id.

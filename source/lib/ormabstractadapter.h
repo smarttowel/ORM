@@ -17,9 +17,14 @@ public:
         Minimum,
         Sum
     };
+    enum Relation
+    {
+        HasOne,
+        HasMany
+    };
     virtual bool createDatabase(const QString &name) = 0;
     virtual bool createTable(const QString &tableName, const QHash<QString, QString> &info) = 0;
-    virtual bool createTableRelations(const QString &tableName) = 0;
+    virtual bool createTableRelations(const QString &parent, Relation rel, const QString &child) = 0;
     virtual bool dropTable(const QString &tableName) = 0;
     virtual bool dropDatabase(const QString &name) = 0;
     //

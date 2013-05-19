@@ -56,16 +56,13 @@
  */
 
 #define ORM_HAS_ONE(ClassName) \
-    Q_CLASSINFO("HAS_ONE:", #ClassName) \
     public: \
     ClassName* get##ClassName() \
     { \
         if(id < 0) \
             return new ClassName; \
-        QString tableName = QString("%1_HAS_ONE_" #ClassName) \
-                                .arg(metaObject()->className()); \
-        QString whereString = QString("WHERE id = (SELECT child_id FROM %1 WHERE parent_id = %2)") \
-                                .arg(tableName) \
+        QString whereString = QString("WHERE %1_id = %2") \
+                                .arg(metaObject()->className()) \
                                 .arg(id); \
         QList<QSqlRecord> list = ORMDatabase::adapter->find( #ClassName, whereString); \
         if(list.isEmpty()) \
@@ -77,36 +74,17 @@
     { \
         if(object.getId() < 0 || id < 0) \
             return; \
-        QString tableName = QString("%1_HAS_ONE_" #ClassName).arg(metaObject()->className()); \
-        QString whereString = QString("WHERE parent_id = " + QString::number(id)); \
-        ORMDatabase::adapter->remove(tableName, whereString); \
         QHash<QString, QVariant> hash; \
-        hash.insert("parent_id", QString::number(id)); \
-        hash.insert("child_id", QString::number(object.getId())); \
-        ORMDatabase::adapter->addRecord(tableName, hash); \
+        hash.insert(QString(metaObject()->className()) + "_id", id); \
+        ORMDatabase::adapter->updateRecord(#ClassName, object.getId(), hash); \
     } \
-    ClassName* create##ClassName(const QHash<QString, QVariant> &values) \
+    ClassName* create##ClassName(QHash<QString, QVariant> &values) \
     { \
         if(id < 0) \
             return new ClassName; \
+        values.insert(QString("%1_id").arg(metaObject()->className()), id); \
         int childId = ORMDatabase::adapter->addRecord(#ClassName, values); \
-        QString tableName = QString("%1_HAS_ONE_" #ClassName) \
-                                .arg(metaObject()->className()); \
-        QHash<QString, QVariant> hash; \
-        hash.insert("parent_id", QString::number(id)); \
-        hash.insert("child_id", QString::number(childId)); \
-        ORMDatabase::adapter->remove(tableName, "WHERE parent_id = " + QString::number(id)); \
-        ORMDatabase::adapter->addRecord(tableName, hash); \
         return translateRecToObj<ClassName>(ORMDatabase::adapter->find(#ClassName, "WHERE id = " + QString::number(childId)).first()); \
-    } \
-    void remove##ClassName() \
-    { \
-        if(id < 0) \
-            return; \
-        QString tableName = QString("%1_HAS_ONE_" #ClassName) \
-                                .arg(metaObject()->className()); \
-        QString whereString = "WHERE parent_id = " + QString::number(id); \
-        ORMDatabase::adapter->remove(tableName, whereString); \
     } \
 
 /*!
@@ -158,10 +136,8 @@
         QList<ClassName*> result; \
         if(id < 0) \
             return result; \
-        QString tableName = QString("%1_HAS_MANY_" #ClassName) \
-                                .arg(metaObject()->className()); \
-        QString whereString = QString("WHERE id IN (SELECT child_id FROM %1 WHERE parent_id = %2)") \
-                                .arg(tableName) \
+        QString whereString = QString("WHERE %1_id = %2") \
+                                .arg(metaObject()->className()) \
                                 .arg(id); \
         QList<QSqlRecord> list = ORMDatabase::adapter->find( #ClassName, whereString + " " + group.getGroupString() + \
                                                             " " + order.getOrderString()); \
@@ -174,24 +150,16 @@
     { \
         if(object.getId() < 0 || id < 0) \
             return; \
-        QString tableName = QString("%1_HAS_MANY_" #ClassName).arg(metaObject()->className()); \
-        QString whereString = QString("WHERE parent_id = " + QString::number(id)); \
         QHash<QString, QVariant> hash; \
-        hash.insert("parent_id", QString::number(id)); \
-        hash.insert("child_id", QString::number(object.getId())); \
-        ORMDatabase::adapter->addRecord(tableName, hash); \
+        hash.insert(QString("%1_id").arg(metaObject()->className()), QString::number(id)); \
+        ORMDatabase::adapter->updateRecord(#ClassName, object.getId(), hash); \
     } \
-    ClassName* create##ClassName(const QHash<QString, QVariant> &values) \
+    ClassName* create##ClassName(QHash<QString, QVariant> &values) \
     { \
         if(id < 0) \
             return new ClassName; \
+        values.insert(QString("%1_id").arg(metaObject()->className()), QString::number(id)); \
         int childId = ORMDatabase::adapter->addRecord(#ClassName, values); \
-        QString tableName = QString("%1_HAS_MANY_" #ClassName) \
-                                .arg(metaObject()->className()); \
-        QHash<QString, QVariant> hash; \
-        hash.insert("parent_id", QString::number(id)); \
-        hash.insert("child_id", QString::number(childId)); \
-        ORMDatabase::adapter->addRecord(tableName, hash); \
         return translateRecToObj<ClassName>(ORMDatabase::adapter->find(#ClassName, "WHERE id = " + QString::number(childId)).first()); \
     } \
     QList<ClassName*> find##ClassName##Where(ORMWhere where, ORMGroupBy group = ORMGroupBy(), ORMOrderBy order = ORMOrderBy()) \
@@ -199,10 +167,8 @@
         QList<ClassName*> result; \
         if(id < 0) \
             return result; \
-        QString tableName = QString("%1_HAS_MANY_" #ClassName) \
-                                .arg(metaObject()->className()); \
-        QString whereString = QString("WHERE id IN (SELECT child_id FROM %1 WHERE parent_id = %2)") \
-                                .arg(tableName) \
+        QString whereString = QString("WHERE %1_id = %2") \
+                                .arg(metaObject()->className()) \
                                 .arg(id); \
         whereString += " AND " + where.getWhereString().remove(0, 6); \
         QList<QSqlRecord> list = ORMDatabase::adapter->find( #ClassName, whereString + " " + group.getGroupString() + \
@@ -211,17 +177,6 @@
             for(int i = 0; i < list.size(); i++) \
                 result.append(translateRecToObj<ClassName>(list.value(i))); \
         return result; \
-    } \
-    void remove##ClassName(const ClassName &object) \
-    { \
-        if(object.getId() < 0 || id < 0) \
-            return; \
-        QString tableName = QString("%1_HAS_MANY_" #ClassName) \
-                                .arg(metaObject()->className()); \
-        QString whereString = QString("WHERE parent_id = %1 && child_id = %2") \
-                                .arg(id) \
-                                .arg(object.getId()); \
-        ORMDatabase::adapter->remove(tableName, whereString); \
     } \
 
 #endif // MACROS_H

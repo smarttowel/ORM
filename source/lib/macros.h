@@ -56,6 +56,12 @@
  */
 
 #define ORM_HAS_ONE(ClassName) \
+    private: \
+    QSqlRecord m_##ClassName##AfterIncludes; \
+    Q_INVOKABLE void add##ClassName##AfterIncludes(QSqlRecord rec) \
+    { \
+        m_##ClassName##AfterIncludes = rec; \
+    } \
     public: \
     ClassName* get##ClassName() \
     { \
@@ -85,6 +91,10 @@
         values.insert(QString("%1_id").arg(metaObject()->className()), id); \
         int childId = ORMDatabase::adapter->addRecord(#ClassName, values); \
         return translateRecToObj<ClassName>(ORMDatabase::adapter->find(#ClassName, "WHERE id = " + QString::number(childId)).first()); \
+    } \
+    ClassName* get##ClassName##AfterIncludes() \
+    { \
+        return translateRecToObj<ClassName>(m_##ClassName##AfterIncludes); \
     } \
 
 /*!
@@ -129,7 +139,12 @@
  */
 
 #define ORM_HAS_MANY(ClassName) \
-    Q_CLASSINFO("HAS_MANY:", #ClassName) \
+    private: \
+    QList<QSqlRecord> m_##ClassName##AfterIncludes; \
+    Q_INVOKABLE void add##ClassName##AfterIncludes(QSqlRecord rec) \
+    { \
+        m_##ClassName##AfterIncludes.append(rec); \
+    } \
     public: \
     QList<ClassName*> getAll##ClassName(ORMGroupBy group = ORMGroupBy(), ORMOrderBy order = ORMOrderBy()) \
     { \
@@ -177,6 +192,13 @@
             for(int i = 0; i < list.size(); i++) \
                 result.append(translateRecToObj<ClassName>(list.value(i))); \
         return result; \
+    } \
+    QList<ClassName*> get##ClassName##AfterIncludes() \
+    { \
+        QList<ClassName*> list; \
+        for(int i = 0; i < m_##ClassName##AfterIncludes.size(); i++) \
+            list.append(translateRecToObj<ClassName>(m_##ClassName##AfterIncludes.value(i))); \
+        return list; \
     } \
 
 #endif // MACROS_H

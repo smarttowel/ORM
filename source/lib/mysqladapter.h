@@ -4,6 +4,7 @@
 #include <QVariant>
 #include <QSqlRecord>
 #include <QStringList>
+#include <QSqlField>
 #include "ormabstractadapter.h"
 
 class MySqlAdapter : public ORMAbstractAdapter
@@ -24,6 +25,7 @@ public:
     virtual int count(const QString &tableName, const QString &arg);
     virtual int countBy(const QString &tableName, const QString &params);
     virtual double calculation(Calculation func, const QString &tableName, const QString &fieldName, const QString &params);
+    virtual QHash<QString, QList<QSqlRecord> > includes(const QString &parentModel, const QStringList &childModels, const QString &params);
 
 protected:
     void fillTableTypes();

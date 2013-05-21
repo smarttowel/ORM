@@ -390,6 +390,32 @@ public:
         return ORMDatabase::adapter->calculation(ORMAbstractAdapter::Sum, metaObject()->className(),
                                                  fieldName, condition.getWhereString());
     }
+    QList<ModelName*> includes(const QStringList &list, ORMWhere condition = ORMWhere())
+    {
+        QHash<QString, QList<QSqlRecord> > hash = ORMDatabase::adapter->includes(metaObject()->className(), list,
+                                                                                condition.getWhereString());
+        QHash<int, int> idIndexHash;
+        QList<ModelName*> result;
+        QList<QSqlRecord> currentList = hash.take(metaObject()->className());
+        QString currentModelName;
+        QString fieldName = QString("%1_id").arg(metaObject()->className());
+        for(int i = 0; i < currentList.size(); i++)
+        {
+            result.append(translateRecToObj<ModelName>(currentList.value(i)));
+            idIndexHash.insert(currentList.value(i).field("id").value().toInt(), i);
+        }
+        foreach(currentModelName, hash.keys())
+        {
+            QString methodName = QString("add%1AfterIncludes")
+                    .arg(currentModelName);
+            currentList = hash.take(currentModelName);
+            for(int i = 0; i < currentList.size(); i++)
+                QMetaObject::invokeMethod(result.value(idIndexHash.value(currentList.value(i).field(fieldName).value().toInt())),
+                                          qPrintable(methodName), Q_ARG(QSqlRecord, currentList.value(i)));
+        }
+        return result;
+    }
+
     /*!
        Returns list of objects that can be found for example where() method. \a T - class, a list of objects which will be returned
        Example:
@@ -410,7 +436,7 @@ protected:
      */
     qlonglong id;
     template<class T>
-    T* translateRecToObj(const QSqlRecord &record)
+    T* translateRecToObj(const QSqlRecord &record) const
     {
         T *result = new T;
         for(int i = 0; i < record.count(); i++)

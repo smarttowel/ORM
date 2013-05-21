@@ -188,6 +188,22 @@ double MySqlAdapter::calculation(ORMAbstractAdapter::Calculation func, const QSt
     return m_query.value(0).toDouble();
 }
 
+QHash<QString, QList<QSqlRecord> > MySqlAdapter::includes(const QString &parentModel, const QStringList &childModels, const QString &params)
+{
+    QList<QSqlRecord> generalList = find(parentModel, params);
+    QHash<QString, QList<QSqlRecord> > result;
+    result.insert(parentModel, generalList);
+    QString whereForChildren = QString("WHERE %1_id IN (")
+            .arg(parentModel);
+    for(int i = 0; i < generalList.size(); i++)
+        whereForChildren += generalList.value(i).field("id").value().toString() + ", ";
+    whereForChildren.resize(whereForChildren.size() - 2);
+    whereForChildren += ')';
+    for(int i = 0; i < childModels.size(); i++)
+        result.insert(childModels.value(i), find(childModels.value(i), whereForChildren));
+    return result;
+}
+
 void MySqlAdapter::initDB(const QString &name)
 {
     m_lastQuery = QString("USE %1;")

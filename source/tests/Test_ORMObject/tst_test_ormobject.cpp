@@ -104,6 +104,7 @@ private Q_SLOTS:
     void test_sumByWhere();
     void test_ORM_HAS_ONE();
     void test_ORM_HAS_MANY();
+    void test_includes();
     void test_dropTable();
 };
 
@@ -766,6 +767,60 @@ void Test_ORMObject::test_ORM_HAS_MANY()
     QCOMPARE(car1.remove(), true);
     QCOMPARE(driver2.getAllCar().size(), 2);
     QCOMPARE(car1.exists(car1.getId()), false);
+}
+
+void Test_ORMObject::test_includes()
+{
+    Car car1, car2, car3;
+    DriverLicense license1, license2;
+    CarDriver driver1, driver2;
+    car1.removeAll();
+    license1.removeAll();
+    driver1.removeAll();
+    driver1.setName("Peter");
+    driver2.setName("Paul");
+    car1.setNumber("1");
+    car2.setNumber("2");
+    car3.setNumber("3");
+    license1.setNumber(123);
+    license2.setNumber(456);
+    driver1.save();
+    driver2.save();
+    car1.save();
+    car2.save();
+    car3.save();
+    license1.save();
+    license2.save();
+    driver1.setDriverLicense(license1);
+    driver2.setDriverLicense(license2);
+    driver1.addCar(car1);
+    driver2.addCar(car2);
+    driver2.addCar(car3);
+    QStringList models;
+    models << "DriverLicense" << "Car";
+    QList<CarDriver*> list = driver1.includes(models);
+    QCOMPARE(list.size(), 2);
+    QCOMPARE(list.value(0)->getCarAfterIncludes().size(), 1);
+    QCOMPARE(list.value(0)->getName(), QString("Peter"));
+    QCOMPARE(list.value(1)->getName(), QString("Paul"));
+    QCOMPARE(list.value(0)->getCarAfterIncludes().first()->getNumber(), QString("1"));
+    QCOMPARE(list.value(1)->getCarAfterIncludes().size(), 2);
+    QCOMPARE(list.value(1)->getCarAfterIncludes().first()->getNumber(), QString("2"));
+    QCOMPARE(list.value(1)->getCarAfterIncludes().value(1)->getNumber(), QString("3"));
+    QCOMPARE(list.first()->getDriverLicense()->getNumber(), 123);
+    QCOMPARE(list.value(1)->getDriverLicense()->getNumber(), 456);
+    car1.remove();
+    car2.remove();
+    list = driver1.includes(models);
+    QCOMPARE(list.first()->getCarAfterIncludes().size(), 0);
+    QCOMPARE(list.value(1)->getCarAfterIncludes().size(), 1);
+    models.removeAt(1);
+    list = driver1.includes(models);
+    QCOMPARE(list.first()->getCarAfterIncludes().size(), 0);
+    QCOMPARE(list.value(1)->getCarAfterIncludes().size(), 0);
+    list = driver1.includes(models, ORMWhere("id", ORMWhere::Equals, driver1.getId()));
+    QCOMPARE(list.size(), 1);
+    QCOMPARE(list.first()->getName(), QString("Peter"));
 }
 
 void Test_ORMObject::test_dropTable()

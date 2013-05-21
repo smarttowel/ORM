@@ -40,6 +40,7 @@ public:
     virtual int count(const QString &tableName, const QString &arg) = 0;
     virtual int countBy(const QString &tableName, const QString &params) = 0;
     virtual double calculation(Calculation func, const QString &tableName, const QString &fieldName, const QString &params) = 0;
+    virtual QHash<QString, QList<QSqlRecord> > includes(const QString &parentModel, const QStringList &childModels, const QString &params) = 0;
 
 protected:
     QHash<QString, QString> m_tableTypes;

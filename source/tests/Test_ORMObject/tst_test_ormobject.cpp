@@ -105,6 +105,7 @@ private Q_SLOTS:
     void test_ORM_HAS_ONE();
     void test_ORM_HAS_MANY();
     void test_includes();
+    void test_pluck();
     void test_dropTable();
 };
 
@@ -821,6 +822,31 @@ void Test_ORMObject::test_includes()
     list = driver1.includes(models, ORMWhere("id", ORMWhere::Equals, driver1.getId()));
     QCOMPARE(list.size(), 1);
     QCOMPARE(list.first()->getName(), QString("Peter"));
+}
+
+void Test_ORMObject::test_pluck()
+{
+    MyModel model1, model2, model3;
+    model1.removeAll();
+    model1.setnameInt(-2);
+    model1.setnameString("abc");
+    model2.setnameInt(1);
+    model2.setnameString("def");
+    model3.setnameInt(5);
+    model3.setnameString("ghi");
+    model1.save();
+    model2.save();
+    model3.save();
+    QList<QVariant> list = model1.pluck("id");
+    QCOMPARE(list.size(), 3);
+    QCOMPARE(list.value(0).toInt(), model1.getId());
+    QCOMPARE(list.value(1).toInt(), model2.getId());
+    QCOMPARE(list.value(2).toInt(), model3.getId());
+    list = model1.pluck("nameInt", ORMWhere("nameString", ORMWhere::Equals, "abc") ||
+                        ORMWhere("nameString", ORMWhere::Equals, "ghi"));
+    QCOMPARE(list.size(), 2);
+    QCOMPARE(list.value(0).toInt(), -2);
+    QCOMPARE(list.value(1).toInt(), 5);
 }
 
 void Test_ORMObject::test_dropTable()

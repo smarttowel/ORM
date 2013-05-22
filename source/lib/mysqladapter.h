@@ -26,6 +26,7 @@ public:
     virtual int countBy(const QString &tableName, const QString &params);
     virtual double calculation(Calculation func, const QString &tableName, const QString &fieldName, const QString &params);
     virtual QHash<QString, QList<QSqlRecord> > includes(const QString &parentModel, const QStringList &childModels, const QString &params);
+    virtual QList<QSqlRecord> pluck(const QString &tableName, const QString &fieldName, const QString &params);
 
 protected:
     void fillTableTypes();

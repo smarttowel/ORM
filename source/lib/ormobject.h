@@ -415,7 +415,14 @@ public:
         }
         return result;
     }
-
+    QList<QVariant> pluck(QString fieldName, ORMWhere condition = ORMWhere())
+    {
+        QList<QSqlRecord> list = ORMDatabase::adapter->pluck(metaObject()->className(), fieldName, condition.getWhereString());
+        QList<QVariant> result;
+        for(int i = 0; i < list.size(); i++)
+            result.append(list.value(i).value(0));
+        return result;
+    }
     /*!
        Returns list of objects that can be found for example where() method. \a T - class, a list of objects which will be returned
        Example:

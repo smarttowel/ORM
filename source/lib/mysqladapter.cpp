@@ -204,6 +204,19 @@ QHash<QString, QList<QSqlRecord> > MySqlAdapter::includes(const QString &parentM
     return result;
 }
 
+QList<QSqlRecord> MySqlAdapter::pluck(const QString &tableName, const QString &fieldName, const QString &params)
+{
+    m_lastQuery = QString("SELECT %1 FROM %2 %3;")
+            .arg(fieldName)
+            .arg(tableName)
+            .arg(params);
+    m_query.exec(m_lastQuery);
+    QList<QSqlRecord> result;
+    while(m_query.next())
+        result.append(m_query.record());
+    return result;
+}
+
 void MySqlAdapter::initDB(const QString &name)
 {
     m_lastQuery = QString("USE %1;")

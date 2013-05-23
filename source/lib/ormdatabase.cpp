@@ -20,7 +20,6 @@ ORMDatabase ORMDatabase::addORMDatabase(QString driverName)
 
 bool ORMDatabase::createDatabase(QString name)
 {
-    open(userName(), password());
     return adapter->createDatabase(name);
 }
 

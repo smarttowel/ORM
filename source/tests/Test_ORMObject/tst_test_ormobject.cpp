@@ -114,6 +114,7 @@ Test_ORMObject::Test_ORMObject()
     db = ORMDatabase::addORMDatabase("QMYSQL");
     db.setUserName("root");
     db.setHostName("localhost");
+    db.open();
     db.createDatabase("Test_ORMDatabase");
 }
 

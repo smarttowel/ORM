@@ -2,6 +2,7 @@
 #define ORMDATABASE_H
 
 #include <QSqlDatabase>
+#include "sqladapter.h"
 #include "mysqladapter.h"
 
 /*!

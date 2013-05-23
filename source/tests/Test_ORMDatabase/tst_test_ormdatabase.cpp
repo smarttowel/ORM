@@ -2,6 +2,7 @@
 #include <QtTest>
 #include "ormdatabase.cpp"
 #include "mysqladapter.cpp"
+#include "sqladapter.cpp"
 #include "ormabstractadapter.cpp"
 
 class Test_ORMDatabase : public QObject
@@ -48,8 +49,10 @@ void Test_ORMDatabase::test_createDatabase()
     {
         ORMDatabase db("QMYSQL");
         db.setUserName("root");
+        db.open();
         QCOMPARE(db.createDatabase("Test_ORMDatabase"), true);
         QCOMPARE(db.dropDatabase("Test_ORMDatabase"), true);
+        db.open();
         QCOMPARE(db.createDatabase("test"), false);
     }
     ORMDatabase::removeDatabase("qt_sql_default_connection");
@@ -61,6 +64,7 @@ void Test_ORMDatabase::test_lastQuery()
         ORMDatabase db("QMYSQL");
         db.setUserName("root");
         QCOMPARE(db.lastQuery().isEmpty(), true);
+        db.open();
         QCOMPARE(db.createDatabase("Test_ORMDatabase"), true);
         QCOMPARE(db.lastQuery().isEmpty(), false);
         QCOMPARE(db.dropDatabase("Test_ORMDatabase"), true);
@@ -73,6 +77,7 @@ void Test_ORMDatabase::test_dropDatabase()
     {
         ORMDatabase db("QMYSQL");
         db.setUserName("root");
+        db.open();
         QCOMPARE(db.createDatabase("Test_ORMDatabase"), true);
         QCOMPARE(db.dropDatabase("Test_ORMDatabase"), true);
         QCOMPARE(db.dropDatabase("Test_ORMDatabase"), false);

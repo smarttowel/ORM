@@ -6,6 +6,7 @@
 #include <QList>
 #include "ormdatabase.cpp"
 #include "mysqladapter.cpp"
+#include "sqladapter.cpp"
 #include "ormabstractadapter.cpp"
 #include "ormobject.h"
 #include "ormwhere.cpp"

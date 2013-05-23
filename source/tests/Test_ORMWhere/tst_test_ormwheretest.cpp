@@ -53,6 +53,11 @@ void Test_ORMWhereTest::test_constructor()
     a = new ORMWhere("field1", ORMWhere::Contains, "1");
     QCOMPARE(a->getWhereString(), QString("WHERE (field1 LIKE '%1%')"));
     delete a;
+    QList<QVariant> list;
+    list << QVariant(1) << QVariant(2) << QVariant(3);
+    a = new ORMWhere("field1", list);
+    QCOMPARE(a->getWhereString(), QString("WHERE (field1 IN ('1', '2', '3'))"));
+    delete a;
 }
 
 void Test_ORMWhereTest::test_operatorAND()

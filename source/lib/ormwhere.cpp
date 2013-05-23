@@ -59,6 +59,16 @@ ORMWhere::ORMWhere(QString fieldName, ORMWhere::Condition con, QVariant value)
     }
 }
 
+ORMWhere::ORMWhere(QString fieldName, QList<QVariant> values)
+{
+    m_whereString = QString("(%1 IN (")
+            .arg(fieldName);
+    for(int i = 0; i < values.size(); i++)
+        m_whereString += '\'' + values.value(i).toString() + "', ";
+    m_whereString.resize(m_whereString.size() - 2);
+    m_whereString += "))";
+}
+
 void ORMWhere::operator =(ORMWhere b)
 {
     this->m_whereString = b.m_whereString;

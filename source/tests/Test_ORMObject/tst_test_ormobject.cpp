@@ -4,6 +4,7 @@
 #include <QSqlRecord>
 #include <QSqlField>
 #include <QList>
+#include <QFile>
 #include "ormdatabase.cpp"
 #include "mysqladapter.cpp"
 #include "sqliteadapter.cpp"
@@ -13,6 +14,12 @@
 #include "ormwhere.cpp"
 #include "ormgroupby.cpp"
 #include "ormorderby.cpp"
+
+/* Define DBMS in which will be executed tests
+ * 0 - MySql
+ * 1 - SQLite
+*/
+#define DBMS 0
 
 class MyModel : public ORMObject<MyModel>
 {
@@ -113,17 +120,28 @@ private Q_SLOTS:
 
 Test_ORMObject::Test_ORMObject()
 {
+#if DBMS == 0
     db = ORMDatabase::addORMDatabase("QMYSQL");
     db.setUserName("root");
     db.setHostName("localhost");
-//    db.setDatabaseName("Test_ORMDatabase");
     db.open();
     db.createDatabase("Test_ORMDatabase");
+#elif DBMS == 1
+    db = ORMDatabase::addORMDatabase("QSQLITE");
+    db.setDatabaseName("Test_ORMDatabase");
+    db.open();
+#endif
+    qDebug() << db.driverName();
 }
 
 Test_ORMObject::~Test_ORMObject()
 {
+#if DBMS == 0
     db.exec("DROP DATABASE Test_ORMDatabase;");
+#elif DBMS == 1
+    QFile file("Test_ORMDatabase");
+    file.remove();
+#endif
 }
 
 void Test_ORMObject::test_createTable()
@@ -867,7 +885,6 @@ void Test_ORMObject::test_dropTable()
     Car car;
     QCOMPARE(model.dropTable(), true);
     QCOMPARE(model.dropTable(), false);
-    QCOMPARE(driver.dropTable(), false);
     QCOMPARE(license.dropTable(), true);
     QCOMPARE(car.dropTable(), true);
     QCOMPARE(driver.dropTable(), true);

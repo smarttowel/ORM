@@ -52,11 +52,13 @@ int SqlAdapter::addRecord(const QString &tableName, const QHash<QString, QVarian
             .arg(tableName);
     foreach(key, info.keys())
         m_lastQuery += key + ", ";
-    m_lastQuery.resize(m_lastQuery.size() - 2);
+    if(!info.isEmpty())
+        m_lastQuery.resize(m_lastQuery.size() - 2);
     m_lastQuery += ") VALUES(";
     foreach(key, info.keys())
         m_lastQuery += "'" + info.value(key).toString() + "', ";
-    m_lastQuery.resize(m_lastQuery.size() - 2);
+    if(!info.isEmpty())
+        m_lastQuery.resize(m_lastQuery.size() - 2);
     m_lastQuery += ");";
     if(m_query.exec(m_lastQuery))
         return m_query.lastInsertId().toInt();

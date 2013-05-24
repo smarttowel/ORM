@@ -15,8 +15,16 @@
     private: \
     type name; \
     public: \
-    type get##name() const { return name; } \
-    void set##name(type input_##name) { name = input_##name; } \
+    type get##name() const \
+    { \
+        return name; \
+    } \
+    void set##name(type input_##name)  \
+    { \
+        name = input_##name; \
+        if(!m_propertiesForUpdate.contains(#name)) \
+            m_propertiesForUpdate.append(#name); \
+    } \
 
 /*!
    \def ORM_HAS_ONE(ClassName)

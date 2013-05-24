@@ -6,6 +6,7 @@
 #include <QList>
 #include "ormdatabase.cpp"
 #include "mysqladapter.cpp"
+#include "sqliteadapter.cpp"
 #include "sqladapter.cpp"
 #include "ormabstractadapter.cpp"
 #include "ormobject.h"
@@ -115,6 +116,7 @@ Test_ORMObject::Test_ORMObject()
     db = ORMDatabase::addORMDatabase("QMYSQL");
     db.setUserName("root");
     db.setHostName("localhost");
+//    db.setDatabaseName("Test_ORMDatabase");
     db.open();
     db.createDatabase("Test_ORMDatabase");
 }
@@ -361,10 +363,10 @@ void Test_ORMObject::test_where()
     QCOMPARE(list.isEmpty(), true);
     list = resultModel.where(ORMWhere("nameInt", ORMWhere::Equals, 1) || ORMWhere("nameInt", ORMWhere::LessThan, 5));
     QCOMPARE(list.size(), 2);
-    list = resultModel.where(ORMWhere("nameInt", ORMWhere::Equals, 1) || ORMWhere("nameString", ORMWhere::Equals, ""));
+    list = resultModel.where(ORMWhere("nameInt", ORMWhere::Equals, 1) || ORMWhere("nameString", ORMWhere::IsNull, ""));
     QCOMPARE(list.size(), 3);
     list = resultModel.where(ORMWhere("nameInt", ORMWhere::Equals, 1) &&
-                      (ORMWhere("nameString", ORMWhere::Equals, "") || ORMWhere("nameInt", ORMWhere::GreaterThan, 3)));
+                      (ORMWhere("nameString", ORMWhere::IsNull, "") || ORMWhere("nameInt", ORMWhere::GreaterThan, 3)));
     QCOMPARE(list.size(), 1);
     QCOMPARE(list.first()->getnameInt(), 1);
     model3.updateProperty("nameInt", 3);
@@ -504,6 +506,12 @@ void Test_ORMObject::test_countByFieldName()
     db.exec("DELETE FROM MyModel;");
     MyModel model1, model2, model3;
     QCOMPARE(model2.count("nameint"), 0);
+    model1.setnameInt(1);
+    model2.setnameInt(1);
+    model3.setnameInt(1);
+    model1.setnameString("Hello!");
+    model2.setnameString("Hello!");
+    model3.setnameString("Hello!");
     model1.save();
     model2.save();
     model3.save();

@@ -10,6 +10,7 @@
 #include "ormgroupby.h"
 #include "ormorderby.h"
 #include "macros.h"
+#include <QDebug>
 
 /*!
    \class ORMObject
@@ -80,15 +81,12 @@ public:
     bool save()
     {
         QHash<QString, QVariant> info;
-        for(int i = 1; i < metaObject()->propertyCount(); i++)
-            info.insert(QString(metaObject()->property(i).name()), metaObject()->property(i).read(this));
-        if(id < 0)
-        {
-            id = ORMDatabase::adapter->addRecord(metaObject()->className(), info);
-            return (id > 0);
-        }
-        else
-            return ORMDatabase::adapter->updateRecord(metaObject()->className(), id, info);
+        for(int i = 0; i < m_propertiesForUpdate.size(); i++)
+            info.insert(m_propertiesForUpdate.value(i), property(qPrintable(m_propertiesForUpdate.value(i))));
+        id = ORMDatabase::adapter->addRecord(metaObject()->className(), info);
+        if(id >= 0)
+            m_propertiesForUpdate.clear();
+        return (id >= 0);
     }
     /*!
        Updates existing record in table with object's \a id.
@@ -100,9 +98,15 @@ public:
         if(id < 0)
             return false;
         QHash<QString, QVariant> info;
-        for(int i = 1; i < metaObject()->propertyCount(); i++)
-            info.insert(QString(metaObject()->property(i).name()), metaObject()->property(i).read(this));
-        return ORMDatabase::adapter->updateRecord(metaObject()->className(), id, info);
+        for(int i = 0; i < m_propertiesForUpdate.size(); i++)
+            info.insert(m_propertiesForUpdate.value(i), property(qPrintable(m_propertiesForUpdate.value(i))));
+        if(ORMDatabase::adapter->updateRecord(metaObject()->className(), id, info))
+        {
+            m_propertiesForUpdate.clear();
+            return true;
+        }
+        else
+            return false;
     }
     /*!
        Finds object by \a id.
@@ -274,7 +278,14 @@ public:
             return false;
         QHash<QString, QVariant> info;
         info.insert(fieldName, value);
-        return ORMDatabase::adapter->updateRecord(metaObject()->className(), id, info);
+        if(ORMDatabase::adapter->updateRecord(metaObject()->className(), id, info))
+        {
+            setProperty(qPrintable(fieldName), value);
+            m_propertiesForUpdate.removeAt(m_propertiesForUpdate.indexOf(fieldName));
+            return true;
+        }
+        else
+            return false;
     }
     /*!
        Removes table's record with object's id.
@@ -442,6 +453,7 @@ protected:
        Id is a primary key in any table. Immediately after creation object id = -1. After call save() id sets the positive value.
      */
     qlonglong id;
+    QStringList m_propertiesForUpdate;
     template<class T>
     T* translateRecToObj(const QSqlRecord &record) const
     {

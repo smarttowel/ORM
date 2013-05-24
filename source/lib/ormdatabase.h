@@ -4,6 +4,7 @@
 #include <QSqlDatabase>
 #include "sqladapter.h"
 #include "mysqladapter.h"
+#include "sqliteadapter.h"
 
 /*!
    \class ORMDatabase

@@ -7,6 +7,8 @@ ORMDatabase::ORMDatabase(QString driverName) :
 {
     if(driverName == "QMYSQL")
         adapter = new MySqlAdapter();
+    else if(driverName == "QSQLITE")
+        adapter = new SqliteAdapter;
 }
 
 ORMDatabase::ORMDatabase()

@@ -2,6 +2,7 @@
 #include <QtTest>
 #include "ormdatabase.cpp"
 #include "mysqladapter.cpp"
+#include "sqliteadapter.cpp"
 #include "sqladapter.cpp"
 #include "ormabstractadapter.cpp"
 

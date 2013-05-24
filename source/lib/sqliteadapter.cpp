@@ -21,9 +21,10 @@ bool SqliteAdapter::createTable(const QString &tableName, const QHash<QString, Q
 
 bool SqliteAdapter::createTableRelations(const QString &parent, ORMAbstractAdapter::Relation rel, const QString &child)
 {
-    m_lastQuery = QString("ALTER TABLE %1 ADD %2_id INTEGER;")
-            .arg(child)
-            .arg(parent);
+    if(rel == HasOne || rel == HasMany)
+        m_lastQuery = QString("ALTER TABLE %1 ADD %2_id INTEGER;")
+                .arg(child)
+                .arg(parent);
     return m_query.exec(m_lastQuery);
 }
 

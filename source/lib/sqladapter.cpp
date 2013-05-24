@@ -15,7 +15,7 @@ bool SqlAdapter::createDatabase(const QString &name)
 bool SqlAdapter::createTable(const QString &tableName, const QHash<QString, QString> &info)
 {
     QString name;
-    m_lastQuery = QString("CREATE TABLE %1(id BIGINT AUTO_INCREMENT, ")
+    m_lastQuery = QString("CREATE TABLE %1(id BIGINT, ")
             .arg(tableName);
     foreach(name, info.keys())
         m_lastQuery += QString("%1 %2, ")
@@ -27,16 +27,8 @@ bool SqlAdapter::createTable(const QString &tableName, const QHash<QString, QStr
 
 bool SqlAdapter::createTableRelations(const QString &parent, Relation rel, const QString &child)
 {
-    if(rel == HasMany)
-        m_lastQuery = QString("ALTER TABLE %1 ADD %2_id BIGINT AFTER id, ADD FOREIGN KEY(%2_id) REFERENCES %2(id);")
-                .arg(child)
-                .arg(parent);
-    else if(rel == HasOne)
-        m_lastQuery = QString("ALTER TABLE %1 ADD %2_id BIGINT AFTER id, ADD FOREIGN KEY(%2_id) REFERENCES %2(id),"
-                              "ADD UNIQUE(%2_id);")
-                .arg(child)
-                .arg(parent);
-    return m_query.exec(m_lastQuery);
+    m_lastQuery = "This adapter haven't query for create relation" + parent + QString::number(rel) + child;
+    return false;
 }
 
 bool SqlAdapter::dropTable(const QString &tableName)

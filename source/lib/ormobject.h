@@ -458,11 +458,22 @@ protected:
     T* translateRecToObj(const QSqlRecord &record) const
     {
         T *result = new T;
-        for(int i = 0; i < record.count(); i++)
-            if(record.fieldName(i) != "id")
-                result->setProperty(record.fieldName(i).toLocal8Bit().data(), record.value(i));
-            else
-                result->setId(record.value(i).toInt());
+        QString currentFieldName;
+        for(int i = 1; i < result->metaObject()->propertyCount(); i++)
+        {
+            currentFieldName = QString(result->metaObject()->property(i).name());
+            if(record.contains(currentFieldName))
+            {
+                result->setProperty(result->metaObject()->property(i).name(), record.value(currentFieldName));
+                continue;
+            }
+            if(record.contains(currentFieldName.toLower()))
+            {
+                result->setProperty(result->metaObject()->property(i).name(), record.value(currentFieldName.toLower()));
+                continue;
+            }
+        }
+        result->setId(record.value("id").toInt());
         return result;
     }
 };

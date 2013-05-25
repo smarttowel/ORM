@@ -9,6 +9,8 @@ ORMDatabase::ORMDatabase(QString driverName) :
         adapter = new MySqlAdapter();
     else if(driverName == "QSQLITE")
         adapter = new SqliteAdapter;
+    else if(driverName == "QPSQL")
+        adapter = new PostgreSQLAdapter;
 }
 
 ORMDatabase::ORMDatabase()

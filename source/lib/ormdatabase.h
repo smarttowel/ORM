@@ -5,6 +5,7 @@
 #include "sqladapter.h"
 #include "mysqladapter.h"
 #include "sqliteadapter.h"
+#include "postgresqladapter.h"
 
 /*!
    \class ORMDatabase

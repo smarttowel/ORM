@@ -5,9 +5,11 @@
 #include <QSqlField>
 #include <QList>
 #include <QFile>
+#include <QSqlDriver>
 #include "ormdatabase.cpp"
 #include "mysqladapter.cpp"
 #include "sqliteadapter.cpp"
+#include "postgresqladapter.cpp"
 #include "sqladapter.cpp"
 #include "ormabstractadapter.cpp"
 #include "ormobject.h"
@@ -18,6 +20,7 @@
 /* Define DBMS in which will be executed tests
  * 0 - MySql
  * 1 - SQLite
+ * 2 - PostgreSQL
 */
 #define DBMS 0
 
@@ -129,6 +132,12 @@ Test_ORMObject::Test_ORMObject()
 #elif DBMS == 1
     db = ORMDatabase::addORMDatabase("QSQLITE");
     db.setDatabaseName("Test_ORMDatabase");
+    db.open();
+#elif DBMS == 2
+    db = ORMDatabase::addORMDatabase("QPSQL");
+    db.setUserName("postgres");
+    db.setPassword("postgres");
+    db.setHostName("localhost");
     db.open();
 #endif
     qDebug() << db.driverName();
@@ -245,6 +254,7 @@ void Test_ORMObject::test_findAll()
     QCOMPARE(list.size(), 4);
     list = resultModel.findAll(ORMGroupBy("id"));
     QCOMPARE(list.size(), 4);
+#if DBMS != 2
     list = resultModel.findAll(ORMGroupBy("nameInt"));
     QCOMPARE(list.size(), 3);
     list = resultModel.findAll(ORMGroupBy("nameInt") && ORMGroupBy("nameString"));
@@ -253,11 +263,14 @@ void Test_ORMObject::test_findAll()
     model2.updateProperty("nameInt", "0");
     list = resultModel.findAll(ORMGroupBy("nameInt") && ORMGroupBy("nameString"));
     QCOMPARE(list.size(), 2);
+#endif
     list = resultModel.findAll(ORMGroupBy(), ORMOrderBy("nameInt", ORMOrderBy::Descending));
     QCOMPARE(list.first()->getnameInt(), 2);
+#if DBMS != 2
     list = resultModel.findAll(ORMGroupBy("nameInt") && ORMGroupBy("nameString"), ORMOrderBy("nameInt", ORMOrderBy::Descending));
     QCOMPARE(list.size(), 2);
     QCOMPARE(list.first()->getnameInt(), 2);
+#endif
 }
 
 void Test_ORMObject::test_findByValue()
@@ -274,14 +287,18 @@ void Test_ORMObject::test_findByValue()
     list = model2.findBy("nameString", QVariant("sdjkfhsjk"));
     QCOMPARE(model2.getId(), -1);
     QCOMPARE(list.size(), 0);
+#if DBMS != 2
     list = model2.findBy("nameInt", 15, ORMGroupBy("nameInt"));
     QCOMPARE(list.size(), 1);
+#endif
     MyModel model3;
     model3.setnameInt(15);
     model3.setnameString("b");
     model3.save();
+#if DBMS != 2
     list = model2.findBy("nameInt", 15, ORMGroupBy("nameInt"));
     QCOMPARE(list.size(), 1);
+#endif
     list = model3.findBy("nameInt", 15, ORMGroupBy(), ORMOrderBy("id", ORMOrderBy::Ascending));
     QCOMPARE(list.first()->getnameString(), QString("a"));
     list = model3.findBy("nameInt", 15, ORMGroupBy(), ORMOrderBy("id", ORMOrderBy::Descending));
@@ -311,6 +328,7 @@ void Test_ORMObject::test_findByValues()
     vector.append(20);
     list = resultModel.findBy("nameInt", vector);
     QCOMPARE(list.isEmpty(), true);
+#if DBMS != 2
     vector.clear();
     vector.append(10);
     vector.append(11);
@@ -320,6 +338,7 @@ void Test_ORMObject::test_findByValues()
     list = resultModel.findBy("nameInt", vector, ORMGroupBy("nameInt"), ORMOrderBy("nameInt", ORMOrderBy::Descending));
     QCOMPARE(list.size(), 2);
     QCOMPARE(list.first()->getnameInt(), 11);
+#endif
 }
 
 void Test_ORMObject::test_findByParams()
@@ -387,6 +406,7 @@ void Test_ORMObject::test_where()
                       (ORMWhere("nameString", ORMWhere::IsNull, "") || ORMWhere("nameInt", ORMWhere::GreaterThan, 3)));
     QCOMPARE(list.size(), 1);
     QCOMPARE(list.first()->getnameInt(), 1);
+#if DBMS != 2
     model3.updateProperty("nameInt", 3);
     list = resultModel.where(ORMWhere("nameInt", ORMWhere::Equals, 3), ORMGroupBy("nameInt"));
     QCOMPARE(list.size(), 1);
@@ -396,6 +416,7 @@ void Test_ORMObject::test_where()
     list = resultModel.where(ORMWhere("nameInt", ORMWhere::Equals, 3) || ORMWhere("nameInt", ORMWhere::Equals, 1),
                                ORMGroupBy("nameInt"), ORMOrderBy("nameInt", ORMOrderBy::Descending));
     QCOMPARE(list.first()->getnameInt(), 3);
+#endif
 }
 
 void Test_ORMObject::test_updateProperty()
@@ -784,6 +805,7 @@ void Test_ORMObject::test_ORM_HAS_MANY()
     QCOMPARE(list.first()->getNumber(), QString("111"));
     QCOMPARE(list.value(1)->getNumber(), QString("111"));
     QCOMPARE(list.value(2)->getNumber(), QString("222"));
+#if DBMS != 2
     list = driver2.findCarWhere(ORMWhere("Number", ORMWhere::Equals, "111") || ORMWhere("Number", ORMWhere::Equals, "222"),
                                 ORMGroupBy("Number"), ORMOrderBy("Number", ORMOrderBy::Descending));
     QCOMPARE(list.size(), 2);
@@ -793,6 +815,7 @@ void Test_ORMObject::test_ORM_HAS_MANY()
     QCOMPARE(list.size(), 2);
     QCOMPARE(list.first()->getNumber(), QString("222"));
     QCOMPARE(list.value(1)->getNumber(), QString("111"));
+#endif
     QCOMPARE(car1.remove(), true);
     QCOMPARE(driver2.getAllCar().size(), 2);
     QCOMPARE(car1.exists(car1.getId()), false);

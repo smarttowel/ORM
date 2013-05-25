@@ -22,7 +22,8 @@ HEADERS += orm.h \
     macros.h \
     ormobject.h \
     sqladapter.h \
-    sqliteadapter.h
+    sqliteadapter.h \
+    postgresqladapter.h
 
 SOURCES += orm.cpp \
     ormdatabase.cpp \
@@ -33,7 +34,8 @@ SOURCES += orm.cpp \
     ormorderby.cpp \
     ormobject.cpp \
     sqladapter.cpp \
-    sqliteadapter.cpp
+    sqliteadapter.cpp \
+    postgresqladapter.cpp
 
 unix:!symbian {
     maemo5 {

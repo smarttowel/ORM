@@ -4,6 +4,7 @@
 #include "mysqladapter.cpp"
 #include "sqliteadapter.cpp"
 #include "sqladapter.cpp"
+#include "postgresqladapter.cpp"
 #include "ormabstractadapter.cpp"
 
 class Test_ORMDatabase : public QObject

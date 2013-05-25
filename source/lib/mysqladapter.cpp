@@ -2,6 +2,7 @@
 
 MySqlAdapter::MySqlAdapter()
 {
+    fillTableTypes();
 }
 
 bool MySqlAdapter::createDatabase(const QString &name)

@@ -2,6 +2,7 @@
 
 SqliteAdapter::SqliteAdapter()
 {
+    fillTableTypes();
 }
 
 bool SqliteAdapter::createTable(const QString &tableName, const QHash<QString, QString> &info)

@@ -2,7 +2,6 @@
 
 SqlAdapter::SqlAdapter()
 {
-    fillTableTypes();
 }
 
 bool SqlAdapter::createDatabase(const QString &name)

@@ -18,8 +18,14 @@ public:
 private:
     QHash<QString, QString> m_tableTypes;
     QString m_driverName;
-    QString createSqlScriptForTable(const Model &model) const;
-    QString createRelationsForTable(const Model &model) const;
+    QString createSqlScriptForTableMySql(const Model &model) const;
+    QString createRelationsForTableMySql(const Model &model) const;
+    QString createSqlScriptForTablePostgreSql(const Model &model) const;
+    QString createRelationsForTablePostgreSql(const Model &model) const;
+    QString createSqlScriptForTableSqlite(const Model &model) const;
+    QString createRelationsForTableSqlite(const Model &model) const;
+    void fillTableTypesMySql();
+    void fillTableTypesPostgreSql();
 };
 
 #endif // SQLSCRIPTBUILDER_H

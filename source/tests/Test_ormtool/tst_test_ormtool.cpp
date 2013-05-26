@@ -114,10 +114,12 @@ void Test_ormtool::getModelFromString()
 void Test_ormtool::createSqlScriptForTable()
 {
     SqlScriptBuilder builder;
+    builder.setDriverName("QMYSQL");
+    builder.fillTableTypesMySql();
     Model model("Table");
     model.addProperty(Property("QString", "name"));
     model.addProperty(Property("int", "number"));
-    QCOMPARE(builder.createSqlScriptForTable(model).simplified(), QString("CREATE TABLE Table(id BIGINT AUTO_INCREMENT, name TEXT, number INT, "
+    QCOMPARE(builder.createSqlScriptForTableMySql(model).simplified(), QString("CREATE TABLE Table(id BIGINT AUTO_INCREMENT, name TEXT, number INT, "
                                                              "PRIMARY KEY(id));").simplified());
 }
 
@@ -129,11 +131,13 @@ void Test_ormtool::createRelationsForTable()
     model.addHasMany("Class3");
     model.addHasMany("Class4");
     SqlScriptBuilder builder;
+    builder.setDriverName("QMYSQL");
+    builder.fillTableTypesMySql();
     QString result = "ALTER TABLE Class1 ADD Table_id BIGINT AFTER id, ADD FOREIGN KEY(Table_id) REFERENCES Table(id), ADD UNIQUE(Table_id);\n"
             "ALTER TABLE Class2 ADD Table_id BIGINT AFTER id, ADD FOREIGN KEY(Table_id) REFERENCES Table(id), ADD UNIQUE(Table_id);\n"
             "ALTER TABLE Class3 ADD Table_id BIGINT AFTER id, ADD FOREIGN KEY(Table_id) REFERENCES Table(id);\n"
             "ALTER TABLE Class4 ADD Table_id BIGINT AFTER id, ADD FOREIGN KEY(Table_id) REFERENCES Table(id);\n";
-    QCOMPARE(builder.createRelationsForTable(model).simplified(), result.simplified());
+    QCOMPARE(builder.createRelationsForTableMySql(model).simplified(), result.simplified());
 }
 
 QTEST_APPLESS_MAIN(Test_ormtool)

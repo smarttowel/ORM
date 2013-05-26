@@ -17,6 +17,7 @@ public:
     static void foundProperty(QString modelName, QString type, QString name);
     static void foundRelation(QString modelName, Relation rel, QString name);
     static void generateScheme(QString name);
+    static void showHelp();
     static void done();
     static QTextStream m_stream;
 };

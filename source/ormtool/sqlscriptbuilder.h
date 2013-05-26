@@ -13,9 +13,11 @@ class SqlScriptBuilder
 public:
     SqlScriptBuilder();
     QString process(const QList<Model> &list);
+    bool setDriverName(const QString &driverName);
 
 private:
     QHash<QString, QString> m_tableTypes;
+    QString m_driverName;
     QString createSqlScriptForTable(const Model &model) const;
     QString createRelationsForTable(const Model &model) const;
 };

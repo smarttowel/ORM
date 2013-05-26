@@ -34,6 +34,17 @@ void Logger::generateScheme(QString name)
     m_stream << "Generate scheme for " << name << "..." << endl;
 }
 
+void Logger::showHelp()
+{
+    m_stream << "Usage:" << endl
+             << "     ormtool [argument] [file1 file2 ... fileN]" << endl
+             << "argument:" << endl
+             << "     QMYSQL - generate script for MySQL;" << endl
+             << "     QPSQL - generate script for PostgreSQL;" << endl
+             << "     QSQLITE - generate script for SQLite;" << endl
+             << "     help - show this help." << endl;
+}
+
 void Logger::done()
 {
     m_stream << "Done!" << endl;

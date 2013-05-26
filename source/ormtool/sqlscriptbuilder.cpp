@@ -26,6 +26,19 @@ QString SqlScriptBuilder::process(const QList<Model> &list)
     return script;
 }
 
+bool SqlScriptBuilder::setDriverName(const QString &driverName)
+{
+    QStringList supportDBMS;
+    supportDBMS << "QMYSQL";// << "QPSQL" << "QSQLITE";
+    if(supportDBMS.contains(driverName))
+    {
+        m_driverName = driverName;
+        return true;
+    }
+    else
+        return false;
+}
+
 QString SqlScriptBuilder::createSqlScriptForTable(const Model &model) const
 {
     QString script = QString("CREATE TABLE %1(id BIGINT AUTO_INCREMENT, ")

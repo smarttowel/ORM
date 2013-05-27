@@ -5,12 +5,12 @@
 #include <QMetaProperty>
 #include <QSqlRecord>
 #include <QVector>
+#include <QSqlTableModel>
 #include "ormdatabase.h"
 #include "ormwhere.h"
 #include "ormgroupby.h"
 #include "ormorderby.h"
 #include "macros.h"
-#include <QDebug>
 
 /*!
    \class ORMObject
@@ -477,5 +477,21 @@ protected:
         return result;
     }
 };
+
+template<class T>
+QSqlTableModel* listToQtModel(const QList<T*> &list)
+{
+    QString filter = "id IN(";
+    for(int i = 0; i < list.size(); i++)
+        filter += QString("%1, ")
+                .arg(list.value(i)->getId());
+    filter.resize(filter.size() - 2);
+    filter += ')';
+    QSqlTableModel *model = new QSqlTableModel;
+    model->setTable(T::staticMetaObject.className());
+    model->setFilter(filter);
+    model->select();
+    return model;
+}
 
 #endif // ORMOBJECT_H

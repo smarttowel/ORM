@@ -116,7 +116,7 @@ public:
     ModelName* find(int id)
     {
         QList<QSqlRecord> list;
-        list = ORMDatabase::adapter->find(metaObject()->className(), ORMWhere("id", ORMWhere::Equals, id).getWhereString());
+        list = ORMDatabase::adapter->find(metaObject()->className(), "*", ORMWhere("id", ORMWhere::Equals, id).getWhereString());
         if(list.isEmpty())
             return new ModelName;
         else
@@ -129,7 +129,7 @@ public:
      */
     QList<ModelName*> findAll(ORMGroupBy group = ORMGroupBy(), ORMOrderBy order = ORMOrderBy())
     {
-        QList<QSqlRecord> list = ORMDatabase::adapter->find(metaObject()->className(), group.getGroupString() + " " + order.getOrderString());
+        QList<QSqlRecord> list = ORMDatabase::adapter->find(metaObject()->className(), "*", group.getGroupString() + " " + order.getOrderString());
         QList<ModelName*> returnList;
         for(int i = 0; i < list.size(); i++)
             returnList.append(translateRecToObj<ModelName>(list.value(i)));
@@ -168,7 +168,7 @@ public:
      */
     QList<ModelName*> findBy(const QString fieldName, const QVariant value, ORMGroupBy group = ORMGroupBy(), ORMOrderBy order = ORMOrderBy())
     {
-        QList<QSqlRecord> list = ORMDatabase::adapter->find(metaObject()->className(),
+        QList<QSqlRecord> list = ORMDatabase::adapter->find(metaObject()->className(), "*",
                                                             ORMWhere(fieldName, ORMWhere::Equals, value).getWhereString() + " " +
                                                             group.getGroupString() + " " + order.getOrderString());
         QList<ModelName*> returnList;
@@ -193,7 +193,7 @@ public:
                     .arg(fieldName)
                     .arg(value.toString());
         whereString.resize(whereString.size() - 4);
-        QList<QSqlRecord> list = ORMDatabase::adapter->find(metaObject()->className(), whereString + " " + group.getGroupString() + " " +
+        QList<QSqlRecord> list = ORMDatabase::adapter->find(metaObject()->className(), "*", whereString + " " + group.getGroupString() + " " +
                                                             order.getOrderString());
         for(int i = 0; i < list.size(); i++)
             returnList.append(translateRecToObj<ModelName>(list.value(i)));
@@ -217,7 +217,7 @@ public:
                     .arg(key)
                     .arg(params.value(key).toString());
         whereString.resize(whereString.size() - 4);
-        QList<QSqlRecord> list = ORMDatabase::adapter->find(metaObject()->className(), whereString);
+        QList<QSqlRecord> list = ORMDatabase::adapter->find(metaObject()->className(), "*", whereString);
         for(int i = 0; i < list.size(); i++)
             returnList.append(translateRecToObj<ModelName>(list.value(i)));
         return returnList;
@@ -237,7 +237,7 @@ public:
      */
     QList<ModelName*> where(ORMWhere condition, ORMGroupBy group = ORMGroupBy(), ORMOrderBy order = ORMOrderBy())
     {
-        QList<QSqlRecord> list = ORMDatabase::adapter->find(metaObject()->className(), condition.getWhereString() + " " + group.getGroupString() + " " +
+        QList<QSqlRecord> list = ORMDatabase::adapter->find(metaObject()->className(), "*", condition.getWhereString() + " " + group.getGroupString() + " " +
                                           order.getOrderString());
         QList<ModelName*> returnList;
         for(int i = 0; i < list.size(); i++)
@@ -249,14 +249,14 @@ public:
      */
     bool exists()
     {
-        return !ORMDatabase::adapter->find(metaObject()->className(), "").isEmpty();
+        return !ORMDatabase::adapter->find(metaObject()->className(), "*", "").isEmpty();
     }
     /*!
        Returns true if object with given \a id exist, otherwise return false.
      */
     bool exists(int id)
     {
-        return !ORMDatabase::adapter->find(metaObject()->className(), ORMWhere("id", ORMWhere::Equals, id).getWhereString()).isEmpty();
+        return !ORMDatabase::adapter->find(metaObject()->className(), "*", ORMWhere("id", ORMWhere::Equals, id).getWhereString()).isEmpty();
     }
     /*!
        Verification existence of objects with specified conditions.
@@ -265,7 +265,7 @@ public:
      */
     bool exists(ORMWhere condition)
     {
-        return !ORMDatabase::adapter->find(metaObject()->className(), condition.getWhereString()).isEmpty();
+        return !ORMDatabase::adapter->find(metaObject()->className(), "*", condition.getWhereString()).isEmpty();
     }
     /*!
        Immediately updates object field in table.
@@ -428,7 +428,7 @@ public:
     }
     QList<QVariant> pluck(QString fieldName, ORMWhere condition = ORMWhere())
     {
-        QList<QSqlRecord> list = ORMDatabase::adapter->pluck(metaObject()->className(), fieldName, condition.getWhereString());
+        QList<QSqlRecord> list = ORMDatabase::adapter->find(metaObject()->className(), fieldName, condition.getWhereString());
         QList<QVariant> result;
         for(int i = 0; i < list.size(); i++)
             result.append(list.value(i).value(0));

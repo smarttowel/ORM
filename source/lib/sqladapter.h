@@ -18,7 +18,7 @@ public:
     bool dropDatabase(const QString &name);
     int addRecord(const QString &tableName, const QHash<QString, QVariant> &info);
     bool updateRecord(const QString &tableName, const qlonglong id, const QHash<QString, QVariant> &info);
-    QList<QSqlRecord> find(const QString &tableName, const QString &params);
+    QList<QSqlRecord> find(const QString &tableName, const QString &fieldName, const QString &params);
     QSqlRecord first(const QString &tableName);
     QSqlRecord last(const QString &tableName);
     bool remove(const QString &tableName, const QString &params);
@@ -26,7 +26,6 @@ public:
     int countBy(const QString &tableName, const QString &params);
     double calculation(Calculation func, const QString &tableName, const QString &fieldName, const QString &params);
     QHash<QString, QList<QSqlRecord> > includes(const QString &parentModel, const QStringList &childModels, const QString &params);
-    QList<QSqlRecord> pluck(const QString &tableName, const QString &fieldName, const QString &params);
 
 protected:
     void fillTableTypes();

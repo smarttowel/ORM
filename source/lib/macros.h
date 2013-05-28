@@ -78,7 +78,7 @@
         QString whereString = QString("WHERE %1_id = %2") \
                                 .arg(metaObject()->className()) \
                                 .arg(id); \
-        QList<QSqlRecord> list = ORMDatabase::adapter->find( #ClassName, whereString); \
+        QList<QSqlRecord> list = ORMDatabase::adapter->find( #ClassName, "*", whereString); \
         if(list.isEmpty()) \
             return 0; \
         else \
@@ -98,7 +98,7 @@
             return 0; \
         values.insert(QString("%1_id").arg(metaObject()->className()), id); \
         int childId = ORMDatabase::adapter->addRecord(#ClassName, values); \
-        return translateRecToObj<ClassName>(ORMDatabase::adapter->find(#ClassName, "WHERE id = " + QString::number(childId)).first()); \
+        return translateRecToObj<ClassName>(ORMDatabase::adapter->find(#ClassName, "*","WHERE id = " + QString::number(childId)).first()); \
     } \
     ClassName* get##ClassName##AfterIncludes() const\
     { \
@@ -162,7 +162,7 @@
         QString whereString = QString("WHERE %1_id = %2") \
                                 .arg(metaObject()->className()) \
                                 .arg(id); \
-        QList<QSqlRecord> list = ORMDatabase::adapter->find( #ClassName, whereString + " " + group.getGroupString() + \
+        QList<QSqlRecord> list = ORMDatabase::adapter->find( #ClassName, "*", whereString + " " + group.getGroupString() + \
                                                             " " + order.getOrderString()); \
         if(!list.isEmpty()) \
             for(int i = 0; i < list.size(); i++) \
@@ -183,7 +183,7 @@
             return 0; \
         values.insert(QString("%1_id").arg(metaObject()->className()), QString::number(id)); \
         int childId = ORMDatabase::adapter->addRecord(#ClassName, values); \
-        return translateRecToObj<ClassName>(ORMDatabase::adapter->find(#ClassName, "WHERE id = " + QString::number(childId)).first()); \
+        return translateRecToObj<ClassName>(ORMDatabase::adapter->find(#ClassName, "*", "WHERE id = " + QString::number(childId)).first()); \
     } \
     QList<ClassName*> find##ClassName##Where(ORMWhere where, ORMGroupBy group = ORMGroupBy(), ORMOrderBy order = ORMOrderBy()) \
     { \
@@ -194,7 +194,7 @@
                                 .arg(metaObject()->className()) \
                                 .arg(id); \
         whereString += " AND " + where.getWhereString().remove(0, 6); \
-        QList<QSqlRecord> list = ORMDatabase::adapter->find( #ClassName, whereString + " " + group.getGroupString() + \
+        QList<QSqlRecord> list = ORMDatabase::adapter->find( #ClassName, "*",whereString + " " + group.getGroupString() + \
                                                             " " + order.getOrderString()); \
         if(!list.isEmpty()) \
             for(int i = 0; i < list.size(); i++) \

@@ -83,10 +83,11 @@ bool SqlAdapter::updateRecord(const QString &tableName, const qlonglong id, cons
     return m_query.exec(m_lastQuery);
 }
 
-QList<QSqlRecord> SqlAdapter::find(const QString &tableName, const QString &params)
+QList<QSqlRecord> SqlAdapter::find(const QString &tableName, const QString &fieldName, const QString &params)
 {
     QList<QSqlRecord> result;
-    m_lastQuery = QString("SELECT * FROM %1 %2;")
+    m_lastQuery = QString("SELECT %1 FROM %2 %3;")
+            .arg(fieldName)
             .arg(tableName)
             .arg(params);
     if(m_query.exec(m_lastQuery))
@@ -183,7 +184,7 @@ double SqlAdapter::calculation(ORMAbstractAdapter::Calculation func, const QStri
 
 QHash<QString, QList<QSqlRecord> > SqlAdapter::includes(const QString &parentModel, const QStringList &childModels, const QString &params)
 {
-    QList<QSqlRecord> generalList = find(parentModel, params);
+    QList<QSqlRecord> generalList = find(parentModel, "*", params);
     QHash<QString, QList<QSqlRecord> > result;
     result.insert(parentModel, generalList);
     QString whereForChildren = QString("WHERE %1_id IN (")
@@ -193,20 +194,7 @@ QHash<QString, QList<QSqlRecord> > SqlAdapter::includes(const QString &parentMod
     whereForChildren.resize(whereForChildren.size() - 2);
     whereForChildren += ')';
     for(int i = 0; i < childModels.size(); i++)
-        result.insert(childModels.value(i), find(childModels.value(i), whereForChildren));
-    return result;
-}
-
-QList<QSqlRecord> SqlAdapter::pluck(const QString &tableName, const QString &fieldName, const QString &params)
-{
-    m_lastQuery = QString("SELECT %1 FROM %2 %3;")
-            .arg(fieldName)
-            .arg(tableName)
-            .arg(params);
-    m_query.exec(m_lastQuery);
-    QList<QSqlRecord> result;
-    while(m_query.next())
-        result.append(m_query.record());
+        result.insert(childModels.value(i), find(childModels.value(i), "*", whereForChildren));
     return result;
 }
 

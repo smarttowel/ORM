@@ -226,8 +226,7 @@ void Test_ORMObject::test_find()
     QVERIFY(id >= 0);
     QCOMPARE((pointer = model.find(id))->getId(), id);
     delete pointer;
-    QCOMPARE((pointer = model.find(13423))->getId(), -1);
-    delete pointer;
+    QVERIFY(model.find(13423) == 0);
     QCOMPARE(model.getId(), id);
     QSqlQuery query = db.exec(QString("SELECT * FROM MyModel WHERE id = %1;")
                               .arg(id));
@@ -516,13 +515,13 @@ void Test_ORMObject::test_remove()
     QCOMPARE(list.size(), 3);
     QCOMPARE(resultModel.find(id)->getId(), id);
     QCOMPARE(model.remove(), true);
-    QCOMPARE(resultModel.find(id)->getId(), -1);
+    QVERIFY(resultModel.find(id) == 0);
     QCOMPARE(resultModel.find(id2)->getId(), id2);
     QCOMPARE(model2.remove(), true);
     list = resultModel.findAll();
     QCOMPARE(list.isEmpty(), false);
     QCOMPARE(list.size(), 1);
-    QCOMPARE(resultModel.find(id2)->getId(), -1);
+    QVERIFY(resultModel.find(id2) == 0);
     QCOMPARE(model3.remove(), true);
     QCOMPARE(resultModel.findAll().isEmpty(), true);
 }
@@ -760,7 +759,7 @@ void Test_ORMObject::test_first()
     QCOMPARE(model2.save(), true);
     QCOMPARE(model3.first()->getId(), model.getId());
     db.exec("DELETE FROM MyModel;");
-    QCOMPARE(model.first()->getId(), -1);
+    QVERIFY(model.first() == 0);
 }
 
 void Test_ORMObject::test_last()
@@ -771,7 +770,7 @@ void Test_ORMObject::test_last()
     QCOMPARE(model2.save(), true);
     QCOMPARE(model3.last()->getId(), model2.getId());
     db.exec("DELETE FROM MyModel;");
-    QCOMPARE(model.last()->getId(), -1);
+    QVERIFY(model.last() == 0);
 }
 
 void Test_ORMObject::test_ORM_HAS_ONE()

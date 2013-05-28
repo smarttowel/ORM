@@ -118,7 +118,7 @@ public:
         QList<QSqlRecord> list;
         list = ORMDatabase::adapter->find(metaObject()->className(), "*", ORMWhere("id", ORMWhere::Equals, id).getWhereString());
         if(list.isEmpty())
-            return new ModelName;
+            return 0;
         else
             return translateRecToObj<ModelName>(list.first());
     }
@@ -144,7 +144,7 @@ public:
     {
         QSqlRecord record = ORMDatabase::adapter->first(metaObject()->className());
         if(record.isNull("id"))
-            return new ModelName;
+            return 0;
         else
             return translateRecToObj<ModelName>(record);
     }
@@ -157,7 +157,7 @@ public:
     {
         QSqlRecord record = ORMDatabase::adapter->last(metaObject()->className());
         if(record.isNull("id"))
-            return new ModelName;
+            return 0;
         else
             return translateRecToObj<ModelName>(record);
     }

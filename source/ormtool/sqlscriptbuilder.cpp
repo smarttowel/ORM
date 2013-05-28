@@ -13,7 +13,7 @@ QString SqlScriptBuilder::process(const QList<Model> &list)
         for(int i = 0; i < list.size(); i++)
             script += createSqlScriptForTableMySql(list.value(i));
         for(int i = 0; i < list.size(); i++)
-            script += createRelationsForTableMySql(list.value(i));
+            script += createRelationForTableMySql(list.value(i));
     }
     else if(m_driverName == "QPSQL")
     {
@@ -21,7 +21,7 @@ QString SqlScriptBuilder::process(const QList<Model> &list)
         for(int i = 0; i < list.size(); i++)
             script += createSqlScriptForTablePostgreSql(list.value(i));
         for(int i = 0; i < list.size(); i++)
-            script += createRelationsForTablePostgreSql(list.value(i));
+            script += createRelationForTablePostgreSql(list.value(i));
     }
     else if(m_driverName == "QSQLITE")
     {
@@ -29,7 +29,7 @@ QString SqlScriptBuilder::process(const QList<Model> &list)
         for(int i = 0; i < list.size(); i++)
             script += createSqlScriptForTableSqlite(list.value(i));
         for(int i = 0; i < list.size(); i++)
-            script += createRelationsForTableSqlite(list.value(i));
+            script += createRelationForTableSqlite(list.value(i));
 
     }
     return script;
@@ -63,7 +63,7 @@ QString SqlScriptBuilder::createSqlScriptForTableMySql(const Model &model) const
     return script;
 }
 
-QString SqlScriptBuilder::createRelationsForTableMySql(const Model &model) const
+QString SqlScriptBuilder::createRelationForTableMySql(const Model &model) const
 {
     QString script;
     QString patternHasMany = QString("ALTER TABLE %1 ADD %2_id BIGINT AFTER id, \n      ADD FOREIGN KEY(%2_id) REFERENCES %2(id);");
@@ -101,26 +101,20 @@ QString SqlScriptBuilder::createSqlScriptForTablePostgreSql(const Model &model) 
     return script;
 }
 
-QString SqlScriptBuilder::createRelationsForTablePostgreSql(const Model &model) const
+QString SqlScriptBuilder::createRelationForTablePostgreSql(const Model &model) const
 {
     QString script;
-    QString patternHasMany = QString("ALTER TABLE %1 ADD %2_id BIGINT, \n      ADD FOREIGN KEY(%2_id) REFERENCES %2(id);");
+    QString patternHasMany = QString("ALTER TABLE %1 ADD %2_id BIGINT, \n      ADD FOREIGN KEY(%2_id) REFERENCES %2(id);\n");
     QString patternHasOne = QString("ALTER TABLE %1 ADD %2_id BIGINT, \n      ADD FOREIGN KEY(%2_id) REFERENCES %2(id), "
-                                    "\n      ADD UNIQUE(%2_id);");
+                                    "\n      ADD UNIQUE(%2_id);\n");
     for(int i = 0; i < model.hasOne().size(); i++)
-    {
         script += patternHasOne
                 .arg(model.hasOne().value(i))
                 .arg(model.name());
-        script += '\n';
-    }
     for(int i = 0; i < model.hasMany().size(); i++)
-    {
         script += patternHasMany
                 .arg(model.hasMany().value(i))
                 .arg(model.name());
-        script += '\n';
-    }
     return script;
 }
 
@@ -140,7 +134,7 @@ QString SqlScriptBuilder::createSqlScriptForTableSqlite(const Model &model) cons
     return script;
 }
 
-QString SqlScriptBuilder::createRelationsForTableSqlite(const Model &model) const
+QString SqlScriptBuilder::createRelationForTableSqlite(const Model &model) const
 {
     QString script;
     QString pattern = QString("ALTER TABLE %1 ADD %2_id INTEGER;");

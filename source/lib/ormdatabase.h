@@ -3,9 +3,9 @@
 
 #include <QSqlDatabase>
 #include "sqladapter.h"
-#include "mysqladapter.h"
-#include "sqliteadapter.h"
-#include "postgresqladapter.h"
+#include "adapters/mysqladapter.h"
+#include "adapters/sqliteadapter.h"
+#include "adapters/postgresqladapter.h"
 
 /*!
    \class ORMDatabase

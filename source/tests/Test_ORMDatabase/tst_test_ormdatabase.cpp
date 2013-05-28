@@ -1,11 +1,11 @@
 #include <QString>
 #include <QtTest>
 #include "ormdatabase.cpp"
-#include "mysqladapter.cpp"
-#include "sqliteadapter.cpp"
-#include "sqladapter.cpp"
-#include "postgresqladapter.cpp"
 #include "ormabstractadapter.cpp"
+#include "sqladapter.cpp"
+#include "adapters/mysqladapter.cpp"
+#include "adapters/sqliteadapter.cpp"
+#include "adapters/postgresqladapter.cpp"
 
 class Test_ORMDatabase : public QObject
 {

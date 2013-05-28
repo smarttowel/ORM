@@ -26,8 +26,11 @@ bool SqlAdapter::createTable(const QString &tableName, const QHash<QString, QStr
 
 bool SqlAdapter::createTableRelations(const QString &parent, Relation rel, const QString &child)
 {
-    m_lastQuery = "This adapter haven't query for create relation" + parent + QString::number(rel) + child;
-    return false;
+    if(rel == HasOne || rel == HasMany)
+        m_lastQuery = QString("ALTER TABLE %1 ADD %2_id INTEGER;")
+                .arg(child)
+                .arg(parent);
+    return m_query.exec(m_lastQuery);
 }
 
 bool SqlAdapter::dropTable(const QString &tableName)

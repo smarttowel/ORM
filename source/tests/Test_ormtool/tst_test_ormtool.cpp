@@ -137,7 +137,7 @@ void Test_ormtool::createRelationsForTable()
             "ALTER TABLE Class2 ADD Table_id BIGINT AFTER id, ADD FOREIGN KEY(Table_id) REFERENCES Table(id), ADD UNIQUE(Table_id);\n"
             "ALTER TABLE Class3 ADD Table_id BIGINT AFTER id, ADD FOREIGN KEY(Table_id) REFERENCES Table(id);\n"
             "ALTER TABLE Class4 ADD Table_id BIGINT AFTER id, ADD FOREIGN KEY(Table_id) REFERENCES Table(id);\n";
-    QCOMPARE(builder.createRelationsForTableMySql(model).simplified(), result.simplified());
+    QCOMPARE(builder.createRelationForTableMySql(model).simplified(), result.simplified());
 }
 
 QTEST_APPLESS_MAIN(Test_ormtool)

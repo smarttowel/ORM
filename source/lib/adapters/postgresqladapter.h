@@ -13,8 +13,6 @@ public:
 
 protected:
     void fillTableTypes();
-private:
-    void initDB(const QString &name);
 };
 
 #endif // POSTGRESQLADAPTER_H

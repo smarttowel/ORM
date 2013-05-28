@@ -7,11 +7,11 @@
 #include <QFile>
 #include <QSqlDriver>
 #include "ormdatabase.cpp"
-#include "mysqladapter.cpp"
-#include "sqliteadapter.cpp"
-#include "postgresqladapter.cpp"
-#include "sqladapter.cpp"
 #include "ormabstractadapter.cpp"
+#include "sqladapter.cpp"
+#include "adapters/mysqladapter.cpp"
+#include "adapters/sqliteadapter.cpp"
+#include "adapters/postgresqladapter.cpp"
 #include "ormobject.h"
 #include "ormwhere.cpp"
 #include "ormgroupby.cpp"
@@ -23,6 +23,10 @@
  * 2 - PostgreSQL
 */
 #define DBMS 0
+
+#define CLEAR_LIST \
+    for(int i = 0; i < list.size(); i++) \
+        delete list.takeAt(i);
 
 class MyModel : public ORMObject<MyModel>
 {
@@ -215,12 +219,15 @@ void Test_ORMObject::test_find()
 {
     db.exec("DELETE FROM MyModel;");
     MyModel model;
+    MyModel *pointer;
     QCOMPARE(model.getId(), -1);
     QCOMPARE(model.save(), true);
     int id = model.getId();
     QVERIFY(id >= 0);
-    QCOMPARE(model.find(id)->getId(), id);
-    QCOMPARE(model.find(13423)->getId(), -1);
+    QCOMPARE((pointer = model.find(id))->getId(), id);
+    delete pointer;
+    QCOMPARE((pointer = model.find(13423))->getId(), -1);
+    delete pointer;
     QCOMPARE(model.getId(), id);
     QSqlQuery query = db.exec(QString("SELECT * FROM MyModel WHERE id = %1;")
                               .arg(id));
@@ -252,24 +259,31 @@ void Test_ORMObject::test_findAll()
     QList<MyModel*> list;
     list = resultModel.findAll();
     QCOMPARE(list.size(), 4);
+    CLEAR_LIST
     list = resultModel.findAll(ORMGroupBy("id"));
     QCOMPARE(list.size(), 4);
+    CLEAR_LIST
 #if DBMS != 2
     list = resultModel.findAll(ORMGroupBy("nameInt"));
     QCOMPARE(list.size(), 3);
+    CLEAR_LIST
     list = resultModel.findAll(ORMGroupBy("nameInt") && ORMGroupBy("nameString"));
     QCOMPARE(list.size(), 4);
     model1.updateProperty("nameString", "a");
     model2.updateProperty("nameInt", "0");
+    CLEAR_LIST
     list = resultModel.findAll(ORMGroupBy("nameInt") && ORMGroupBy("nameString"));
     QCOMPARE(list.size(), 2);
+    CLEAR_LIST
 #endif
     list = resultModel.findAll(ORMGroupBy(), ORMOrderBy("nameInt", ORMOrderBy::Descending));
     QCOMPARE(list.first()->getnameInt(), 2);
+    CLEAR_LIST
 #if DBMS != 2
     list = resultModel.findAll(ORMGroupBy("nameInt") && ORMGroupBy("nameString"), ORMOrderBy("nameInt", ORMOrderBy::Descending));
     QCOMPARE(list.size(), 2);
     QCOMPARE(list.first()->getnameInt(), 2);
+    CLEAR_LIST
 #endif
 }
 
@@ -287,9 +301,11 @@ void Test_ORMObject::test_findByValue()
     list = model2.findBy("nameString", QVariant("sdjkfhsjk"));
     QCOMPARE(model2.getId(), -1);
     QCOMPARE(list.size(), 0);
+    CLEAR_LIST
 #if DBMS != 2
     list = model2.findBy("nameInt", 15, ORMGroupBy("nameInt"));
     QCOMPARE(list.size(), 1);
+    CLEAR_LIST
 #endif
     MyModel model3;
     model3.setnameInt(15);
@@ -298,11 +314,14 @@ void Test_ORMObject::test_findByValue()
 #if DBMS != 2
     list = model2.findBy("nameInt", 15, ORMGroupBy("nameInt"));
     QCOMPARE(list.size(), 1);
+    CLEAR_LIST
 #endif
     list = model3.findBy("nameInt", 15, ORMGroupBy(), ORMOrderBy("id", ORMOrderBy::Ascending));
     QCOMPARE(list.first()->getnameString(), QString("a"));
+    CLEAR_LIST
     list = model3.findBy("nameInt", 15, ORMGroupBy(), ORMOrderBy("id", ORMOrderBy::Descending));
     QCOMPARE(list.first()->getnameString(), QString("b"));
+    CLEAR_LIST
 }
 
 void Test_ORMObject::test_findByValues()
@@ -323,11 +342,13 @@ void Test_ORMObject::test_findByValues()
     QCOMPARE(list.size(), 2);
     QCOMPARE(list.first()->getId(), model1.getId());
     vector.clear();
+    CLEAR_LIST
     list = resultModel.findBy("nameInt", vector);
     QCOMPARE(list.isEmpty(), true);
     vector.append(20);
     list = resultModel.findBy("nameInt", vector);
     QCOMPARE(list.isEmpty(), true);
+    CLEAR_LIST
 #if DBMS != 2
     vector.clear();
     vector.append(10);
@@ -335,9 +356,11 @@ void Test_ORMObject::test_findByValues()
     model3.updateProperty("nameInt", 10);
     list = resultModel.findBy("nameInt", vector, ORMGroupBy("nameInt"));
     QCOMPARE(list.size(), 2);
+    CLEAR_LIST
     list = resultModel.findBy("nameInt", vector, ORMGroupBy("nameInt"), ORMOrderBy("nameInt", ORMOrderBy::Descending));
     QCOMPARE(list.size(), 2);
     QCOMPARE(list.first()->getnameInt(), 11);
+    CLEAR_LIST
 #endif
 }
 
@@ -375,6 +398,7 @@ void Test_ORMObject::test_findByParams()
     }
     findHash.clear();
     findHash.insert("id", QVariant(-100));
+    CLEAR_LIST
     list = resultModel.findBy(findHash);
     QCOMPARE(list.isEmpty(), true);
 }
@@ -394,28 +418,37 @@ void Test_ORMObject::test_where()
     QCOMPARE(list.size(), 1);
     QCOMPARE(list.first()->getnameInt(), 3);
     QVERIFY(resultModel.getId() < 0);
+    CLEAR_LIST
     list = resultModel.where(ORMWhere("nameString", ORMWhere::Equals, "Hello"));
     QCOMPARE(list.isEmpty(), true);
+    CLEAR_LIST
     list = resultModel.where(ORMWhere("nameInt", ORMWhere::Equals, 1) && ORMWhere("nameInt", ORMWhere::Equals, 5));
     QCOMPARE(list.isEmpty(), true);
+    CLEAR_LIST
     list = resultModel.where(ORMWhere("nameInt", ORMWhere::Equals, 1) || ORMWhere("nameInt", ORMWhere::LessThan, 5));
     QCOMPARE(list.size(), 2);
+    CLEAR_LIST
     list = resultModel.where(ORMWhere("nameInt", ORMWhere::Equals, 1) || ORMWhere("nameString", ORMWhere::IsNull, ""));
     QCOMPARE(list.size(), 3);
+    CLEAR_LIST
     list = resultModel.where(ORMWhere("nameInt", ORMWhere::Equals, 1) &&
                       (ORMWhere("nameString", ORMWhere::IsNull, "") || ORMWhere("nameInt", ORMWhere::GreaterThan, 3)));
     QCOMPARE(list.size(), 1);
     QCOMPARE(list.first()->getnameInt(), 1);
+    CLEAR_LIST
 #if DBMS != 2
     model3.updateProperty("nameInt", 3);
     list = resultModel.where(ORMWhere("nameInt", ORMWhere::Equals, 3), ORMGroupBy("nameInt"));
     QCOMPARE(list.size(), 1);
+    CLEAR_LIST
     list = resultModel.where(ORMWhere("nameInt", ORMWhere::Equals, 3) || ORMWhere("nameInt", ORMWhere::Equals, 1),
                                ORMGroupBy("nameInt"));
     QCOMPARE(list.size(), 2);
+    CLEAR_LIST
     list = resultModel.where(ORMWhere("nameInt", ORMWhere::Equals, 3) || ORMWhere("nameInt", ORMWhere::Equals, 1),
                                ORMGroupBy("nameInt"), ORMOrderBy("nameInt", ORMOrderBy::Descending));
     QCOMPARE(list.first()->getnameInt(), 3);
+    CLEAR_LIST
 #endif
 }
 
@@ -744,35 +777,41 @@ void Test_ORMObject::test_last()
 void Test_ORMObject::test_ORM_HAS_ONE()
 {
     CarDriver driver1, driver2;
-    DriverLicense license;
+    DriverLicense license, *pointer;
     driver1.removeAll();
     license.removeAll();
     driver1.setName("Alex");
     driver2.setName("Paul");
     driver1.save();
     driver2.save();
-    QCOMPARE(driver1.getDriverLicense()->getId(), -1);
+    QVERIFY(driver1.getDriverLicense() == 0);
     QHash<QString, QVariant> info;
     info.insert("Number", 123);
-    QCOMPARE(driver1.createDriverLicense(info)->getNumber(), 123);
-    QCOMPARE(driver1.getDriverLicense()->getNumber(), 123);
-    QCOMPARE(driver2.getDriverLicense()->getId(),  -1);
+    QCOMPARE((pointer = driver1.createDriverLicense(info))->getNumber(), 123);
+    delete pointer;
+    QCOMPARE((pointer = driver1.getDriverLicense())->getNumber(), 123);
+    delete pointer;
+    QVERIFY(driver2.getDriverLicense() == 0);
     license.setNumber(456);
     license.save();
     driver2.setDriverLicense(license);
-    QCOMPARE(driver2.getDriverLicense()->getNumber(), 456);
-    int idDr2Lic = driver2.getDriverLicense()->getId();
+    QCOMPARE((pointer = driver2.getDriverLicense())->getNumber(), 456);
+    delete pointer;
+    int idDr2Lic = (pointer = driver2.getDriverLicense())->getId();
+    delete pointer;
     QCOMPARE(license.exists(idDr2Lic), true);
-    QCOMPARE(driver2.getDriverLicense()->remove(), true);
+    QCOMPARE((pointer = driver2.getDriverLicense())->remove(), true);
+    delete pointer;
     QCOMPARE(license.exists(idDr2Lic), false);
-    QCOMPARE(driver2.getDriverLicense()->getId(), -1);
-    QVERIFY(driver1.getDriverLicense()->getId() >= 0);
+    QVERIFY(driver2.getDriverLicense() == 0);
+    QVERIFY((pointer = driver1.getDriverLicense())->getId() >= 0);
+    delete pointer;
 }
 
 void Test_ORMObject::test_ORM_HAS_MANY()
 {
     CarDriver driver1, driver2;
-    Car car1, car2, car3;
+    Car car1, car2, car3, *pointer;
     driver1.removeAll();
     car1.removeAll();
     driver1.setName("Alex");
@@ -782,10 +821,12 @@ void Test_ORMObject::test_ORM_HAS_MANY()
     QVERIFY(driver1.getAllCar().size() == 0);
     QHash<QString, QVariant> info;
     info.insert("Number", "123");
-    QCOMPARE(driver1.createCar(info)->getNumber(), QString("123"));
+    QCOMPARE((pointer = driver1.createCar(info))->getNumber(), QString("123"));
+    delete pointer;
     info.clear();
     info.insert("Number", "456");
-    QCOMPARE(driver1.createCar(info)->getNumber(), QString("456"));
+    QCOMPARE((pointer = driver1.createCar(info))->getNumber(), QString("456"));
+    delete pointer;
     QList<Car*> list = driver1.getAllCar();
     QCOMPARE(list.size(), 2);
     QCOMPARE(list.first()->getNumber(), QString("123"));
@@ -800,24 +841,28 @@ void Test_ORMObject::test_ORM_HAS_MANY()
     driver2.addCar(car1);
     driver2.addCar(car2);
     driver2.addCar(car3);
+    CLEAR_LIST
     list = driver2.getAllCar();
     QCOMPARE(list.size(), 3);
     QCOMPARE(list.first()->getNumber(), QString("111"));
     QCOMPARE(list.value(1)->getNumber(), QString("111"));
     QCOMPARE(list.value(2)->getNumber(), QString("222"));
+    CLEAR_LIST
 #if DBMS != 2
     list = driver2.findCarWhere(ORMWhere("Number", ORMWhere::Equals, "111") || ORMWhere("Number", ORMWhere::Equals, "222"),
                                 ORMGroupBy("Number"), ORMOrderBy("Number", ORMOrderBy::Descending));
     QCOMPARE(list.size(), 2);
     QCOMPARE(list.first()->getNumber(), QString("222"));
     QCOMPARE(list.value(1)->getNumber(), QString("111"));
+    CLEAR_LIST
     list = driver2.getAllCar(ORMGroupBy("Number"), ORMOrderBy("Number", ORMOrderBy::Descending));
     QCOMPARE(list.size(), 2);
     QCOMPARE(list.first()->getNumber(), QString("222"));
     QCOMPARE(list.value(1)->getNumber(), QString("111"));
 #endif
     QCOMPARE(car1.remove(), true);
-    QCOMPARE(driver2.getAllCar().size(), 2);
+    QCOMPARE((list = driver2.getAllCar()).size(), 2);
+    CLEAR_LIST
     QCOMPARE(car1.exists(car1.getId()), false);
 }
 
@@ -863,13 +908,16 @@ void Test_ORMObject::test_includes()
     QCOMPARE(list.value(1)->getDriverLicense()->getNumber(), 456);
     car1.remove();
     car2.remove();
+    CLEAR_LIST
     list = driver1.includes(models);
     QCOMPARE(list.first()->getCarAfterIncludes().size(), 0);
     QCOMPARE(list.value(1)->getCarAfterIncludes().size(), 1);
     models.removeAt(1);
+    CLEAR_LIST
     list = driver1.includes(models);
     QCOMPARE(list.first()->getCarAfterIncludes().size(), 0);
     QCOMPARE(list.value(1)->getCarAfterIncludes().size(), 0);
+    CLEAR_LIST
     list = driver1.includes(models, ORMWhere("id", ORMWhere::Equals, driver1.getId()));
     QCOMPARE(list.size(), 1);
     QCOMPARE(list.first()->getName(), QString("Peter"));

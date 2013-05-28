@@ -24,7 +24,7 @@
         name = input_##name; \
         if(!m_propertiesForUpdate.contains(#name)) \
             m_propertiesForUpdate.append(#name); \
-    } \
+    }
 
 /*!
    \def ORM_HAS_ONE(ClassName)
@@ -74,13 +74,13 @@
     ClassName* get##ClassName() \
     { \
         if(id < 0) \
-            return new ClassName; \
+            return 0; \
         QString whereString = QString("WHERE %1_id = %2") \
                                 .arg(metaObject()->className()) \
                                 .arg(id); \
         QList<QSqlRecord> list = ORMDatabase::adapter->find( #ClassName, whereString); \
         if(list.isEmpty()) \
-            return new ClassName; \
+            return 0; \
         else \
             return translateRecToObj<ClassName>(list.first()); \
     } \
@@ -95,15 +95,15 @@
     ClassName* create##ClassName(QHash<QString, QVariant> &values) \
     { \
         if(id < 0) \
-            return new ClassName; \
+            return 0; \
         values.insert(QString("%1_id").arg(metaObject()->className()), id); \
         int childId = ORMDatabase::adapter->addRecord(#ClassName, values); \
         return translateRecToObj<ClassName>(ORMDatabase::adapter->find(#ClassName, "WHERE id = " + QString::number(childId)).first()); \
     } \
-    ClassName* get##ClassName##AfterIncludes() \
+    ClassName* get##ClassName##AfterIncludes() const\
     { \
         return translateRecToObj<ClassName>(m_##ClassName##AfterIncludes); \
-    } \
+    }
 
 /*!
    \def ORM_HAS_MANY(ClassName)
@@ -180,7 +180,7 @@
     ClassName* create##ClassName(QHash<QString, QVariant> &values) \
     { \
         if(id < 0) \
-            return new ClassName; \
+            return 0; \
         values.insert(QString("%1_id").arg(metaObject()->className()), QString::number(id)); \
         int childId = ORMDatabase::adapter->addRecord(#ClassName, values); \
         return translateRecToObj<ClassName>(ORMDatabase::adapter->find(#ClassName, "WHERE id = " + QString::number(childId)).first()); \
@@ -201,12 +201,12 @@
                 result.append(translateRecToObj<ClassName>(list.value(i))); \
         return result; \
     } \
-    QList<ClassName*> get##ClassName##AfterIncludes() \
+    QList<ClassName*> get##ClassName##AfterIncludes() const \
     { \
         QList<ClassName*> list; \
         for(int i = 0; i < m_##ClassName##AfterIncludes.size(); i++) \
             list.append(translateRecToObj<ClassName>(m_##ClassName##AfterIncludes.value(i))); \
         return list; \
-    } \
+    }
 
 #endif // MACROS_H

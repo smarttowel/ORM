@@ -352,61 +352,33 @@ public:
         return ORMDatabase::adapter->countBy(metaObject()->className(), condition.getWhereString());
     }
     /*!
-       Returns average value from given \a fieldName column.
-     */
-    double average(QString fieldName) const
-    {
-        return ORMDatabase::adapter->calculation(ORMAbstractAdapter::Average, metaObject()->className(), fieldName, "");
-    }
-    /*!
        Returns average value from given \a fieldName column that match \a condition.
      */
-    double average(QString fieldName, ORMWhere condition) const
+    double average(QString fieldName, ORMWhere condition = ORMWhere()) const
     {
         return ORMDatabase::adapter->calculation(ORMAbstractAdapter::Average, metaObject()->className(),
                                                  fieldName, condition.getWhereString());
     }
     /*!
-       Returns maximum value from given \a fieldName column.
-     */
-    double maximum(QString fieldName) const
-    {
-        return ORMDatabase::adapter->calculation(ORMAbstractAdapter::Maximum, metaObject()->className(), fieldName, "");
-    }
-    /*!
        Returns maximum value from given \a fieldName column that match \a condition.
      */
-    double maximum(QString fieldName, ORMWhere condition) const
+    double maximum(QString fieldName, ORMWhere condition = ORMWhere()) const
     {
         return ORMDatabase::adapter->calculation(ORMAbstractAdapter::Maximum, metaObject()->className(),
                                                  fieldName, condition.getWhereString());
     }
     /*!
-       Returns minimum value from given \a fieldName column.
-     */
-    double minimum(QString fieldName) const
-    {
-        return ORMDatabase::adapter->calculation(ORMAbstractAdapter::Minimum, metaObject()->className(), fieldName, "");
-    }
-    /*!
        Returns minimum value from given \a fieldName column that match \a condition.
      */
-    double minimum(QString fieldName, ORMWhere condition) const
+    double minimum(QString fieldName, ORMWhere condition = ORMWhere()) const
     {
         return ORMDatabase::adapter->calculation(ORMAbstractAdapter::Minimum, metaObject()->className(),
                                                  fieldName, condition.getWhereString());
     }
     /*!
-       Returns sum of values \a fieldName column.
-     */
-    double sum(QString fieldName) const
-    {
-        return ORMDatabase::adapter->calculation(ORMAbstractAdapter::Sum, metaObject()->className(), fieldName, "");
-    }
-    /*!
        Returns sum of values \a fieldName column that match \a condition.
      */
-    double sum(QString fieldName, ORMWhere condition) const
+    double sum(QString fieldName, ORMWhere condition = ORMWhere()) const
     {
         return ORMDatabase::adapter->calculation(ORMAbstractAdapter::Sum, metaObject()->className(),
                                                  fieldName, condition.getWhereString());

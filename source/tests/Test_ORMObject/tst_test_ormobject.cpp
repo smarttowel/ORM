@@ -111,13 +111,9 @@ private Q_SLOTS:
     void test_countByFieldName();
     void test_countByWhere();
     void test_average();
-    void test_averageByWhere();
     void test_max();
-    void test_maxByWhere();
     void test_min();
-    void test_minByWhere();
     void test_sum();
-    void test_sumByWhere();
     void test_ORM_HAS_ONE();
     void test_ORM_HAS_MANY();
     void test_includes();
@@ -623,23 +619,19 @@ void Test_ORMObject::test_average()
     QCOMPARE(model1.average("nameInt"), double(20));
     model2.updateProperty("nameInt", -30);
     QCOMPARE(model1.average("nameInt"), double(0));
-}
-
-void Test_ORMObject::test_averageByWhere()
-{
     db.exec("DELETE FROM MyModel;");
-    MyModel model1, model2, model3;
-    model1.setnameInt(10);
-    model1.setnameString("abc");
-    model2.setnameInt(15);
-    model2.setnameString("abc");
-    model3.setnameInt(20);
-    model3.setnameString("cba");
-    model1.save();
-    model2.save();
-    model3.save();
-    QCOMPARE(model1.average("nameInt", ORMWhere("nameString", ORMWhere::Equals, "abc")), double(12.5));
-    QCOMPARE(model1.average("nameInt", ORMWhere("nameString", ORMWhere::Equals, "abc")
+    MyModel model4, model5, model6;
+    model4.setnameInt(10);
+    model4.setnameString("abc");
+    model5.setnameInt(15);
+    model5.setnameString("abc");
+    model6.setnameInt(20);
+    model6.setnameString("cba");
+    model4.save();
+    model5.save();
+    model6.save();
+    QCOMPARE(model4.average("nameInt", ORMWhere("nameString", ORMWhere::Equals, "abc")), double(12.5));
+    QCOMPARE(model4.average("nameInt", ORMWhere("nameString", ORMWhere::Equals, "abc")
                             || ORMWhere("nameString", ORMWhere::Equals, "cba")), double(15));
 }
 
@@ -659,23 +651,19 @@ void Test_ORMObject::test_max()
     QCOMPARE(model1.maximum("nameInt"), double(20));
     model3.updateProperty("nameInt", 100);
     QCOMPARE(model1.maximum("nameInt"), double(100));
-}
-
-void Test_ORMObject::test_maxByWhere()
-{
     db.exec("DELETE FROM MyModel;");
-    MyModel model1, model2, model3;
-    model1.setnameInt(10);
-    model1.setnameString("abc");
-    model2.setnameInt(15);
-    model2.setnameString("abc");
-    model3.setnameInt(20);
-    model3.setnameString("cba");
-    model1.save();
-    model2.save();
-    model3.save();
-    QCOMPARE(model1.maximum("nameInt", ORMWhere("nameString", ORMWhere::Equals, "abc")), double(15));
-    QCOMPARE(model1.maximum("nameInt", ORMWhere("nameString", ORMWhere::Equals, "abc")
+    MyModel model4, model5, model6;
+    model4.setnameInt(10);
+    model4.setnameString("abc");
+    model5.setnameInt(15);
+    model5.setnameString("abc");
+    model6.setnameInt(20);
+    model6.setnameString("cba");
+    model4.save();
+    model5.save();
+    model6.save();
+    QCOMPARE(model4.maximum("nameInt", ORMWhere("nameString", ORMWhere::Equals, "abc")), double(15));
+    QCOMPARE(model4.maximum("nameInt", ORMWhere("nameString", ORMWhere::Equals, "abc")
                             || ORMWhere("nameString", ORMWhere::Equals, "cba")), double(20));
 }
 
@@ -695,23 +683,19 @@ void Test_ORMObject::test_min()
     QCOMPARE(model1.minimum("nameInt"), double(-5));
     model3.updateProperty("nameInt", 100);
     QCOMPARE(model1.minimum("nameInt"), double(-5));
-}
-
-void Test_ORMObject::test_minByWhere()
-{
     db.exec("DELETE FROM MyModel;");
-    MyModel model1, model2, model3;
-    model1.setnameInt(10);
-    model1.setnameString("abc");
-    model2.setnameInt(15);
-    model2.setnameString("abc");
-    model3.setnameInt(-20);
-    model3.setnameString("cba");
-    model1.save();
-    model2.save();
-    model3.save();
-    QCOMPARE(model1.minimum("nameInt", ORMWhere("nameString", ORMWhere::Equals, "abc")), double(10));
-    QCOMPARE(model1.minimum("nameInt", ORMWhere("nameString", ORMWhere::Equals, "abc")
+    MyModel model4, model5, model6;
+    model4.setnameInt(10);
+    model4.setnameString("abc");
+    model5.setnameInt(15);
+    model5.setnameString("abc");
+    model6.setnameInt(-20);
+    model6.setnameString("cba");
+    model4.save();
+    model5.save();
+    model6.save();
+    QCOMPARE(model4.minimum("nameInt", ORMWhere("nameString", ORMWhere::Equals, "abc")), double(10));
+    QCOMPARE(model4.minimum("nameInt", ORMWhere("nameString", ORMWhere::Equals, "abc")
                             || ORMWhere("nameString", ORMWhere::Equals, "cba")), double(-20));
 }
 
@@ -731,23 +715,19 @@ void Test_ORMObject::test_sum()
     QCOMPARE(model1.sum("nameInt"), double(25));
     model3.updateProperty("nameInt", 100);
     QCOMPARE(model1.sum("nameInt"), double(105));
-}
-
-void Test_ORMObject::test_sumByWhere()
-{
     db.exec("DELETE FROM MyModel;");
-    MyModel model1, model2, model3;
-    model1.setnameInt(10);
-    model1.setnameString("abc");
-    model2.setnameInt(15);
-    model2.setnameString("abc");
-    model3.setnameInt(-20);
-    model3.setnameString("cba");
-    model1.save();
-    model2.save();
-    model3.save();
-    QCOMPARE(model1.sum("nameInt", ORMWhere("nameString", ORMWhere::Equals, "abc")), double(25));
-    QCOMPARE(model1.sum("nameInt", ORMWhere("nameString", ORMWhere::Equals, "abc")
+    MyModel model4, model5, model6;
+    model4.setnameInt(10);
+    model4.setnameString("abc");
+    model5.setnameInt(15);
+    model5.setnameString("abc");
+    model6.setnameInt(-20);
+    model6.setnameString("cba");
+    model4.save();
+    model5.save();
+    model6.save();
+    QCOMPARE(model4.sum("nameInt", ORMWhere("nameString", ORMWhere::Equals, "abc")), double(25));
+    QCOMPARE(model4.sum("nameInt", ORMWhere("nameString", ORMWhere::Equals, "abc")
                             || ORMWhere("nameString", ORMWhere::Equals, "cba")), double(5));
 }
 

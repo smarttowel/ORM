@@ -16,6 +16,7 @@
    \code
    ORMDatabase myDatabase("QMYSQL");
    myDatabase.setUserName("root");
+   myDatabase.open();
    myDatabase.createDatabase("MyDatabase");
    \endcode
    or
@@ -23,6 +24,7 @@
    ORMDatabase myDatabase;
    myDatabase = ORMDatabase::addORMDatabase("QMYSQL");
    myDatabase.setUserName("root");
+   myDatabase.open();
    myDatabase.createDatabase("MyDatabase");
    \endcode
  */

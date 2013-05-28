@@ -30,12 +30,12 @@
    \def ORM_HAS_ONE(ClassName)
    Declares HAS_ONE relation. Example:
    \code
-   class DriverLicense : public ORMObject
+   class DriverLicense : public ORMObject<DriverLicense>
    {
        ...
    };
 
-   class CarDriver : public ORMObject
+   class CarDriver : public ORMObject<CarDriver>
    {
        ...
        ORM_HAS_ONE(DriverLicense)
@@ -50,16 +50,15 @@
    Returns child \a ClassName, associated with model or 0, if no such child object.
 
    <b>void set\a ClassName(const \a Classname &object) \n</b>
-   Assigns \a object with model. If the association already exists, this method removes the old and create a new one.
-   Old relation removed.\n
+   Assigns \a object with model. If the child exists, it is updated with new values.\n
    \b NOTE: \a object must exists in table!
 
    <b>\a ClassName* create\a ClassName(const QHash<QString, QVariant> &values) \n</b>
    Creates new \a ClassName object from QHash<fieldName, value> \a values and call save() method. After assigns \a object with model
-   and return pointer to it. Old relation removed.
+   and return pointer to it.
 
-   <b>void remove\a ClassName() \n </b>
-   Removes existing association, but not delete child object from table. If association not exist, does nothing.
+   <b>\a ClassName* get<em>ClassName</em>AfterIncludes() const \n </b>
+   Returns pointer to \a ClassName that be loaded by includes(..) method.
 
  */
 
@@ -109,12 +108,12 @@
    \def ORM_HAS_MANY(ClassName)
    Declares HAS_MANY relation. Example:
    \code
-   class Car : public ORMObject
+   class Car : public ORMObject<Car>
    {
        ...
    };
 
-   class CarDriver : public ORMObject
+   class CarDriver : public ORMObject<CarDriver>
    {
        ...
        ORM_HAS_ONE(DriverLicense)
@@ -138,11 +137,10 @@
    and return pointer to it.
 
    <b>QList<\a ClassName*> find<em>ClassName</em>Where(ORMWhere where, ORMGroupBy group = ORMGroupBy(), ORMOrderBy order = ORMOrderBy()) \n</b>
-   Find child objects appropriate given \a where and returns them in accordance with \group and \a order.
+   Find child objects appropriate given \a where and returns them in accordance with \a group and \a order.
 
-   <b>void remove\a ClassName(const \a ClassName &object) \n </b>
-   Removes existing association, but not delete child object from table.\n
-   \b NOTE: \a object must exists in table!
+   <b>void get<em>ClassName</em>AfterIncludes() const \n </b>
+   Returns list of \a ClassName that be loaded by includes(..) method.
 
  */
 

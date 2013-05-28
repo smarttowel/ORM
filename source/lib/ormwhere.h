@@ -69,6 +69,9 @@ public:
        Constructs ORMWhere object with the given parameters.
      */
     ORMWhere(QString fieldName, Condition con, QVariant value);
+    /*!
+       Constructs ORMWhere and generate "IN (...)" condition with given \a fieldName and list of \a values.
+     */
     ORMWhere(QString fieldName, QList<QVariant> values);
     /*!
        Assigns the b object to this object.

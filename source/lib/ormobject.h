@@ -19,7 +19,7 @@
    For create model, you must inherits by this class.
    Example:
    \code
-   Car : public ORMObject
+   Car : public ORMObject<Car>
    {
     Car();
     ORM_PROPERTY(QString, brand)
@@ -49,6 +49,11 @@ public:
             info.insert(metaObject()->property(i).name(), metaObject()->property(i).typeName());
         return ORMDatabase::adapter->createTable(metaObject()->className(), info);
     }
+    /*!
+       Creates table relation \a rel to child model \a childModelName.
+
+       Returns true if relation created, otherwise return false.
+     */
     bool createTableRelation(ORMAbstractAdapter::Relation rel, QString childModelName) const
     {
         return ORMDatabase::adapter->createTableRelations(metaObject()->className(), rel, childModelName);
@@ -63,18 +68,23 @@ public:
         return ORMDatabase::adapter->dropTable(metaObject()->className());
     }
     /*!
-       Returns object id.
+       Sets new id.
+
+       It must be used carefully, because now model will be linked to another record in the table.
      */
     void setId(qlonglong newId)
     {
         id = newId;
     }
+    /*!
+       Returns object id.
+     */
     int getId() const
     {
         return id;
     }
     /*!
-       Creates new record in table. Read all meta-property from model and save their into table.
+       Creates new record in table. Read all meta-property from model that have be changed and save their into table.
 
        Returns true if success, otherwise return false.
      */
@@ -111,7 +121,7 @@ public:
     /*!
        Finds object by \a id.
 
-       Returns true if object is found, otherwise return false.
+       Returns pointer to found model or 0 if no object found.
      */
     ModelName* find(int id)
     {
@@ -123,9 +133,9 @@ public:
             return translateRecToObj<ModelName>(list.first());
     }
     /*!
-       Finds all records in table. List of objects you can get by calling toList().
+       Finds all records in table.
 
-       Returns true is success, otherwise retur false. If table is empty return false.
+       Returns list of found objects.
      */
     QList<ModelName*> findAll(ORMGroupBy group = ORMGroupBy(), ORMOrderBy order = ORMOrderBy())
     {
@@ -138,7 +148,7 @@ public:
     /*!
        Finds first object in table.
 
-       Returns true if object is found, otherwise return false.
+       Returns pointer to found model or 0 if no object found.
      */
     ModelName* first()
     {
@@ -151,7 +161,7 @@ public:
     /*!
        Finds last object in table.
 
-       Returns true if object is found, otherwise return false.
+       Returns pointer to found model or 0 if no object found.
      */
     ModelName* last()
     {
@@ -162,9 +172,9 @@ public:
             return translateRecToObj<ModelName>(record);
     }
     /*!
-       Finds object by some field and value. If there is more than one object, you can get them by toList().
+       Finds objects by some field and value.
 
-       Returns true if object is found, otherwise return false.
+       Returns list of found objects.
      */
     QList<ModelName*> findBy(const QString fieldName, const QVariant value, ORMGroupBy group = ORMGroupBy(), ORMOrderBy order = ORMOrderBy())
     {
@@ -177,9 +187,9 @@ public:
         return returnList;
     }
     /*!
-       Finds objects by vector of values. If found more than one object, you can get them by toList().
+       Finds objects by vector of values.
 
-       Returns true if object is found, otherwise return false.
+       Returns list of found objects.
      */
     QList<ModelName*> findBy(const QString fieldName, const QVector<QVariant> &values, ORMGroupBy group = ORMGroupBy(), ORMOrderBy order = ORMOrderBy())
     {
@@ -200,10 +210,10 @@ public:
         return returnList;
     }
     /*!
-       Finds object by many fields and values. If there is more than one object, you can get them by toList().
+       Finds object by many fields and values.
        \a params - QHash<fieldName, value>, of which will be searched.
 
-       Returns true if object is found, otherwise return false.
+       Returns list of found objects.
      */
     QList<ModelName*> findBy(const QHash<QString, QVariant> &params)
     {
@@ -223,7 +233,7 @@ public:
         return returnList;
     }
     /*!
-       Finds object with use WHERE expression. If there is more than one object, you can get them by toList().
+       Finds object with use WHERE expression.
        For ORMWhere defined && and || operators, so you use next code:
        \code
        Model.where(ORMWhere(...) || ORMWhere(...));
@@ -233,7 +243,7 @@ public:
        Model.where(ORMWhere(...) && ORMWhere(...));
        \endcode
 
-       Returns true if object is found, otherwise return false.
+       Returns list of found objects.
      */
     QList<ModelName*> where(ORMWhere condition, ORMGroupBy group = ORMGroupBy(), ORMOrderBy order = ORMOrderBy())
     {
@@ -401,6 +411,13 @@ public:
         return ORMDatabase::adapter->calculation(ORMAbstractAdapter::Sum, metaObject()->className(),
                                                  fieldName, condition.getWhereString());
     }
+    /*!
+       Find all models that match \a condition and immediately load all relations that contains in \a list.
+       This method sovle n+1 problem, ORM execute 1 + list.size() queries. Child objects may be get with
+       get<em>ChildModelName</em>AfterInclude method.
+
+       Returns list of found models.
+     */
     QList<ModelName*> includes(const QStringList &list, ORMWhere condition = ORMWhere())
     {
         QHash<QString, QList<QSqlRecord> > hash = ORMDatabase::adapter->includes(metaObject()->className(), list,
@@ -426,6 +443,11 @@ public:
         }
         return result;
     }
+    /*!
+       Select \a fieldName from object that match \a condition.
+
+       Returns list of found \a fieldName.
+     */
     QList<QVariant> pluck(QString fieldName, ORMWhere condition = ORMWhere())
     {
         QList<QSqlRecord> list = ORMDatabase::adapter->find(metaObject()->className(), fieldName, condition.getWhereString());
@@ -434,24 +456,8 @@ public:
             result.append(list.value(i).value(0));
         return result;
     }
-    /*!
-       Returns list of objects that can be found for example where() method. \a T - class, a list of objects which will be returned
-       Example:
-       \code
-       Student : public ORMObject
-       {
-        ...
-       }
-       ...
-       Student model;
-       QList<Student*> list = model.toList<Student>();
-       \endcode
-     */
 
 protected:
-    /*!
-       Id is a primary key in any table. Immediately after creation object id = -1. After call save() id sets the positive value.
-     */
     qlonglong id;
     QStringList m_propertiesForUpdate;
     template<class T>
@@ -478,6 +484,11 @@ protected:
     }
 };
 
+/*!
+   Function takes list of models, create "WHERE" expression with model's ids and call QSqlTableModel::setFilter() method.
+
+   Returns created QSqlTableModel.
+ */
 template<class T>
 QSqlTableModel* listToQtModel(const QList<T*> &list)
 {

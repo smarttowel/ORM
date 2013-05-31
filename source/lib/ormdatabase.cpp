@@ -11,6 +11,8 @@ ORMDatabase::ORMDatabase(QString driverName) :
         adapter = new SqliteAdapter;
     else if(driverName == "QPSQL")
         adapter = new PostgreSQLAdapter;
+    else
+        adapter = new SqlAdapter;
 }
 
 ORMDatabase::ORMDatabase()

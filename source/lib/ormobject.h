@@ -5,7 +5,7 @@
 #include <QMetaProperty>
 #include <QSqlRecord>
 #include <QVector>
-#include <QSqlTableModel>
+#include <QSqlRelationalTableModel>
 #include "ormdatabase.h"
 #include "ormwhere.h"
 #include "ormgroupby.h"
@@ -462,7 +462,7 @@ protected:
    Returns created QSqlTableModel.
  */
 template<class T>
-QSqlTableModel* listToQtModel(const QList<T*> &list)
+QSqlRelationalTableModel* listToQtModel(const QList<T*> &list)
 {
     QString filter = "id IN(";
     for(int i = 0; i < list.size(); i++)
@@ -470,7 +470,7 @@ QSqlTableModel* listToQtModel(const QList<T*> &list)
                 .arg(list.value(i)->getId());
     filter.resize(filter.size() - 2);
     filter += ')';
-    QSqlTableModel *model = new QSqlTableModel;
+    QSqlRelationalTableModel *model = new QSqlRelationalTableModel;
     model->setTable(T::staticMetaObject.className());
     model->setFilter(filter);
     model->select();

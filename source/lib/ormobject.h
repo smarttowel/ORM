@@ -457,6 +457,7 @@ protected:
 };
 
 /*!
+   \relates ORMObject
    Function takes list of models, create "WHERE" expression with model's ids and call QSqlTableModel::setFilter() method.
 
    Returns created QSqlTableModel.

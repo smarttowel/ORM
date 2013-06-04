@@ -14,26 +14,26 @@ CONFIG += staticlib
 
 HEADERS += orm.h \
     ormdatabase.h \
-    ormabstractadapter.h \
+    adapters/ormabstractadapter.h \
     adapters/mysqladapter.h \
     ormwhere.h \
     ormgroupby.h \
     ormorderby.h \
     macros.h \
     ormobject.h \
-    sqladapter.h \
+    adapters/sqladapter.h \
     adapters/sqliteadapter.h \
     adapters/postgresqladapter.h
 
 SOURCES += orm.cpp \
     ormdatabase.cpp \
-    ormabstractadapter.cpp \
+    adapters/ormabstractadapter.cpp \
     adapters/mysqladapter.cpp \
     ormwhere.cpp \
     ormgroupby.cpp \
     ormorderby.cpp \
     ormobject.cpp \
-    sqladapter.cpp \
+    adapters/sqladapter.cpp \
     adapters/sqliteadapter.cpp \
     adapters/postgresqladapter.cpp
 

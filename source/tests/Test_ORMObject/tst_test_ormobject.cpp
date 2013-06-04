@@ -7,8 +7,8 @@
 #include <QFile>
 #include <QSqlDriver>
 #include "ormdatabase.cpp"
-#include "ormabstractadapter.cpp"
-#include "sqladapter.cpp"
+#include "adapters/ormabstractadapter.cpp"
+#include "adapters/sqladapter.cpp"
 #include "adapters/mysqladapter.cpp"
 #include "adapters/sqliteadapter.cpp"
 #include "adapters/postgresqladapter.cpp"

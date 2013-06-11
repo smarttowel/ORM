@@ -428,6 +428,17 @@ public:
             result.append(list.value(i).value(0));
         return result;
     }
+    QString toString()
+    {
+        QString str;
+        str += metaObject()->className();
+        str += '\n';
+        str.append("    id : " + QString::number(id) + '\n');
+        for(int i = 1; i < metaObject()->propertyCount(); i++)
+            str.append(QString("    ") + metaObject()->property(i).name() +
+                       QString(" : ") + property(metaObject()->property(i).name()).toString() + '\n');
+        return str;
+    }
 
 protected:
     qlonglong id;

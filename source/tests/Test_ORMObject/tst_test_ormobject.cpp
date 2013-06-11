@@ -118,6 +118,7 @@ private Q_SLOTS:
     void test_ORM_HAS_MANY();
     void test_includes();
     void test_pluck();
+    void test_toString();
     void test_dropTable();
 };
 
@@ -925,6 +926,15 @@ void Test_ORMObject::test_pluck()
     QCOMPARE(list.size(), 2);
     QCOMPARE(list.value(0).toInt(), -2);
     QCOMPARE(list.value(1).toInt(), 5);
+}
+
+void Test_ORMObject::test_toString()
+{
+    Car model;
+    model.setNumber("123");
+    model.setId(10);
+    QString result = "Car\n    id : 10\n    Number : 123\n";
+    QCOMPARE(model.toString(), result);
 }
 
 void Test_ORMObject::test_dropTable()

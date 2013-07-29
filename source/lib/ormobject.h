@@ -119,6 +119,8 @@ public:
     {
         if(id < 0)
             return false;
+        if(m_propertiesForUpdate.isEmpty())
+            return true;
         QHash<QString, QVariant> info;
         for(int i = 0; i < m_propertiesForUpdate.size(); i++)
             info.insert(m_propertiesForUpdate.value(i), property(qPrintable(m_propertiesForUpdate.value(i))));

@@ -119,6 +119,7 @@ private Q_SLOTS:
     void test_includes();
     void test_pluck();
     void test_toString();
+    void test_hasUnsavedChanges();
     void test_dropTable();
 };
 
@@ -141,7 +142,7 @@ Test_ORMObject::Test_ORMObject()
     db.setHostName("localhost");
     db.open();
 #endif
-    qDebug() << db.driverName();
+    //qDebug() << db.driverName();
 }
 
 Test_ORMObject::~Test_ORMObject()
@@ -935,6 +936,27 @@ void Test_ORMObject::test_toString()
     model.setId(10);
     QString result = "Car\n    id : 10\n    Number : 123\n";
     QCOMPARE(model.toString(), result);
+}
+
+void Test_ORMObject::test_hasUnsavedChanges()
+{
+    MyModel model;
+    model.removeAll();
+    QCOMPARE(model.getId(), -1);
+    QCOMPARE(model.hasUnsavedChanges(), false);
+    model.setnameString("123ABC");
+    QCOMPARE(model.hasUnsavedChanges(), true);
+    model.setnameString("1234ABC");
+    QCOMPARE(model.hasUnsavedChanges(), true);
+    model.setnameInt(123);
+    QCOMPARE(model.hasUnsavedChanges(), true);
+    QCOMPARE(model.save(), true);
+    QVERIFY(model.getId() >= 0);
+    QCOMPARE(model.hasUnsavedChanges(), false);
+    model.setnameString("123ABC");
+    QCOMPARE(model.hasUnsavedChanges(), true);
+    QCOMPARE(model.update(), true);
+    QCOMPARE(model.hasUnsavedChanges(), false);
 }
 
 void Test_ORMObject::test_dropTable()

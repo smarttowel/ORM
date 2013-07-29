@@ -22,6 +22,7 @@
     void set##name(type input_##name)  \
     { \
         name = input_##name; \
+        m_hasUnsavedChanges = true; \
         if(!m_propertiesForUpdate.contains(#name)) \
             m_propertiesForUpdate.append(#name); \
     }

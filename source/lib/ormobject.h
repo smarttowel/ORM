@@ -36,7 +36,11 @@ public:
     /*!
        Creates empty ORMObject with \a parent QObject.
      */
-    explicit ORMObject(QObject *parent = 0) : QObject(parent) {id = -1; }
+    explicit ORMObject(QObject *parent = 0) : QObject(parent)
+    {
+        id = -1;
+        m_hasUnsavedChanges = false;
+    }
     /*!
        Creates table associated with model.
 
@@ -75,6 +79,7 @@ public:
     void setId(qlonglong newId)
     {
         id = newId;
+        m_hasUnsavedChanges = true;
     }
     /*!
        Returns object id.
@@ -82,6 +87,10 @@ public:
     int getId() const
     {
         return id;
+    }
+    bool hasUnsavedChanges()
+    {
+        return m_hasUnsavedChanges;
     }
     /*!
        Creates new record in table. Read all meta-property from model that have be changed and save their into table.
@@ -95,7 +104,10 @@ public:
             info.insert(m_propertiesForUpdate.value(i), property(qPrintable(m_propertiesForUpdate.value(i))));
         id = ORMDatabase::adapter->addRecord(metaObject()->className(), info);
         if(id >= 0)
+        {
             m_propertiesForUpdate.clear();
+            m_hasUnsavedChanges = false;
+        }
         return (id >= 0);
     }
     /*!
@@ -113,6 +125,7 @@ public:
         if(ORMDatabase::adapter->updateRecord(metaObject()->className(), id, info))
         {
             m_propertiesForUpdate.clear();
+            m_hasUnsavedChanges = false;
             return true;
         }
         else
@@ -442,6 +455,7 @@ public:
 
 protected:
     qlonglong id;
+    bool m_hasUnsavedChanges;
     QStringList m_propertiesForUpdate;
     template<class T>
     T* translateRecToObj(const QSqlRecord &record) const

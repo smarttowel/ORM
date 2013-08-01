@@ -120,6 +120,7 @@ private Q_SLOTS:
     void test_pluck();
     void test_toString();
     void test_hasUnsavedChanges();
+    void test_setNull();
     void test_dropTable();
 };
 
@@ -957,6 +958,22 @@ void Test_ORMObject::test_hasUnsavedChanges()
     QCOMPARE(model.hasUnsavedChanges(), true);
     QCOMPARE(model.update(), true);
     QCOMPARE(model.hasUnsavedChanges(), false);
+}
+
+void Test_ORMObject::test_setNull()
+{
+    Car car;
+    CarDriver driver;
+    car.removeAll();
+    driver.removeAll();
+    car.setNumber("123abc");
+    car.save();
+    driver.setName("Bob");
+    driver.save();
+    driver.addCar(car);
+    QCOMPARE(driver.getAllCar().size(), 1);
+    driver.removeCar(car.getId());
+    QCOMPARE(driver.getAllCar().size(), 0);
 }
 
 void Test_ORMObject::test_dropTable()

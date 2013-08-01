@@ -36,6 +36,7 @@ public:
     virtual QList<QSqlRecord> find(const QString &tableName, const QString &fieldName, const QString &params) = 0;
     virtual QSqlRecord first(const QString &tableName) = 0;
     virtual QSqlRecord last(const QString &tableName) = 0;
+    virtual bool setNull(const QString &tableName, const QString &fieldName, qlonglong id) = 0;
     virtual bool remove(const QString &tableName, const QString &params) = 0;
     virtual int count(const QString &tableName, const QString &arg) = 0;
     virtual int countBy(const QString &tableName, const QString &params) = 0;

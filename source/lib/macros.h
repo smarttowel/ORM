@@ -103,6 +103,10 @@
     ClassName* get##ClassName##AfterIncludes() const\
     { \
         return translateRecToObj<ClassName>(m_##ClassName##AfterIncludes); \
+    } \
+    bool remove##ClassName(qlonglong id) \
+    { \
+        return ORMDatabase::adapter->setNull(#ClassName, QString("%1_id").arg(metaObject()->className()), id); \
     }
 
 /*!
@@ -206,6 +210,10 @@
         for(int i = 0; i < m_##ClassName##AfterIncludes.size(); i++) \
             list.append(translateRecToObj<ClassName>(m_##ClassName##AfterIncludes.value(i))); \
         return list; \
+    } \
+    bool remove##ClassName(qlonglong id) \
+    { \
+        return ORMDatabase::adapter->setNull(#ClassName, QString("%1_id").arg(metaObject()->className()), id); \
     }
 
 #endif // MACROS_H

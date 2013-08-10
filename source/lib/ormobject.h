@@ -454,6 +454,11 @@ public:
                        QString(" : ") + property(metaObject()->property(i).name()).toString() + '\n');
         return str;
     }
+    void clearUpdateList()
+    {
+        m_propertiesForUpdate.clear();
+        m_hasUnsavedChanges = false;
+    }
 
 protected:
     qlonglong id;
@@ -468,17 +473,12 @@ protected:
         {
             currentFieldName = QString(result->metaObject()->property(i).name());
             if(record.contains(currentFieldName))
-            {
-                result->setProperty(result->metaObject()->property(i).name(), record.value(currentFieldName));
-                continue;
-            }
-            if(record.contains(currentFieldName.toLower()))
-            {
-                result->setProperty(result->metaObject()->property(i).name(), record.value(currentFieldName.toLower()));
-                continue;
-            }
+                result->metaObject()->property(i).write(result, record.value(currentFieldName));
+            else if(record.contains(currentFieldName.toLower()))
+                result->metaObject()->property(i).write(result, record.value(currentFieldName.toLower()));
         }
         result->setId(record.value("id").toInt());
+        result->clearUpdateList();
         return result;
     }
 };

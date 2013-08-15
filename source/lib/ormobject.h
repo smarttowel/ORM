@@ -435,9 +435,10 @@ public:
 
        Returns list of found \a fieldName.
      */
-    QList<QVariant> pluck(QString fieldName, ORMWhere condition = ORMWhere())
+    QList<QVariant> pluck(QString fieldName, ORMWhere condition = ORMWhere(), ORMGroupBy group = ORMGroupBy())
     {
-        QList<QSqlRecord> list = ORMDatabase::adapter->find(metaObject()->className(), fieldName, condition.getWhereString());
+        QList<QSqlRecord> list = ORMDatabase::adapter->find(metaObject()->className(), fieldName, condition.getWhereString() + " "
+                                                            + group.getGroupString());
         QList<QVariant> result;
         for(int i = 0; i < list.size(); i++)
             result.append(list.value(i).value(0));

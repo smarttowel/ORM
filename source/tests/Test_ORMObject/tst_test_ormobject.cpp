@@ -928,6 +928,10 @@ void Test_ORMObject::test_pluck()
     QCOMPARE(list.size(), 2);
     QCOMPARE(list.value(0).toInt(), -2);
     QCOMPARE(list.value(1).toInt(), 5);
+    model1.setnameString("def");
+    model1.update();
+    list = model1.pluck("nameString", ORMWhere(), ORMGroupBy("nameString"));
+    QCOMPARE(list.size(), 2);
 }
 
 void Test_ORMObject::test_toString()

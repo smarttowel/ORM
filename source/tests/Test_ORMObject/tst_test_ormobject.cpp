@@ -823,6 +823,14 @@ void Test_ORMObject::test_ORM_HAS_MANY()
     driver2.addCar(car1);
     driver2.addCar(car2);
     driver2.addCar(car3);
+    driver2.removeAllCar();
+    QCOMPARE(driver2.getAllCar().size(), 0);
+    QCOMPARE(car1.exists(), true);
+    QCOMPARE(car2.exists(), true);
+    QCOMPARE(car3.exists(), true);
+    driver2.addCar(car1);
+    driver2.addCar(car2);
+    driver2.addCar(car3);
     CLEAR_LIST
     list = driver2.getAllCar();
     QCOMPARE(list.size(), 3);

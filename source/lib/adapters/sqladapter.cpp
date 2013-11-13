@@ -114,12 +114,12 @@ QSqlRecord SqlAdapter::last(const QString &tableName)
     return m_query.record();
 }
 
-bool SqlAdapter::setNull(const QString &tableName, const QString &fieldName, qlonglong id)
+bool SqlAdapter::setNull(const QString &tableName, const QString &fieldName, const QString &params)
 {
-    m_lastQuery = QString("UPDATE %1 SET %2 = NULL WHERE id = %3;")
+    m_lastQuery = QString("UPDATE %1 SET %2 = NULL %3;")
             .arg(tableName)
             .arg(fieldName)
-            .arg(id);
+            .arg(params);
     return m_query.exec(m_lastQuery);
 }
 

@@ -21,7 +21,7 @@ public:
     QList<QSqlRecord> find(const QString &tableName, const QString &fieldName, const QString &params);
     QSqlRecord first(const QString &tableName);
     QSqlRecord last(const QString &tableName);
-    bool setNull(const QString &tableName, const QString &fieldName, qlonglong id);
+    bool setNull(const QString &tableName, const QString &fieldName, const QString &params);
     bool remove(const QString &tableName, const QString &params);
     int count(const QString &tableName, const QString &arg);
     int countBy(const QString &tableName, const QString &params);

@@ -106,7 +106,9 @@
     } \
     bool remove##ClassName(qlonglong id) \
     { \
-        return ORMDatabase::adapter->setNull(#ClassName, QString("%1_id").arg(metaObject()->className()), id); \
+        return ORMDatabase::adapter->setNull(#ClassName, QString("%1_id").arg(metaObject()->className()), \
+            QString("WHERE id = '%1'") \
+                .arg(id)); \
     }
 
 /*!
@@ -213,7 +215,16 @@
     } \
     bool remove##ClassName(qlonglong id) \
     { \
-        return ORMDatabase::adapter->setNull(#ClassName, QString("%1_id").arg(metaObject()->className()), id); \
+        return ORMDatabase::adapter->setNull(#ClassName, QString("%1_id").arg(metaObject()->className()), \
+            QString("WHERE id = '%1'") \
+                .arg(id)); \
+    } \
+    bool removeAll##ClassName() \
+    { \
+        return ORMDatabase::adapter->setNull(#ClassName, QString("%1_id").arg(metaObject()->className()), \
+            QString("WHERE %1_id = '%2'") \
+                .arg(metaObject()->className()) \
+                .arg(id)); \
     }
 
 #endif // MACROS_H

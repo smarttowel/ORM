@@ -84,7 +84,7 @@ public:
     /*!
        Returns object id.
      */
-    int getId() const
+    qlonglong getId() const
     {
         return id;
     }
@@ -138,7 +138,7 @@ public:
 
        Returns pointer to found model or 0 if no object found.
      */
-    ModelName* find(int id)
+    ModelName* find(qlonglong id)
     {
         QList<QSqlRecord> list;
         list = ORMDatabase::adapter->find(metaObject()->className(), "*", ORMWhere("id", ORMWhere::Equals, id).getWhereString());
@@ -279,7 +279,7 @@ public:
     /*!
        Returns true if object with given \a id exist, otherwise return false.
      */
-    bool exists(int id)
+    bool exists(qlonglong id)
     {
         return !ORMDatabase::adapter->find(metaObject()->className(), "*", ORMWhere("id", ORMWhere::Equals, id).getWhereString()).isEmpty();
     }
@@ -348,21 +348,21 @@ public:
     /*!
        Returns number of objects in table.
      */
-    int count() const
+    qlonglong count() const
     {
         return ORMDatabase::adapter->count(metaObject()->className(), "*");
     }
     /*!
        Returns number of not null fields with given \a fieldName column.
      */
-    int count(QString fieldName) const
+    qlonglong count(QString fieldName) const
     {
         return ORMDatabase::adapter->count(metaObject()->className(), fieldName);
     }
     /*!
        Returns number of objects that match \a condition.
      */
-    int count(ORMWhere condition) const
+    qlonglong count(ORMWhere condition) const
     {
         return ORMDatabase::adapter->countBy(metaObject()->className(), condition.getWhereString());
     }

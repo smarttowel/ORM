@@ -84,13 +84,13 @@
         else \
             return translateRecToObj<ClassName>(list.first()); \
     } \
-    void set##ClassName(const ClassName &object) \
+    void set##ClassName(const qlonglong childId) \
     { \
-        if(object.getId() < 0 || id < 0) \
+        if(childId < 0 || id < 0) \
             return; \
         QHash<QString, QVariant> hash; \
         hash.insert(QString(metaObject()->className()) + "_id", id); \
-        ORMDatabase::adapter->updateRecord(#ClassName, object.getId(), hash); \
+        ORMDatabase::adapter->updateRecord(#ClassName, childId, hash); \
     } \
     ClassName* create##ClassName(QHash<QString, QVariant> &values) \
     { \
@@ -174,13 +174,13 @@
                 result.append(translateRecToObj<ClassName>(list.value(i))); \
         return result; \
     } \
-    void add##ClassName(const ClassName &object) \
+    void add##ClassName(const qlonglong childId) \
     { \
-        if(object.getId() < 0 || id < 0) \
+        if(childId < 0 || id < 0) \
             return; \
         QHash<QString, QVariant> hash; \
         hash.insert(QString("%1_id").arg(metaObject()->className()), QString::number(id)); \
-        ORMDatabase::adapter->updateRecord(#ClassName, object.getId(), hash); \
+        ORMDatabase::adapter->updateRecord(#ClassName, childId, hash); \
     } \
     ClassName* create##ClassName(QHash<QString, QVariant> &values) \
     { \

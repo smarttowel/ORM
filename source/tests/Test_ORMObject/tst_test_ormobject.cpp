@@ -776,7 +776,7 @@ void Test_ORMObject::test_ORM_HAS_ONE()
     QVERIFY(driver2.getDriverLicense() == 0);
     license.setNumber(456);
     license.save();
-    driver2.setDriverLicense(license);
+    driver2.setDriverLicense(license.getId());
     QCOMPARE((pointer = driver2.getDriverLicense())->getNumber(), 456);
     delete pointer;
     int idDr2Lic = (pointer = driver2.getDriverLicense())->getId();
@@ -820,17 +820,17 @@ void Test_ORMObject::test_ORM_HAS_MANY()
     car1.save();
     car2.save();
     car3.save();
-    driver2.addCar(car1);
-    driver2.addCar(car2);
-    driver2.addCar(car3);
+    driver2.addCar(car1.getId());
+    driver2.addCar(car2.getId());
+    driver2.addCar(car3.getId());
     driver2.removeAllCar();
     QCOMPARE(driver2.getAllCar().size(), 0);
     QCOMPARE(car1.exists(), true);
     QCOMPARE(car2.exists(), true);
     QCOMPARE(car3.exists(), true);
-    driver2.addCar(car1);
-    driver2.addCar(car2);
-    driver2.addCar(car3);
+    driver2.addCar(car1.getId());
+    driver2.addCar(car2.getId());
+    driver2.addCar(car3.getId());
     CLEAR_LIST
     list = driver2.getAllCar();
     QCOMPARE(list.size(), 3);
@@ -878,11 +878,11 @@ void Test_ORMObject::test_includes()
     car3.save();
     license1.save();
     license2.save();
-    driver1.setDriverLicense(license1);
-    driver2.setDriverLicense(license2);
-    driver1.addCar(car1);
-    driver2.addCar(car2);
-    driver2.addCar(car3);
+    driver1.setDriverLicense(license1.getId());
+    driver2.setDriverLicense(license2.getId());
+    driver1.addCar(car1.getId());
+    driver2.addCar(car2.getId());
+    driver2.addCar(car3.getId());
     QStringList models;
     models << "DriverLicense" << "Car";
     QList<CarDriver*> list = driver1.includes(models);
@@ -982,7 +982,7 @@ void Test_ORMObject::test_setNull()
     car.save();
     driver.setName("Bob");
     driver.save();
-    driver.addCar(car);
+    driver.addCar(car.getId());
     QCOMPARE(driver.getAllCar().size(), 1);
     driver.removeCar(car.getId());
     QCOMPARE(driver.getAllCar().size(), 0);

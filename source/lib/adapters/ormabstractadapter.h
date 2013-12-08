@@ -5,6 +5,7 @@
 #include <QHash>
 #include <QSqlQuery>
 #include <QSqlError>
+#include "ormlogger.h"
 
 class ORMAbstractAdapter
 {
@@ -47,6 +48,7 @@ protected:
     QHash<QString, QString> m_tableTypes;
     QSqlQuery m_query;
     QString m_lastQuery;
+    OrmLogger m_logger;
     virtual void fillTableTypes() = 0;
 };
 

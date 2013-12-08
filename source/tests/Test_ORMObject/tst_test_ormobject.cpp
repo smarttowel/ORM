@@ -16,13 +16,14 @@
 #include "ormwhere.cpp"
 #include "ormgroupby.cpp"
 #include "ormorderby.cpp"
+#include "ormlogger.cpp"
 
 /* Define DBMS in which will be executed tests
  * 0 - MySql
  * 1 - SQLite
  * 2 - PostgreSQL
 */
-#define DBMS 0
+#define DBMS 1
 
 #define CLEAR_LIST \
     for(int i = 0; i < list.size(); i++) \

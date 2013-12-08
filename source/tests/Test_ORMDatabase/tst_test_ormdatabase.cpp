@@ -6,6 +6,7 @@
 #include "adapters/mysqladapter.cpp"
 #include "adapters/sqliteadapter.cpp"
 #include "adapters/postgresqladapter.cpp"
+#include "ormlogger.cpp"
 
 class Test_ORMDatabase : public QObject
 {

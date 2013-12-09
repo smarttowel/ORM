@@ -63,7 +63,10 @@ int SqlAdapter::addRecord(const QString &tableName, const QHash<QString, QVarian
         m_lastQuery.resize(m_lastQuery.size() - 2);
     m_lastQuery += ") VALUES(";
     foreach(key, info.keys())
-        m_lastQuery += "'" + info.value(key).toString() + "', ";
+        if(info.value(key).type() == QVariant::Bool)
+            m_lastQuery += info.value(key).toString() + ", ";
+        else
+            m_lastQuery += "'" + info.value(key).toString() + "', ";
     if(!info.isEmpty())
         m_lastQuery.resize(m_lastQuery.size() - 2);
     m_lastQuery += ");";
@@ -79,9 +82,14 @@ bool SqlAdapter::updateRecord(const QString &tableName, const qlonglong id, cons
             .arg(tableName);
     QString fieldName;
     foreach(fieldName, info.keys())
-        m_lastQuery += QString("%1 = '%2', ")
-                .arg(fieldName)
-                .arg(info.value(fieldName).toString());
+        if(info.value(fieldName).type() == QVariant::Bool)
+            m_lastQuery += QString("%1 = %2, ")
+                    .arg(fieldName)
+                    .arg(info.value(fieldName).toString());
+        else
+            m_lastQuery += QString("%1 = '%2', ")
+                    .arg(fieldName)
+                    .arg(info.value(fieldName).toString());
     m_lastQuery.resize(m_lastQuery.size() - 2);
     m_lastQuery += QString(" WHERE id = %1;")
             .arg(id);
@@ -170,7 +178,7 @@ int SqlAdapter::countBy(const QString &tableName, const QString &params)
 }
 
 double SqlAdapter::calculation(ORMAbstractAdapter::Calculation func, const QString &tableName,
-                                 const QString &fieldName, const QString &params)
+                               const QString &fieldName, const QString &params)
 {
     QString funcName;
     switch(func)

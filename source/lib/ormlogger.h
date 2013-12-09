@@ -9,9 +9,18 @@
 class OrmLogger
 {
 public:
+    enum LogDeep
+    {
+        ldAll,
+        ldWarningsOnly,
+        ldNone
+    };
     OrmLogger();
     bool exec(QSqlQuery &query, const QString &queryString);
+    void setLogDeep(OrmLogger::LogDeep deep);
 
+private:
+    LogDeep m_logDeep;
 };
 
 #endif // ORMLOGGER_H

@@ -64,6 +64,7 @@ public:
        Returns last query to database.
      */
     QString lastQuery() const;
+    void setLogDeep(OrmLogger::LogDeep deep);
 };
 
 #endif // ORMDATABASE_H

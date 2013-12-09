@@ -23,7 +23,7 @@
  * 1 - SQLite
  * 2 - PostgreSQL
 */
-#define DBMS 1
+#define DBMS 0
 
 #define CLEAR_LIST \
     for(int i = 0; i < list.size(); i++) \
@@ -145,6 +145,7 @@ Test_ORMObject::Test_ORMObject()
     db.open();
 #endif
     //qDebug() << db.driverName();
+    db.setLogDeep(OrmLogger::ldWarningsOnly);
 }
 
 Test_ORMObject::~Test_ORMObject()

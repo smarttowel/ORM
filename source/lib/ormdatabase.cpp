@@ -38,3 +38,8 @@ QString ORMDatabase::lastQuery() const
 {
     return adapter->lastQuery();
 }
+
+void ORMDatabase::setLogDeep(OrmLogger::LogDeep deep)
+{
+    adapter->m_logger.setLogDeep(deep);
+}

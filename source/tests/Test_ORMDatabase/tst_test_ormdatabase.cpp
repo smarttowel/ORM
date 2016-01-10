@@ -87,6 +87,6 @@ void Test_ORMDatabase::test_dropDatabase()
     }
 }
 
-QTEST_APPLESS_MAIN(Test_ORMDatabase)
+QTEST_MAIN(Test_ORMDatabase)
 
 #include "tst_test_ormdatabase.moc"

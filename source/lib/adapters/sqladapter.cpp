@@ -54,23 +54,23 @@ bool SqlAdapter::dropDatabase(const QString &name)
 
 int SqlAdapter::addRecord(const QString &tableName, const QHash<QString, QVariant> &info)
 {
-    QString key;
-    m_lastQuery = QString("INSERT INTO %1(")
-            .arg(tableName);
+    QString key, fields, values;
+    m_lastQuery = QString("INSERT INTO %1(%2) VALUES(%3);");
     foreach(key, info.keys())
-        m_lastQuery += key + ", ";
+    {
+        fields += key + ", ";
+        values += ":" + key + ", ";
+    }
     if(!info.isEmpty())
-        m_lastQuery.resize(m_lastQuery.size() - 2);
-    m_lastQuery += ") VALUES(";
+    {
+        fields.resize(fields.size() - 2);
+        values.resize(values.size() - 2);
+    }
+    m_lastQuery = m_lastQuery.arg(tableName).arg(fields).arg(values);
+    m_query.prepare(m_lastQuery);
     foreach(key, info.keys())
-        if(info.value(key).type() == QVariant::Bool)
-            m_lastQuery += info.value(key).toString() + ", ";
-        else
-            m_lastQuery += "'" + info.value(key).toString() + "', ";
-    if(!info.isEmpty())
-        m_lastQuery.resize(m_lastQuery.size() - 2);
-    m_lastQuery += ");";
-    if(m_logger.exec(m_query, m_lastQuery))
+        m_query.bindValue(":" + key, info.value(key));
+    if(m_logger.exec(m_query))
         return m_query.lastInsertId().toInt();
     else
         return -1;

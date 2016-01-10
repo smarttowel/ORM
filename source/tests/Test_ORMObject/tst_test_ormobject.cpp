@@ -179,7 +179,7 @@ void Test_ORMObject::test_save()
     QTime time = QTime::currentTime();
     MyModel model;
     model.setnameBool(true);
-    model.setnameBlob(QByteArray());
+    model.setnameBlob(QByteArray(10000, '1'));
     model.setnameChar('A');
     model.setnameDate(QDate(2013, 03, 26));
     model.setnameDatetime(QDateTime(QDate(2013, 03, 26), time));

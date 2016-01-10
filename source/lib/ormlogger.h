@@ -16,6 +16,7 @@ public:
         ldNone
     };
     OrmLogger();
+    bool exec(QSqlQuery query);
     bool exec(QSqlQuery &query, const QString &queryString);
     void setLogDeep(OrmLogger::LogDeep deep);
 
